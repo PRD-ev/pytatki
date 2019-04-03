@@ -19,6 +19,8 @@ export default Vue.extend({
 
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700');
+
 :root{
   --orange:#fe9e63;
   --light-orange:#ffba5c;
@@ -46,5 +48,13 @@ a{
 }
 a,p{
   font-size: 18px;
+}
+img{
+  max-width: 100%;
+}
+.mobile-only{
+  @media (min-width: 769px) {
+    display: none !important;
+  }
 }
 </style>
