@@ -19,6 +19,13 @@ export default Vue.extend({
 
 
 <style lang="scss">
+:root{
+  --orange:#fe9e63;
+  --light-orange:#ffba5c;
+  --white:#fff;
+  --red:#ed5252;
+  --light-red:#f68888;
+}
 *,
 *::before,
 *::after {
@@ -32,5 +39,12 @@ export default Vue.extend({
 }
 body {
   margin: 0;
+}
+a{
+  color: inherit;
+  text-decoration: none;
+}
+a,p{
+  font-size: 18px;
 }
 </style>
