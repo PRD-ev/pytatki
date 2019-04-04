@@ -1,5 +1,7 @@
 # pytatki-front
 
+Current development build on http://pytatki.netlify.com
+
 ## Project setup
 ```
 npm install
