@@ -4,7 +4,7 @@
       <div class="open-menu" @click="openMenu">
         <img src="../assets/icons/hamburger.svg" alt="hamburger icon to open menu">
       </div>
-      <p class="current-location">Current location</p>
+      <p class="current-location">{{$route.name}}</p>
     </div>
     <header v-show="this.menuIsOpen">
       <div class="close-menu mobile-only" @click="closeMenu">
@@ -14,20 +14,25 @@
         <logo/>
       </router-link>
       <nav>
-        <router-link to="/dashboard">
-          <img class="menu-item__image" src="../assets/icons/group-fill.svg">Dashboard
+        <router-link to="/grupy">
+          <img class="menu-item__image" src="../assets/icons/group-fill.svg">
+          Grupy
         </router-link>
         <router-link to="/dashboard">
-          <img class="menu-item__image" src="../assets/icons/group-fill.svg">Dashboard
+          <img class="menu-item__image" src="../assets/icons/group-fill.svg">
+          Dashboard
+        </router-link>
+        <router-link to="/grupa">
+          <img class="menu-item__image" src="../assets/icons/heart-fill.svg">
+          Grupa
         </router-link>
         <router-link to="/dashboard">
-          <img class="menu-item__image" src="../assets/icons/heart-fill.svg">Dashboard
+          <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">
+          Dashboard
         </router-link>
         <router-link to="/dashboard">
-          <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">Dashboard
-        </router-link>
-        <router-link to="/dashboard">
-          <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg">Dashboard
+          <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg">
+          Dashboard
         </router-link>
       </nav>
       <div class="header-bottom">
@@ -111,6 +116,7 @@ export default Vue.extend({
   margin-left: 80px;
   font-size: 24px;
   z-index: 1;
+  text-transform: capitalize;
   color: var(--white);
 }
 header {

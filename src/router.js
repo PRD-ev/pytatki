@@ -16,10 +16,17 @@ export default new Router({
     {
       path: '/dashboard',
       name: 'dashboard',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/Dashboard.vue'),
+      component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
+    },
+    {
+      path: '/grupy',
+      name: 'grupy',
+      component: () => import(/* webpackChunkName: "grupy" */ './views/Grupy.vue'),
+    },
+    {
+      path: '/grupa',
+      name: 'grupa',
+      component: () => import(/* webpackChunkName: "grupa" */ './views/Grupa.vue'),
     },
   ],
 });

@@ -21,12 +21,12 @@ export default Vue.extend({
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700');
 
-:root{
-  --orange:#fe9e63;
-  --light-orange:#ffba5c;
-  --white:#fff;
-  --red:#ed5252;
-  --light-red:#f68888;
+:root {
+  --orange: #fe9e63;
+  --light-orange: #ffba5c;
+  --white: #fff;
+  --red: #ed5252;
+  --light-red: #f68888;
 }
 *,
 *::before,
@@ -42,17 +42,18 @@ export default Vue.extend({
 body {
   margin: 0;
 }
-a{
+a {
   color: inherit;
   text-decoration: none;
 }
-a,p{
+a,
+p {
   font-size: 18px;
 }
-img{
+img {
   max-width: 100%;
 }
-.mobile-only{
+.mobile-only {
   @media (min-width: 769px) {
     display: none !important;
   }

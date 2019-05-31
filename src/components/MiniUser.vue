@@ -1,7 +1,7 @@
 <template>
   <div class="mini-user">
-    <img src="../assets/Filip.jpg" alt="">
-    <p>Filip Wachowiak</p>
+    <img class="mini-user__thumbnail" src="../assets/Filip.jpg" alt="">
+    <p class="mini-user__text">Filip Wachowiak</p>
   </div>
 </template>
 
@@ -18,16 +18,16 @@ export default Vue.extend({
   display: flex;
   align-items: center;
 }
-img{
+.mini-user__thumbnail{
   height: 55px;
   border-radius: 50%;
   margin-right: 15px;
 }
 @media (max-width: 768px) {
-  p{
+  .mini-user__text{
     font-size: 24px;
   }
-  img{
+  .mini-user__thumbnail{
     height: 70px;
     margin-right: 20px;
   }

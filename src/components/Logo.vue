@@ -1,5 +1,5 @@
 <template>
-  <div class="logo">logo</div>
+  <img class="logo" src="../assets/Logo.svg" alt="Logo Pytatek">
 </template>
 
 <script>
@@ -11,5 +11,8 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-
+.logo {
+  width: 100%;
+  max-width: 225px;
+}
 </style>
