@@ -10,33 +10,33 @@
       <div class="close-menu mobile-only" @click="closeMenu">
         <img src="../assets/icons/close.svg" alt="cross icon to close menu">
       </div>
-      <router-link to="/">
-        <logo/>
+      <router-link @click.native="closeMenu" to="/">
+        <logo class="desktop-only"/>
       </router-link>
       <nav>
-        <router-link to="/grupy">
+        <router-link @click.native="closeMenu" to="/grupy">
           <img class="menu-item__image" src="../assets/icons/group-fill.svg">
           Grupy
         </router-link>
-        <router-link to="/dashboard">
+        <router-link @click.native="closeMenu" to="/dashboard">
           <img class="menu-item__image" src="../assets/icons/group-fill.svg">
           Dashboard
         </router-link>
-        <router-link to="/grupa">
+        <router-link @click.native="closeMenu" to="/grupa">
           <img class="menu-item__image" src="../assets/icons/heart-fill.svg">
           Grupa
         </router-link>
-        <router-link to="/dashboard">
+        <router-link @click.native="closeMenu" to="/dashboard">
           <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">
           Dashboard
         </router-link>
-        <router-link to="/dashboard">
+        <router-link @click.native="closeMenu" to="/dashboard">
           <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg">
           Dashboard
         </router-link>
       </nav>
       <div class="header-bottom">
-        <mini-user/>
+        <mini-user @click.native="closeMenu"/>
         <div class="external-links">
           <a href="https://github.com/prd-ev/pytatki-front" target="_blank" rel="nofollow">
             <img class="external-link__image" src="../assets/icons/github-fill.svg">
@@ -65,6 +65,8 @@ import Vue from 'vue';
 import Logo from '@/components/Logo.vue';
 import MiniUser from '@/components/MiniUser.vue';
 
+const isMobile = window.innerWidth < 769;
+
 export default Vue.extend({
   name: 'Header',
   components: {
@@ -78,7 +80,9 @@ export default Vue.extend({
   },
   methods: {
     closeMenu() {
-      this.menuIsOpen = false;
+      if (isMobile === true) {
+        this.menuIsOpen = false;
+      }
     },
     openMenu() {
       this.menuIsOpen = true;
@@ -90,9 +94,11 @@ export default Vue.extend({
 <style scoped lang="scss">
 .close-menu,
 .open-menu {
+  cursor: pointer;
   position: fixed;
-  top: 25px;
-  left: 25px;
+  top: 8px;
+  left: 8px;
+  padding: 15px;
   img {
     width: 20px;
     height: 20px;
@@ -111,9 +117,10 @@ export default Vue.extend({
     var(--orange) 0%,
     var(--light-orange) 100%
   );
+  z-index: 2;
 }
 .current-location {
-  margin-left: 80px;
+  margin-left: 70px;
   font-size: 24px;
   z-index: 1;
   text-transform: capitalize;
@@ -134,7 +141,7 @@ header {
   );
   color: var(--white);
   box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.25);
-  z-index: 2;
+  z-index: 3;
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
@@ -154,8 +161,7 @@ nav {
   a {
     margin: 10px 0;
     @media (max-width: 768px) {
-      margin: 20px 0;
-      font-size: 30px;
+      font-size: 25px;
     }
   }
 }

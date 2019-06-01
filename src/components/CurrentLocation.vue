@@ -1,5 +1,5 @@
 <template>
-    <h1 class="current-location">
+    <h1 class="current-location desktop-only">
       {{$route.name}}
     </h1>
 </template>

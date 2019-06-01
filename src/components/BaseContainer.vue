@@ -22,7 +22,7 @@ export default Vue.extend({
   &__inner {
     margin: 30px 90px;
     @media screen and (max-width: 768px) {
-      margin: 30px 40px;
+      margin: 60px 5px;
       height: 100vh;
     }
   }

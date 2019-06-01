@@ -22,6 +22,10 @@ export default Vue.extend({
   text-align: center;
   font-size: 22px;
   margin: 20px;
+  @media screen and (max-width: 768px) {
+    font-size: 20px;
+    margin: 15px;
+  }
 }
 .group__circle {
   width: 140px;
@@ -30,5 +34,10 @@ export default Vue.extend({
   border-radius: 50%;
   border: 3px solid var(--orange);
   margin: 20px auto;
+  @media screen and (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+    margin: 15px auto;
+  }
 }
 </style>

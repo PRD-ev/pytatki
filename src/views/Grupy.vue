@@ -58,5 +58,8 @@ export default Vue.extend({
   cursor: pointer;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    @media screen and (max-width: 769px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }
 </style>

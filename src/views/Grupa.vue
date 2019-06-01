@@ -1,7 +1,7 @@
 <template>
   <base-container>
     <current-location/>
-    <div class="grupy">
+    <div class="pliki">
       <folder :key="note.name" v-for="note in notes" :name="note.name"/>
       <file :key="note.name" v-for="note in notes" :name="note.name" :type="note.type"/>
     </div>
@@ -90,7 +90,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.grupy {
+.pliki {
   cursor: pointer;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

@@ -53,6 +53,11 @@ p {
 img {
   max-width: 100%;
 }
+.desktop-only{
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
 .mobile-only {
   @media (min-width: 769px) {
     display: none !important;
