@@ -124,6 +124,7 @@ export default Vue.extend({
 .current-location {
   margin-left: 70px;
   font-size: 24px;
+  font-weight: 500;
   z-index: 1;
   text-transform: capitalize;
   color: var(--white);
