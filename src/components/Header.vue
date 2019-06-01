@@ -14,7 +14,7 @@
         <logo class="desktop-only"/>
       </router-link>
       <nav>
-        <router-link @click.native="closeMenu" to="/grupy">
+        <router-link @click.native="closeMenu" to="/groups">
           <img class="menu-item__image" src="../assets/icons/group-fill.svg">
           Grupy
         </router-link>
@@ -22,21 +22,23 @@
           <img class="menu-item__image" src="../assets/icons/group-fill.svg">
           Dashboard
         </router-link>
-        <router-link @click.native="closeMenu" to="/grupa">
+        <router-link @click.native="closeMenu" to="/group">
           <img class="menu-item__image" src="../assets/icons/heart-fill.svg">
           Grupa
         </router-link>
-        <router-link @click.native="closeMenu" to="/dashboard">
+        <router-link @click.native="closeMenu" to="/settings">
           <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">
-          Dashboard
+          Ustawienia
         </router-link>
-        <router-link @click.native="closeMenu" to="/dashboard">
+        <router-link @click.native="closeMenu" to="/">
           <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg">
-          Dashboard
+          Home
         </router-link>
       </nav>
       <div class="header-bottom">
-        <mini-user @click.native="closeMenu"/>
+        <router-link @click.native="closeMenu" to="/user">
+          <mini-user/>
+        </router-link>
         <div class="external-links">
           <a href="https://github.com/prd-ev/pytatki-front" target="_blank" rel="nofollow">
             <img class="external-link__image" src="../assets/icons/github-fill.svg">

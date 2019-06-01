@@ -18,7 +18,7 @@ import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 
 export default Vue.extend({
-  name: 'grupa',
+  name: 'singleGroup',
   components: {
     File,
     Folder,

@@ -19,14 +19,24 @@ export default new Router({
       component: () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
     },
     {
-      path: '/grupy',
+      path: '/groups',
       name: 'grupy',
-      component: () => import(/* webpackChunkName: "grupy" */ './views/Grupy.vue'),
+      component: () => import(/* webpackChunkName: "groups" */ './views/Groups.vue'),
     },
     {
-      path: '/grupa',
+      path: '/group',
       name: 'grupa',
-      component: () => import(/* webpackChunkName: "grupa" */ './views/Grupa.vue'),
+      component: () => import(/* webpackChunkName: "singleGroup" */ './views/SingleGroup.vue'),
+    },
+    {
+      path: '/settings',
+      name: 'ustawienia',
+      component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue'),
+    },
+    {
+      path: '/user',
+      name: 'użytkownik',
+      component: () => import(/* webpackChunkName: "user" */ './views/User.vue'),
     },
   ],
 });
