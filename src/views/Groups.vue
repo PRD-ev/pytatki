@@ -4,7 +4,7 @@
     <div class="grupy">
       <group :key="group.name" v-for="group in groups" :name="group.name" :image="group.image"/>
     </div>
-    <floating-button>plusik</floating-button>
+    <floating-button><img src="@/assets/icons/plus.svg" alt="plus"></floating-button>
   </base-container>
 </template>
 

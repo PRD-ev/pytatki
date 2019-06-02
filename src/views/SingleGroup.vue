@@ -3,9 +3,9 @@
     <current-location/>
     <div class="pliki">
       <folder :key="note.name" v-for="note in notes" :name="note.name"/>
-      <file :key="note.name" v-for="note in notes" :name="note.name" :type="note.type"/>
+      <file :key="note.name+'1'" v-for="note in notes" :name="note.name" :type="note.type"/>
     </div>
-    <floating-button>plusik</floating-button>
+    <floating-button><img src="@/assets/icons/plus.svg" alt="plus"></floating-button>
   </base-container>
 </template>
 

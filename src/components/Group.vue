@@ -35,9 +35,9 @@ export default Vue.extend({
   border: 3px solid var(--orange);
   margin: 20px auto;
   @media screen and (max-width: 768px) {
-    width: 100px;
-    height: 100px;
-    margin: 15px auto;
+    width: 130px;
+    height: 130px;
+    margin: 10px auto;
   }
 }
 </style>

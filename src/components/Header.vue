@@ -77,7 +77,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      menuIsOpen: true,
+      menuIsOpen: !isMobile,
     };
   },
   methods: {
@@ -154,7 +154,7 @@ header {
   }
 }
 nav {
-  margin-top: 90px;
+  margin-top: 10vh;
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {

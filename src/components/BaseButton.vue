@@ -1,7 +1,7 @@
 <template>
-  <div :class="buttonClass.join(' ')">
+  <button :class="buttonClass.join(' ')">
     <slot></slot>
-  </div>
+  </button>
 </template>
 
 <script>
@@ -34,9 +34,12 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  padding: 5px 25px;
+  padding: 5px 15px;
+  margin: 10px;
+  width: 100%;
   color: var(--white);
   cursor: pointer;
+  border: none;
   background: linear-gradient(
     90deg,
     var(--orange) 0%,

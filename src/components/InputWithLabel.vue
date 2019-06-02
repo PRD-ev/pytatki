@@ -1,7 +1,7 @@
 <template>
-  <label for>
+  <label class="base-label" for>
     <slot></slot>
-    <base-input></base-input>
+    <base-input :length="length"></base-input>
   </label>
 </template>
 
@@ -14,8 +14,15 @@ export default Vue.extend({
   components: {
     BaseInput,
   },
+  props: {
+    length: String,
+  },
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
+.base-label {
+  margin: 10px 0;
+  color: var(--dark-gray);
+}
 </style>

@@ -25,6 +25,7 @@ export default Vue.extend({
   --orange: #fe9e63;
   --light-orange: #ffba5c;
   --gray: #dcdcdc;
+  --dark-gray: #747474;
   --white: #fff;
   --red: #ed5252;
   --light-red: #f68888;
@@ -33,6 +34,10 @@ export default Vue.extend({
 *::before,
 *::after {
   box-sizing: border-box;
+}
+::selection {
+  background-color: var(--orange);
+  color: var(--white);
 }
 #app {
   font-family: 'Roboto', sans-serif;
@@ -54,7 +59,7 @@ p {
 img {
   max-width: 100%;
 }
-.desktop-only{
+.desktop-only {
   @media (max-width: 768px) {
     display: none !important;
   }
