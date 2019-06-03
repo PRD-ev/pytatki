@@ -30,9 +30,9 @@
           <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">
           Ustawienia
         </router-link>
-        <router-link @click.native="closeMenu" to="/">
+        <router-link @click.native="closeMenu" to="/note">
           <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg">
-          Home
+          Notatka
         </router-link>
       </nav>
       <div class="header-bottom">

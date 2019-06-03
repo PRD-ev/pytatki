@@ -28,5 +28,8 @@ export default Vue.extend({
     height: 65px;
     margin-right: 20px;
   }
+  .base-user--medium {
+    height: 125px;
+  }
 }
 </style>

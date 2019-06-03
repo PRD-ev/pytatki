@@ -38,5 +38,10 @@ export default new Router({
       name: 'użytkownik',
       component: () => import(/* webpackChunkName: "user" */ './views/User.vue'),
     },
+    {
+      path: '/note',
+      name: 'notatka',
+      component: () => import(/* webpackChunkName: "note" */ './views/Note.vue'),
+    },
   ],
 });
