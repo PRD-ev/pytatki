@@ -30,11 +30,12 @@ export default Vue.extend({
 
 <style scoped lang="scss">
 .button {
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  padding: 5px 15px;
+  padding: 7px 15px;
   margin: 10px;
   width: 100%;
   color: var(--white);

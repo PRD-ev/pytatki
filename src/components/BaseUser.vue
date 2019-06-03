@@ -21,15 +21,12 @@ export default Vue.extend({
   margin-right: 15px;
 }
 .base-user--medium {
-  height: 110px;
+  height: 125px;
 }
 @media (max-width: 768px) {
   .base-user {
     height: 65px;
     margin-right: 20px;
-  }
-  .base-user--medium {
-    height: 110px;
   }
 }
 </style>

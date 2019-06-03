@@ -45,6 +45,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .user-with-buttons {
   display: flex;
+  align-items: center;
   margin: 20px 0;
 }
 .two-inputs {
