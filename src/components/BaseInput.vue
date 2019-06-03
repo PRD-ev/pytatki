@@ -1,5 +1,5 @@
 <template>
-  <input class="base-input" type="text">
+  <input class="base-input" :value="value" :class="size?`base-input--${size}`:''" type="text">
 </template>
 
 <script>
@@ -7,6 +7,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'BaseInput',
+  props: {
+    size: String,
+    value: String,
+  },
 });
 </script>
 
@@ -18,5 +22,8 @@ export default Vue.extend({
   padding: 5px;
   border: 1px solid var(--gray);
   border-radius: 10px;
+  &--half{
+    width: 50%;
+  }
 }
 </style>

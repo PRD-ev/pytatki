@@ -1,56 +1,58 @@
 <template>
   <base-container>
-    test
     <div class="editor">
-      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-        <div class="menubar">
+      <editor-menu-bubble
+        :editor="editor"
+        :keep-in-bounds="keepInBounds"
+        v-slot="{ commands, isActive, menu }"
+      >
+        <div
+          class="menububble"
+          :class="{ 'is-active': menu.isActive }"
+          :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
+        >
           <button
-            class="menubar__button"
+            class="menububble__button"
             :class="{ 'is-active': isActive.bold() }"
             @click="commands.bold"
           >
-            bold
+            <img src="@/assets/icons/bold.svg" alt="bold">
           </button>
 
           <button
-            class="menubar__button"
+            class="menububble__button"
             :class="{ 'is-active': isActive.italic() }"
             @click="commands.italic"
           >
-            italic
+            <img src="@/assets/icons/italic.svg" alt="italic">
           </button>
 
           <button
-            class="menubar__button"
+            class="menububble__button"
             :class="{ 'is-active': isActive.strike() }"
             @click="commands.strike"
           >
-            strike
+            <img src="@/assets/icons/strikethrough.svg" alt="strikethrough">
           </button>
 
           <button
-            class="menubar__button"
+            class="menububble__button"
             :class="{ 'is-active': isActive.underline() }"
             @click="commands.underline"
           >
-            underline
+            <img src="@/assets/icons/underline.svg" alt="underline">
           </button>
+        </div>
+      </editor-menu-bubble>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.code() }"
-            @click="commands.code"
-          >
-            code
-          </button>
-
+      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+        <div class="menubar">
+          <base-input value="Roboto" size="half"/>
           <button
             class="menubar__button"
             :class="{ 'is-active': isActive.paragraph() }"
             @click="commands.paragraph"
-          >
-            paragraph
-          </button>
+          >paragraph</button>
 
           <button
             class="menubar__button"
@@ -72,10 +74,18 @@
 
           <button
             class="menubar__button"
+            :class="{ 'is-active': isActive.code() }"
+            @click="commands.code"
+          >
+            <img src="@/assets/icons/code-view.svg" alt="code-view">
+          </button>
+
+          <button
+            class="menubar__button"
             :class="{ 'is-active': isActive.bullet_list() }"
             @click="commands.bullet_list"
           >
-            ul
+            <img src="@/assets/icons/list-unordered.svg" alt="list-unordered">
           </button>
 
           <button
@@ -83,7 +93,7 @@
             :class="{ 'is-active': isActive.ordered_list() }"
             @click="commands.ordered_list"
           >
-            ol
+            <img src="@/assets/icons/list-ordered.svg" alt="list-ordered">
           </button>
 
           <button
@@ -91,27 +101,26 @@
             :class="{ 'is-active': isActive.blockquote() }"
             @click="commands.blockquote"
           >
-            quote
+            <img src="@/assets/icons/double-quotes-r.svg" alt="quote">
           </button>
 
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.code_block() }"
-            @click="commands.code_block"
-          >
-            code
+          <button class="menubar__button" @click="commands.horizontal_rule">hr</button>
+          <button class="menubar__button" @click="commands.redo">
+            <img src="@/assets/icons/align-left.svg" alt="redo">
           </button>
-
-          <button class="menubar__button" @click="commands.horizontal_rule">
-            hr
+          <button class="menubar__button" @click="commands.redo">
+            <img src="@/assets/icons/align-center.svg" alt="redo">
+          </button>
+          <button class="menubar__button" @click="commands.redo">
+            <img src="@/assets/icons/align-right.svg" alt="redo">
           </button>
 
           <button class="menubar__button" @click="commands.undo">
-            undo
+            <img src="@/assets/icons/arrow-go-back-line.svg" alt="undo">
           </button>
 
           <button class="menubar__button" @click="commands.redo">
-            redo
+            <img src="@/assets/icons/arrow-go-forward-line.svg" alt="redo">
           </button>
         </div>
       </editor-menu-bar>
@@ -125,18 +134,16 @@
 <script>
 import Vue from 'vue';
 import BaseContainer from '@/components/BaseContainer.vue';
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
+import BaseInput from '@/components/BaseInput.vue';
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap';
 import {
   Blockquote,
-  CodeBlock,
   HardBreak,
   Heading,
   HorizontalRule,
   OrderedList,
   BulletList,
   ListItem,
-  TodoItem,
-  TodoList,
   Bold,
   Code,
   Italic,
@@ -150,23 +157,23 @@ export default Vue.extend({
   name: 'note',
   components: {
     BaseContainer,
+    BaseInput,
     EditorContent,
     EditorMenuBar,
+    EditorMenuBubble,
   },
   data() {
     return {
+      keepInBounds: true,
       editor: new Editor({
         extensions: [
           new Blockquote(),
           new BulletList(),
-          new CodeBlock(),
           new HardBreak(),
           new Heading({ levels: [1, 2, 3] }),
           new HorizontalRule(),
           new ListItem(),
           new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
           new Link(),
           new Bold(),
           new Code(),
@@ -182,7 +189,7 @@ export default Vue.extend({
           <p>
             this is a very <em>basic</em> example of tiptap.
           </p>
-          <pre><code>body { display: none; }</code></pre>
+          <code>body { display: none; }</code>
           <ul>
             <li>
               A regular list
@@ -208,4 +215,46 @@ export default Vue.extend({
 
 
 <style lang="scss" scoped>
+.editor {
+  margin-top: 130px;
+}
+.menubar__button,
+.menububble__button {
+  padding: 10px;
+  height: 39px;
+    border-radius: 10px;
+    border: none;
+  cursor: pointer;
+    background-color: var(--white);
+  img {
+    height: 20px;
+  }
+   &:hover {
+      background-color: var(--gray);
+    }
+  &.is-active {
+    background-color: var(--orange);
+  }
+}
+.menubar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 2;
+  background-color: var(--white);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.menububble {
+  position: absolute;
+  visibility: hidden;
+  border: 1px solid var(--orange);
+  border-radius: 10px;
+  z-index: 3;
+  &.is-active {
+    visibility: visible;
+  }
+}
 </style>
