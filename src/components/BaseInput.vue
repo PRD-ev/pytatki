@@ -22,8 +22,8 @@ export default Vue.extend({
   padding: 5px;
   border: 1px solid var(--gray);
   border-radius: 10px;
-  &--half{
-    width: 50%;
+  &--small{
+    width: 150px;
   }
 }
 </style>

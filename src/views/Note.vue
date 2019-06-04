@@ -47,12 +47,12 @@
 
       <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
-          <base-input value="Roboto" size="half"/>
+          <base-input value="Roboto" size="small"/>
           <button
             class="menubar__button"
             :class="{ 'is-active': isActive.paragraph() }"
             @click="commands.paragraph"
-          >paragraph</button>
+          >P</button>
 
           <button
             class="menubar__button"
@@ -105,14 +105,20 @@
           </button>
 
           <button class="menubar__button" @click="commands.horizontal_rule">hr</button>
-          <button class="menubar__button" @click="commands.redo">
-            <img src="@/assets/icons/align-left.svg" alt="redo">
+          <button class="menubar__button" 
+          :class="{ 'is-active': isActive.paragraph({ textAlign: 'left' }) }"
+          @click="commands.paragraph({ textAlign: 'left' })">
+            <img src="@/assets/icons/align-left.svg" alt="align left">
           </button>
-          <button class="menubar__button" @click="commands.redo">
-            <img src="@/assets/icons/align-center.svg" alt="redo">
+          <button class="menubar__button" 
+          :class="{ 'is-active': isActive.paragraph({ textAlign: 'center' }) }"
+          @click="commands.paragraph({ textAlign: 'center' })">
+            <img src="@/assets/icons/align-center.svg" alt="align center">
           </button>
-          <button class="menubar__button" @click="commands.redo">
-            <img src="@/assets/icons/align-right.svg" alt="redo">
+          <button class="menubar__button" 
+          :class="{ 'is-active': isActive.paragraph({ textAlign: 'right' }) }"
+          @click="commands.paragraph({ textAlign: 'right' })">
+            <img src="@/assets/icons/align-right.svg" alt="align right">
           </button>
 
           <button class="menubar__button" @click="commands.undo">
@@ -152,6 +158,7 @@ import {
   Underline,
   History,
 } from 'tiptap-extensions';
+import Paragraph from '@/tiptap-extensions/paragraph.js';
 
 export default Vue.extend({
   name: 'note',
@@ -181,6 +188,7 @@ export default Vue.extend({
           new Strike(),
           new Underline(),
           new History(),
+          new Paragraph(),
         ],
         content: `
           <h2>
@@ -222,16 +230,16 @@ export default Vue.extend({
 .menububble__button {
   padding: 10px;
   height: 39px;
-    border-radius: 10px;
-    border: none;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--white);
   cursor: pointer;
-    background-color: var(--white);
   img {
     height: 20px;
   }
-   &:hover {
-      background-color: var(--gray);
-    }
+  &:hover {
+    background-color: var(--gray);
+  }
   &.is-active {
     background-color: var(--orange);
   }
@@ -248,6 +256,7 @@ export default Vue.extend({
 }
 
 .menububble {
+  background-color: var(--white);
   position: absolute;
   visibility: hidden;
   border: 1px solid var(--orange);

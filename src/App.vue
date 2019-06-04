@@ -24,8 +24,10 @@ export default Vue.extend({
 :root {
   --orange: #fe9e63;
   --light-orange: #ffba5c;
+  --superlight-orange: #ffdeb0;
   --gray: #dcdcdc;
   --dark-gray: #747474;
+  --black: #202020;
   --white: #fff;
   --red: #ed5252;
   --light-red: #f68888;
@@ -67,6 +69,31 @@ img {
 .mobile-only {
   @media (min-width: 769px) {
     display: none !important;
+  }
+}
+.ProseMirror {
+  font-weight: 300;
+  &-focused{
+    outline: none;
+  }
+  strong{
+    font-weight: 500;
+  }
+  code {
+    background-color: var(--black);
+    color: var(--white);
+    display: inline-flex;
+    padding: 5px 10px;
+    border-radius: 10px;
+    line-height: 190%;
+  }
+  blockquote{
+    border-left: 4px solid var(--gray);
+    padding: 1px 15px;
+    color: var(--dark-gray);
+  }
+  hr{
+    border: 1px solid var(--gray);
   }
 }
 </style>
