@@ -26,6 +26,7 @@ export default Vue.extend({
   --light-orange: #ffba5c;
   --superlight-orange: #ffdeb0;
   --gray: #dcdcdc;
+  --light-gray: #eaeaea;
   --dark-gray: #747474;
   --black: #202020;
   --white: #fff;
