@@ -98,8 +98,8 @@ export default Vue.extend({
 .open-menu {
   cursor: pointer;
   position: fixed;
-  top: 8px;
-  left: 8px;
+  top: 6px;
+  left: 6px;
   padding: 15px;
   img {
     width: 20px;
@@ -113,7 +113,7 @@ export default Vue.extend({
   top: 0;
   left: 0;
   width: 100vw;
-  height: 67px;
+  height: 63px;
   background: linear-gradient(
     90deg,
     var(--orange) 0%,

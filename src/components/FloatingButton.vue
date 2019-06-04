@@ -18,11 +18,11 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  bottom: 30px;
+  right: 30px;
   color: var(--white);
   cursor: pointer;
   border: none;

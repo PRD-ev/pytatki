@@ -342,7 +342,7 @@ export default Vue.extend({
   }
 }
 .pen {
-  height: 40px;
+  height: 27px;
 }
 .basic-input {
   margin: 5px;
