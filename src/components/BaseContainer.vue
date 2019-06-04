@@ -19,6 +19,7 @@ export default Vue.extend({
   width: 100%;
   height: 100vh;
   overflow: auto;
+  position: relative;
   &__inner {
     margin: 30px 90px;
     @media screen and (max-width: 768px) {

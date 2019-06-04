@@ -18,10 +18,6 @@
           <img class="menu-item__image" src="../assets/icons/group-fill.svg">
           Grupy
         </router-link>
-        <router-link @click.native="closeMenu" to="/dashboard">
-          <img class="menu-item__image" src="../assets/icons/group-fill.svg">
-          Dashboard
-        </router-link>
         <router-link @click.native="closeMenu" to="/group">
           <img class="menu-item__image" src="../assets/icons/heart-fill.svg">
           Grupa

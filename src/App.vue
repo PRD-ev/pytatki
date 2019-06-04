@@ -72,12 +72,16 @@ img {
     display: none !important;
   }
 }
+
+.v-hidden {
+  visibility: hidden;
+}
 .ProseMirror {
   font-weight: 300;
-  &-focused{
+  &-focused {
     outline: none;
   }
-  strong{
+  strong {
     font-weight: 500;
   }
   code {
@@ -88,7 +92,7 @@ img {
     border-radius: 10px;
     line-height: 190%;
   }
-  blockquote{
+  blockquote {
     border-left: 4px solid var(--gray);
     padding: 1px 15px;
     color: var(--dark-gray);

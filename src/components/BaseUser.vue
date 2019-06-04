@@ -23,6 +23,9 @@ export default Vue.extend({
 .base-user--medium {
   height: 125px;
 }
+.base-user--small {
+  height: 40px;
+}
 @media (max-width: 768px) {
   .base-user {
     height: 65px;
@@ -30,6 +33,9 @@ export default Vue.extend({
   }
   .base-user--medium {
     height: 125px;
+  }
+  .base-user--small {
+    height: 40px;
   }
 }
 </style>

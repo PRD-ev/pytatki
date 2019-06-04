@@ -23,7 +23,7 @@ export default Vue.extend({
   padding: 25px;
   margin: 25px 0;
   @media screen and (min-width: 1050px) {
-    width: 50%;
+    width: 48%;
   }
   &__title{
     font-size: 24px;

@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <p>Filip Wachowiak uutworzył notatkę 10:25</p>
-    <base-user/>
+  <div class="note-event">
+    <p class="note-event__text">
+      <b>{{person}}</b>
+      {{event}}.
+      <span class="note-event__time">{{time}}</span>
+    </p>
+    <base-user size="small"/>
   </div>
 </template>
 
@@ -15,9 +19,36 @@ export default Vue.extend({
   components: {
     BaseUser,
   },
+  props: {
+    person: {
+      required: true,
+      type: String,
+    },
+    event: {
+      required: true,
+      type: String,
+    },
+    time: {
+      required: true,
+      type: String,
+    },
+  },
 });
 </script>
 
 
 <style lang="scss" scoped>
+.note-event {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  &__text {
+    font-size: 14px;
+    margin-right: 15px;
+  }
+  &__time {
+    font-size: 12px;
+    color: var(--dark-gray);
+  }
+}
 </style>

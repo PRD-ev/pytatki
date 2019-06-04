@@ -1,7 +1,11 @@
 <template>
   <div style="display:contents;">
     <base-container>
-      <floating-button v-if="readOnly" @click.native="edit">
+      <floating-button
+        :right="sidebarAlwaysOn?'335px':''"
+        :class="readOnly?'':'v-hidden'"
+        @click.native="edit"
+      >
         <img class="pen" src="@/assets/icons/pen.svg" alt="edit">
       </floating-button>
       <div class="editor">
@@ -50,9 +54,8 @@
           </div>
         </editor-menu-bubble>
 
-        <editor-menu-bar v-if="!readOnly" :editor="editor" v-slot="{ commands, isActive }">
-          <div class="menubar">
-            <base-input class="basic-input" value="Roboto" size="small"/>
+        <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+          <div class="menubar" :class="readOnly?'v-hidden':''">
             <button
               class="menubar__button"
               :class="{ 'is-active': isActive.paragraph() }"
@@ -148,7 +151,7 @@
         <editor-content class="editor__content" :editor="editor"/>
       </div>
     </base-container>
-    <note-sidebar/>
+    <note-sidebar :sidebarAlwaysOn="sidebarAlwaysOn"/>
   </div>
 </template>
 
@@ -156,10 +159,9 @@
 <script>
 import Vue from 'vue';
 import BaseContainer from '@/components/BaseContainer.vue';
-import BaseInput from '@/components/BaseInput.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import NoteSidebar from '@/components/NoteSidebar.vue';
-
+// eslint-disable-next-line object-curly-newline
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap';
 import {
   Blockquote,
@@ -182,7 +184,6 @@ export default Vue.extend({
   name: 'note',
   components: {
     BaseContainer,
-    BaseInput,
     FloatingButton,
     NoteSidebar,
     EditorContent,
@@ -192,6 +193,7 @@ export default Vue.extend({
   data() {
     return {
       readOnly: true,
+      sidebarAlwaysOn: window.innerWidth > 1193,
       keepInBounds: true,
       editor: new Editor({
         editable: false,
@@ -291,14 +293,11 @@ export default Vue.extend({
 .menubar__button,
 .menububble__button {
   padding: 8px;
-  margin: 3px 0;
-  height: 39px;
+  height: 32px;
   border-radius: 10px;
   border: none;
   background-color: var(--white);
   cursor: pointer;
-  display: flex;
-  align-items: center;
   img {
     height: 20px;
   }
@@ -322,12 +321,19 @@ export default Vue.extend({
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
+  padding: 3px 20px;
   @media screen and (min-width: 769px) {
+    position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 50px;
     border-radius: 10px;
-    width: 700px;
+    width: 600px;
+  }
+  &__button {
+    margin: 3px 2px;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -344,12 +350,15 @@ export default Vue.extend({
 }
 .save-button {
   border-radius: 50%;
-  margin: 0 20px 0 auto;
-  width: 35px;
-  height: 35px;
+  margin: 0 0 0 auto;
+  width: 30px;
+  height: 30px;
   background-color: var(--orange);
   &:hover {
     background-color: var(--orange);
+  }
+  img {
+    transform: scale(1.7);
   }
 }
 .pen {

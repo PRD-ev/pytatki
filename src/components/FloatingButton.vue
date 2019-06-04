@@ -1,5 +1,5 @@
 <template>
-  <button class="floating-button">
+  <button :style="`right:${right?right:'30px'}`" class="floating-button">
     <slot></slot>
   </button>
 </template>
@@ -9,6 +9,9 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'FloatingButton',
+  props: {
+    right: String,
+  },
 });
 </script>
 
