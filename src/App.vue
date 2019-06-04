@@ -92,8 +92,5 @@ img {
     padding: 1px 15px;
     color: var(--dark-gray);
   }
-  hr{
-    border: 1px solid var(--gray);
-  }
 }
 </style>
