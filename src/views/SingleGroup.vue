@@ -3,13 +3,39 @@
     <current-location/>
     <div class="pliki">
       <base-modal :key="note.name" v-for="note in notes">
-        <template v-slot:modal-content>info o folderze</template>
+        <template v-slot:modal-content>
+          <div class="modal-content">
+            <folder/>
+            <div>
+              <p>{{note.name}}</p>Autor:
+              <p>
+                <b>Filip Wachowiak</b>
+                <base-user size="small"/>
+              </p>
+              <p>Data utworzenia: 13 mar 2019</p>
+            </div>
+            <base-button>Otwórz</base-button>
+          </div>
+        </template>
         <template v-slot:triggerer>
           <folder :name="note.name"/>
         </template>
       </base-modal>
       <base-modal :key="note.name+'1'" v-for="note in notes">
-        <template v-slot:modal-content>info o pliku</template>
+        <template v-slot:modal-content>
+          <div class="modal-content">
+            <file :type="note.type"/>
+            <div>
+              <p>{{note.name}}</p>Autor:
+              <p>
+                <b>Filip Wachowiak</b>
+                <base-user size="small"/>
+              </p>
+              <p>Data utworzenia: 13 mar 2019</p>
+            </div>
+            <base-button>Otwórz</base-button>
+          </div>
+        </template>
         <template v-slot:triggerer>
           <file :name="note.name" :type="note.type"/>
         </template>
@@ -38,6 +64,8 @@ import BaseContainer from '@/components/BaseContainer.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
+import BaseUser from '@/components/BaseUser.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 export default Vue.extend({
   name: 'singleGroup',
@@ -48,6 +76,8 @@ export default Vue.extend({
     CurrentLocation,
     FloatingButton,
     BaseModal,
+    BaseUser,
+    BaseButton,
   },
   data() {
     return {
@@ -117,5 +147,8 @@ export default Vue.extend({
   cursor: pointer;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.modal-content {
+  display: flex;
 }
 </style>
