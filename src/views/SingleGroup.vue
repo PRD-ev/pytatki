@@ -2,10 +2,31 @@
   <base-container>
     <current-location/>
     <div class="pliki">
-      <folder :key="note.name" v-for="note in notes" :name="note.name"/>
-      <file :key="note.name+'1'" v-for="note in notes" :name="note.name" :type="note.type"/>
+      <base-modal :key="note.name" v-for="note in notes">
+        <template v-slot:modal-content>info o folderze</template>
+        <template v-slot:triggerer>
+          <folder :name="note.name"/>
+        </template>
+      </base-modal>
+      <base-modal :key="note.name+'1'" v-for="note in notes">
+        <template v-slot:modal-content>info o pliku</template>
+        <template v-slot:triggerer>
+          <file :name="note.name" :type="note.type"/>
+        </template>
+      </base-modal>
     </div>
-    <floating-button><img src="@/assets/icons/plus.svg" alt="plus"></floating-button>
+    <base-modal>
+      <template v-slot:modal-content>
+        <p>zwykła notatka</p>
+        <p>notatka zewnętrzna</p>
+        <p>plik</p>
+      </template>
+      <template v-slot:triggerer>
+        <floating-button>
+          <img src="@/assets/icons/plus.svg" alt="plus">
+        </floating-button>
+      </template>
+    </base-modal>
   </base-container>
 </template>
 
@@ -16,6 +37,7 @@ import Folder from '@/components/Folder.vue';
 import BaseContainer from '@/components/BaseContainer.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
+import BaseModal from '@/components/BaseModal.vue';
 
 export default Vue.extend({
   name: 'singleGroup',
@@ -25,6 +47,7 @@ export default Vue.extend({
     BaseContainer,
     CurrentLocation,
     FloatingButton,
+    BaseModal,
   },
   data() {
     return {
