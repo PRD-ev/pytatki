@@ -1,7 +1,7 @@
 <template>
   <div class="mini-user">
     <base-user/>
-    <p class="mini-user__text">Filip Wachowiak</p>
+    <p class="mini-user__text">{{ $store.state.user.name }}</p>
   </div>
 </template>
 
