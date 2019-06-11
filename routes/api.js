@@ -15,6 +15,9 @@ var router = express.Router();
 
 router.get("/", function(req, res) {
   let token = req.header("Authorization");
+
+  if (!token) return res.json({ data: "You need to pass token" });
+
   admin
     .auth()
     .verifyIdToken(token)

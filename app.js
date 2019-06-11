@@ -17,8 +17,10 @@ var apiRouter = require("./routes/api");
 var app = express();
 app.use(compression());
 
+let firebaseKey = JSON.parse(process.env.FIREBASE_KEY);
+
 admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+  credential: admin.credential.cert(firebaseKey),
   databaseURL: "https://https://pytatki-1559814016089.firebaseio.com"
 });
 
