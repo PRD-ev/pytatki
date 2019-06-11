@@ -3,7 +3,10 @@
     <h3>Sign In</h3>
     <br>
     <button @click="socialLogin" class="social-button">
-      <img alt="Google Logo" src="../assets/google-logo.png">
+      <img
+        alt="Sign in with Google"
+        src="../assets/google/2x/btn_google_signin_light_normal_web@2x.png"
+      >
     </button>
   </base-container>
 </template>
@@ -29,10 +32,12 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then(result => {
+          console.log(result);
           let user = {
             name: result.additionalUserInfo.profile.name,
             action: 'zalogowany',
             id: result.user.uid,
+            token: result.credential.idToken,
           };
           this.$store.commit('setUser', user);
           this.$router.replace('user');
@@ -69,16 +74,14 @@ p a {
   cursor: pointer;
 }
 .social-button {
-  width: 75px;
+  width: 200px;
   background: white;
-  padding: 10px;
-  border-radius: 100%;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  padding: 0;
   outline: 0;
   border: 0;
 }
-.social-button:active {
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+.social-button:active img {
+  content: url('../assets/google/2x/btn_google_signin_light_pressed_web@2x.png');
 }
 .social-button img {
   width: 100%;

@@ -5,11 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    user: {
-      name: 'Filip Wachowiak',
-      action: 'testuje',
-      id: '123',
-    },
+    user: {},
     friends: ['Adam', 'Tomek', 'Patryk', ' Kostek'],
   },
   getters: {

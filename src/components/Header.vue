@@ -32,8 +32,11 @@
         </router-link>
       </nav>
       <div class="header-bottom">
-        <router-link @click.native="closeMenu" to="/user">
+        <router-link v-if="$store.state.user.id" @click.native="closeMenu" to="/user">
           <mini-user/>
+        </router-link>
+        <router-link v-else @click.native="closeMenu" to="/login">
+          <base-button style="margin-bottom: 40px">TMP: Zaloguj się</base-button>
         </router-link>
         <div class="external-links">
           <a href="https://github.com/prd-ev/pytatki-front" target="_blank" rel="nofollow">
@@ -62,6 +65,7 @@
 import Vue from 'vue';
 import Logo from '@/components/Logo.vue';
 import MiniUser from '@/components/MiniUser.vue';
+import BaseButton from '@/components/BaseButton';
 
 const isMobile = window.innerWidth < 769;
 
@@ -70,6 +74,7 @@ export default Vue.extend({
   components: {
     Logo,
     MiniUser,
+    BaseButton,
   },
   data() {
     return {
@@ -110,11 +115,7 @@ export default Vue.extend({
   left: 0;
   width: 100vw;
   height: 63px;
-  background: linear-gradient(
-    90deg,
-    var(--orange) 0%,
-    var(--light-orange) 100%
-  );
+  background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
   z-index: 2;
 }
 .current-location {
@@ -133,11 +134,7 @@ header {
   padding: 40px 50px;
   width: 275px;
   font-weight: 500;
-  background: linear-gradient(
-    180deg,
-    var(--orange) 15%,
-    var(--light-orange) 100%
-  );
+  background: linear-gradient(180deg, var(--orange) 15%, var(--light-orange) 100%);
   color: var(--white);
   box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.25);
   z-index: 3;
