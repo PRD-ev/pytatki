@@ -8,6 +8,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var compression = require("compression");
+var admin = require("firebase-admin");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -15,6 +16,11 @@ var apiRouter = require("./routes/api");
 
 var app = express();
 app.use(compression());
+
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  databaseURL: "https://https://pytatki-1559814016089.firebaseio.com"
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

@@ -1,5 +1,6 @@
 import express from "express";
 import schema, { graphql } from "../schemas/query.js";
+import * as admin from "firebase-admin";
 
 var router = express.Router();
 
@@ -13,9 +14,19 @@ var router = express.Router();
 // );
 
 router.get("/", function(req, res) {
-  graphql(schema, req.query.query).then(result => {
-    res.json(result);
-  });
+  let token = req.header("Authorization");
+  admin
+    .auth()
+    .verifyIdToken(token)
+    .then(function(decodedToken) {
+      let uid = decodedToken.uid;
+      graphql(schema, req.query.query).then(result => {
+        res.json(result);
+      });
+    })
+    .catch(function() {
+      res.json({ data: "Invalid or expired token" });
+    });
 });
 
 module.exports = router;
