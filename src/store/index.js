@@ -8,6 +8,7 @@ export default new Vuex.Store({
     user: {
       name: 'Filip Wachowiak',
       action: 'testuje',
+      id: '123',
     },
     friends: ['Adam', 'Tomek', 'Patryk', ' Kostek'],
   },
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
     addFriend(state, friend) {
       state.friends = [friend, ...state.friends];
     },
