@@ -1,6 +1,6 @@
 workflow "Test" {
   on = "push"
-  resolves = ["Run e2e tests"]
+  resolves = ["Run unit tests"]
 }
 
 action "Install dependencies" {
@@ -18,10 +18,4 @@ action "Run unit tests" {
   uses = "actions/npm@59b64a598378f31e49cb76f27d6f3312b582f680"
   runs = "npm run test:unit"
   needs = ["Run linter"]
-}
-
-action "Run e2e tests" {
-  uses = "actions/npm@59b64a598378f31e49cb76f27d6f3312b582f680"
-  runs = "npm run test:e2e"
-  needs = ["Run unit tests"]
 }
