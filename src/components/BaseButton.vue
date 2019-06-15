@@ -10,8 +10,12 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'BaseButton',
   props: {
-    size: String,
-    color: String,
+    size: {
+      type: String,
+      validator: size => {
+        return size === 'huge';
+      },
+    },
   },
   data() {
     return {
@@ -21,8 +25,6 @@ export default Vue.extend({
   created() {
     if (this.size === 'huge') {
       this.buttonClass.push('button--huge');
-    } else if (this.size === 'large') {
-      this.buttonClass.push('button--large');
     }
   },
 });
@@ -41,14 +43,7 @@ export default Vue.extend({
   color: var(--white);
   cursor: pointer;
   border: none;
-  background: linear-gradient(
-    90deg,
-    var(--orange) 0%,
-    var(--light-orange) 100%
-  );
-  &--large {
-    padding: 10px 25px;
-  }
+  background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
   &--huge {
     padding: 10px 25px;
     height: 100px;

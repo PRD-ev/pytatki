@@ -150,5 +150,6 @@ export default Vue.extend({
 }
 .modal-content {
   display: flex;
+  cursor: default;
 }
 </style>

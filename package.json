@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit --watch"
   },
   "dependencies": {
     "core-js": "^2.6.5",
@@ -78,7 +78,7 @@
       "^.+\\.jsx?$": "babel-jest"
     },
     "transformIgnorePatterns": [
-      "/node_modules/"
+      "<rootDir>/node_modules/"
     ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
