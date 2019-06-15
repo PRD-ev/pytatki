@@ -1,6 +1,6 @@
 workflow "Test" {
   on = "push"
-  resolves = ["Run unit tests"]
+  resolves = ["Run e2e tests"]
 }
 
 action "Install dependencies" {
