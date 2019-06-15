@@ -14,7 +14,7 @@
 <script>
 import firebase from 'firebase';
 
-import BaseContainer from '../components/BaseContainer';
+import BaseContainer from '../components/BaseContainer.vue';
 
 export default {
   name: 'login',
@@ -31,19 +31,19 @@ export default {
       firebase
         .auth()
         .signInWithPopup(provider)
-        .then(result => {
+        .then((result) => {
           console.log(result);
-          let user = {
+          const user = {
             name: result.additionalUserInfo.profile.name,
             action: 'zalogowany',
             id: result.user.uid,
             token: result.credential.idToken,
           };
-          this.$store.commit('setUser', user);
+          this.$store.dispatch('setUserAction', user);
           this.$router.replace('user');
         })
-        .catch(err => {
-          alert('Oops. ' + err.message);
+        .catch((err) => {
+          alert(`Oops. ${err.message}`);
         });
     },
   },
@@ -51,7 +51,6 @@ export default {
 </script>
 
 <style scoped>
-/* "scoped" attribute limit the CSS to this component only */
 .login {
   margin: 40px;
 }

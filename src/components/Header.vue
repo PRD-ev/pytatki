@@ -65,7 +65,7 @@
 import Vue from 'vue';
 import Logo from '@/components/Logo.vue';
 import MiniUser from '@/components/MiniUser.vue';
-import BaseButton from '@/components/BaseButton';
+import BaseButton from '@/components/BaseButton.vue';
 
 const isMobile = window.innerWidth < 769;
 
