@@ -8,7 +8,12 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'BaseInput',
   props: {
-    size: String,
+    size: {
+      type: String,
+      validator: size => {
+        return size === 'small';
+      },
+    },
     value: String,
   },
 });
@@ -22,7 +27,7 @@ export default Vue.extend({
   padding: 5px;
   border: 1px solid var(--gray);
   border-radius: 10px;
-  &--small{
+  &--small {
     width: 150px;
   }
 }
