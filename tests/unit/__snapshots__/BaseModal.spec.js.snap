@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseModal.vue Matches snapshot 1`] = `
+<div>
+  <div>
+    <p class="open"></p>
+  </div>
+  <!---->
+</div>
+`;

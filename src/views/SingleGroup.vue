@@ -17,7 +17,7 @@
             <base-button>Otwórz</base-button>
           </div>
         </template>
-        <template v-slot:triggerer>
+        <template v-slot:trigger>
           <folder :name="note.name"/>
         </template>
       </base-modal>
@@ -36,7 +36,7 @@
             <base-button>Otwórz</base-button>
           </div>
         </template>
-        <template v-slot:triggerer>
+        <template v-slot:trigger>
           <file :name="note.name" :type="note.type"/>
         </template>
       </base-modal>
@@ -47,7 +47,7 @@
         <p>notatka zewnętrzna</p>
         <p>plik</p>
       </template>
-      <template v-slot:triggerer>
+      <template v-slot:trigger>
         <floating-button>
           <img src="@/assets/icons/plus.svg" alt="plus">
         </floating-button>

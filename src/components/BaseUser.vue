@@ -1,5 +1,5 @@
 <template>
-  <img class="base-user" :class="`base-user--${size}`" src="../assets/Filip.jpg" alt>
+  <img class="base-user" :class="size?`base-user--${size}`:''" src="../assets/Filip.jpg" alt>
 </template>
 
 <script>
@@ -8,7 +8,11 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'BaseUser',
   props: {
-    size: String,
+    size: {
+      type: String,
+      // prettier-ignore
+      validator: size => size === 'small' || size === 'medium',
+    },
   },
 });
 </script>

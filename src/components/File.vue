@@ -3,20 +3,22 @@
     <div class="file__symbol">
       <img
         v-if="type==='external'"
-      class="file-type"
+        class="file-type"
         src="@/assets/icons/link.svg"
-        alt="notatka zewnętrzna"/>
-              <img
+        alt="notatka zewnętrzna"
+      >
+      <img
         v-if="type==='download'"
-      class="file-type"
+        class="file-type"
         src="@/assets/icons/download-fill.svg"
-        alt="pobierz"/>
+        alt="pobierz"
+      >
       <img
         v-if="type==='pytatki'"
-      class="file-type"
+        class="file-type"
         src="@/assets/icons/quill-pen-fill.svg"
-        alt="notatka"/>
-
+        alt="notatka"
+      >
     </div>
     {{name}}
   </div>
@@ -32,6 +34,8 @@ export default Vue.extend({
     type: {
       type: String,
       required: true,
+      // prettier-ignore
+      validator: type => ['download', 'pytatki', 'external'].indexOf(type) !== -1,
     },
   },
 });
@@ -56,7 +60,7 @@ export default Vue.extend({
     background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
   }
 }
-.file-type{
+.file-type {
   height: 50px;
 }
 </style>

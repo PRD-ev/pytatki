@@ -8,6 +8,7 @@ describe('BaseButton.vue', () => {
     });
     expect(wrapper.find('.button.button--huge').exists()).toBe(true);
   });
+
   it('Throws error on forbidden modification class', () => {
     const wrapper = shallowMount(BaseButton);
     expect(wrapper.vm.$options.props.size.validator('enormous')).toBe(false);

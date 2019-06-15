@@ -1,7 +1,7 @@
 <template>
   <div>
     <div @click="openModal">
-      <slot name="triggerer"></slot>
+      <slot name="trigger"></slot>
     </div>
     <div v-if="modalOn">
       <div @click="closeModal" class="dark-background"></div>
