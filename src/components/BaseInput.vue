@@ -10,9 +10,7 @@ export default Vue.extend({
   props: {
     size: {
       type: String,
-      validator: size => {
-        return size === 'small';
-      },
+      validator: size => size === 'small',
     },
     value: String,
   },

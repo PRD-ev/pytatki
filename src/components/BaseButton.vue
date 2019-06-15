@@ -12,9 +12,7 @@ export default Vue.extend({
   props: {
     size: {
       type: String,
-      validator: size => {
-        return size === 'huge';
-      },
+      validator: size => size === 'huge',
     },
   },
   data() {

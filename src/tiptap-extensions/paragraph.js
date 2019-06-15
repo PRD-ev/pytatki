@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { toggleBlockType } from 'tiptap-commands';
 import { Node } from 'tiptap';
 

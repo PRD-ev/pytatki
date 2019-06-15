@@ -32,6 +32,7 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then((result) => {
+          // eslint-disable-next-line no-console
           console.log(result);
           const user = {
             name: result.additionalUserInfo.profile.name,
@@ -43,6 +44,7 @@ export default {
           this.$router.replace('user');
         })
         .catch((err) => {
+          // eslint-disable-next-line no-alert
           alert(`Oops. ${err.message}`);
         });
     },
