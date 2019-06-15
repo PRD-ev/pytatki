@@ -1,6 +1,6 @@
 workflow "Test" {
   on = "push"
-  resolves = ["Run tests"]
+  resolves = ["Run unit tests"]
 }
 
 action "Install dependencies" {
