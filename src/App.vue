@@ -76,6 +76,7 @@ img {
 .v-hidden {
   visibility: hidden;
 }
+
 .ProseMirror {
   font-weight: 300;
   &-focused {

@@ -36,7 +36,7 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  padding: 7px 15px;
+  padding: 10px 15px;
   margin: 10px;
   width: 100%;
   color: var(--white);
@@ -50,7 +50,6 @@ export default Vue.extend({
   }
   &--small{
     margin: 15px 0;
-    width: 200px
   }
 }
 </style>

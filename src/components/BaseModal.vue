@@ -42,8 +42,8 @@ export default Vue.extend({
 .close-modal {
   filter: invert(1);
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 30px;
+  right: 30px;
   cursor: pointer;
 }
 .dark-background {
@@ -58,12 +58,15 @@ export default Vue.extend({
 }
 .modal {
   z-index: 6;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--white);
-  padding: 55px;
+  padding: 40px 50px;
   border-radius: 10px;
+  max-height: 90vh;
+  max-width: 90vw;
+  overflow: scroll;
 }
 </style>

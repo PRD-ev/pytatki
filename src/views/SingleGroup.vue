@@ -4,18 +4,7 @@
     <div class="pliki">
       <base-modal :key="note.name" v-for="note in notes">
         <template v-slot:modal-content>
-          <div class="modal-content">
-            <folder/>
-            <div>
-              <p>{{note.name}}</p>Autor:
-              <p>
-                <b>Filip Wachowiak</b>
-                <base-user size="small"/>
-              </p>
-              <p>Data utworzenia: 13 mar 2019</p>
-            </div>
-            <base-button>Otwórz</base-button>
-          </div>
+          <file-modal type="folder" :note="note"/>
         </template>
         <template v-slot:trigger>
           <folder :name="note.name"/>
@@ -23,18 +12,7 @@
       </base-modal>
       <base-modal :key="note.name+'1'" v-for="note in notes">
         <template v-slot:modal-content>
-          <div class="modal-content">
-            <file :type="note.type"/>
-            <div>
-              <p>{{note.name}}</p>Autor:
-              <p>
-                <b>Filip Wachowiak</b>
-                <base-user size="small"/>
-              </p>
-              <p>Data utworzenia: 13 mar 2019</p>
-            </div>
-            <base-button>Otwórz</base-button>
-          </div>
+          <file-modal type="file" :note="note"/>
         </template>
         <template v-slot:trigger>
           <file :name="note.name" :type="note.type"/>
@@ -43,9 +21,24 @@
     </div>
     <base-modal>
       <template v-slot:modal-content>
-        <p>zwykła notatka</p>
-        <p>notatka zewnętrzna</p>
-        <p>plik</p>
+        <div class="add-note-container">
+          <div>
+            <folder class="negative-margin"/>
+            <p class="add-note-desc">Folder</p>
+          </div>
+          <div>
+            <file class="negative-margin" type="download"/>
+            <p class="add-note-desc">Folder</p>
+          </div>
+          <div>
+            <file class="negative-margin" type="pytatki"/>
+            <p class="add-note-desc">Folder</p>
+          </div>
+          <div>
+            <file class="negative-margin" type="external"/>
+            <p class="add-note-desc">Folder</p>
+          </div>
+        </div>
       </template>
       <template v-slot:trigger>
         <floating-button>
@@ -64,8 +57,7 @@ import BaseContainer from '@/components/BaseContainer.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
-import BaseUser from '@/components/BaseUser.vue';
-import BaseButton from '@/components/BaseButton.vue';
+import FileModal from '@/components/FileModal.vue';
 
 export default Vue.extend({
   name: 'singleGroup',
@@ -76,8 +68,7 @@ export default Vue.extend({
     CurrentLocation,
     FloatingButton,
     BaseModal,
-    BaseUser,
-    BaseButton,
+    FileModal,
   },
   data() {
     return {
@@ -148,8 +139,18 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
-.modal-content {
+.add-note-container {
   display: flex;
-  cursor: default;
+  align-items: flex-end;
+  @media screen and (max-width: 550px) {
+    flex-direction: column;
+    align-items: initial;
+  }
+  .negative-margin {
+    margin: -5px;
+  }
+}
+.add-note-desc {
+  margin: 0 0 0 20px;
 }
 </style>

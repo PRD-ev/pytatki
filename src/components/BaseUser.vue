@@ -11,7 +11,7 @@ export default Vue.extend({
     size: {
       type: String,
       // prettier-ignore
-      validator: size => size === 'small' || size === 'medium',
+      validator: size => size === 'small' || size === 'medium' || size === 'tiny',
     },
   },
 });
@@ -30,6 +30,10 @@ export default Vue.extend({
 .base-user--small {
   height: 40px;
 }
+.base-user--tiny {
+  height: 30px;
+}
+
 @media (max-width: 768px) {
   .base-user {
     height: 65px;
@@ -40,6 +44,9 @@ export default Vue.extend({
   }
   .base-user--small {
     height: 40px;
+  }
+  .base-user--tiny {
+    height: 30px;
   }
 }
 </style>
