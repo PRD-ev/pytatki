@@ -23,7 +23,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .base-label {
   margin: 5px 0;
-  color: var(--dark-gray);
+  color: var(--black);
   display: inline-block;
   width: 100%;
 }
