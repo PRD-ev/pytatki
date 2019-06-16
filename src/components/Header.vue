@@ -35,9 +35,7 @@
         <router-link v-if="$store.state.user.id" @click.native="closeMenu" to="/user">
           <mini-user/>
         </router-link>
-        <router-link v-else @click.native="closeMenu" to="/login">
-          <base-button style="margin-bottom: 40px">TMP: Zaloguj się</base-button>
-        </router-link>
+        <login-modal v-else/>
         <div class="external-links">
           <a href="https://github.com/prd-ev/pytatki-front" target="_blank" rel="nofollow">
             <img class="external-link__image" src="../assets/icons/github-fill.svg">
@@ -65,7 +63,8 @@
 import Vue from 'vue';
 import Logo from '@/components/Logo.vue';
 import MiniUser from '@/components/MiniUser.vue';
-import BaseButton from '@/components/BaseButton.vue';
+import LoginModal from '@/components/LoginModal.vue';
+
 
 const isMobile = window.innerWidth < 769;
 
@@ -74,7 +73,7 @@ export default Vue.extend({
   components: {
     Logo,
     MiniUser,
-    BaseButton,
+    LoginModal,
   },
   data() {
     return {

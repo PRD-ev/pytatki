@@ -1,24 +1,32 @@
 <template>
-  <base-container class="login">
-    <h3>Sign In</h3>
-    <br>
-    <button @click="socialLogin" class="social-button">
-      <img
-        alt="Sign in with Google"
-        src="../assets/google/2x/btn_google_signin_light_normal_web@2x.png"
-      >
-    </button>
-  </base-container>
+  <div>
+    <base-modal>
+      <template v-slot:modal-content>
+        <h3 class="login-header">Sign In</h3>
+        <button @click="socialLogin" class="social-button">
+          <img
+            alt="Sign in with Google"
+            src="../assets/google/2x/btn_google_signin_light_normal_web@2x.png"
+          >
+        </button>
+      </template>
+      <template v-slot:trigger>
+        <div class="login-trigger">Sign In</div>
+      </template>
+    </base-modal>
+  </div>
 </template>
 
 <script>
 import firebase from 'firebase';
 
-import BaseContainer from '../components/BaseContainer.vue';
+import BaseModal from '@/components/BaseModal.vue';
 
 export default {
-  name: 'login',
-  components: { BaseContainer },
+  name: 'LoginModal',
+  components: {
+    BaseModal,
+  },
   data() {
     return {
       email: '',
@@ -52,9 +60,9 @@ export default {
 };
 </script>
 
-<style scoped>
-.login {
-  margin: 40px;
+<style lang="scss" scoped>
+.login-header{
+  color: var(--black);
 }
 input {
   margin: 10px 0;
@@ -86,5 +94,12 @@ p a {
 }
 .social-button img {
   width: 100%;
+}
+.login-trigger{
+  margin-bottom: 25px;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    font-size: 25px;
+  }
 }
 </style>
