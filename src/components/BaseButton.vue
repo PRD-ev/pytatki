@@ -1,5 +1,5 @@
 <template>
-  <button :class="buttonClass.join(' ')">
+  <button class="button" :class="buttonClass">
     <slot></slot>
   </button>
 </template>
@@ -12,17 +12,18 @@ export default Vue.extend({
   props: {
     size: {
       type: String,
-      validator: size => size === 'huge',
+      // prettier-ignore
+      validator: size => size === 'huge' || size === 'small',
     },
   },
   data() {
     return {
-      buttonClass: ['button'],
+      buttonClass: [],
     };
   },
   created() {
-    if (this.size === 'huge') {
-      this.buttonClass.push('button--huge');
+    if (this.size) {
+      this.buttonClass.push(`button--${this.size}`);
     }
   },
 });
@@ -46,6 +47,10 @@ export default Vue.extend({
     padding: 10px 25px;
     height: 100px;
     width: 250px;
+  }
+  &--small{
+    margin: 15px 0;
+    width: 200px
   }
 }
 </style>

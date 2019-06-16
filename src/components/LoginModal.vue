@@ -2,7 +2,11 @@
   <div>
     <base-modal>
       <template v-slot:modal-content>
-        <h3 class="login-header">Sign In</h3>
+        <h3 class="login-header">Zaloguj się</h3>
+        <input-with-label>Login</input-with-label>
+        <br>
+        <input-with-label>Hasło</input-with-label>
+        <base-button size="small">Zaloguj</base-button>
         <button @click="socialLogin" class="social-button">
           <img
             alt="Sign in with Google"
@@ -11,7 +15,10 @@
         </button>
       </template>
       <template v-slot:trigger>
-        <div class="login-trigger">Sign In</div>
+        <p class="login-trigger">
+          <img class="login-image" src="../assets/icons/logout-box-fill.svg">
+          Zaloguj się
+        </p>
       </template>
     </base-modal>
   </div>
@@ -21,11 +28,15 @@
 import firebase from 'firebase';
 
 import BaseModal from '@/components/BaseModal.vue';
+import BaseButton from '@/components/BaseButton.vue';
+import InputWithLabel from '@/components/InputWithLabel.vue';
 
 export default {
   name: 'LoginModal',
   components: {
     BaseModal,
+    BaseButton,
+    InputWithLabel,
   },
   data() {
     return {
@@ -61,33 +72,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login-header{
+.login-header {
+  font-size: 30px;
   color: var(--black);
-}
-input {
-  margin: 10px 0;
-  width: 20%;
-  padding: 15px;
-}
-button {
-  margin-top: 20px;
-  width: 10%;
-  cursor: pointer;
-}
-p {
-  margin-top: 40px;
-  font-size: 13px;
-}
-p a {
-  text-decoration: underline;
-  cursor: pointer;
+  margin-top: 0;
+  min-width: 200px;
 }
 .social-button {
   width: 200px;
-  background: white;
+  background: transparent;
+  margin-top: 20px;
   padding: 0;
   outline: 0;
   border: 0;
+  cursor: pointer;
 }
 .social-button:active img {
   content: url('../assets/google/2x/btn_google_signin_light_pressed_web@2x.png');
@@ -95,11 +93,20 @@ p a {
 .social-button img {
   width: 100%;
 }
-.login-trigger{
-  margin-bottom: 25px;
+.login-trigger {
+  margin-bottom: 50px;
   cursor: pointer;
   @media screen and (max-width: 768px) {
     font-size: 25px;
+  }
+}
+.login-image {
+  height: 23px;
+  margin-right: 15px;
+  vertical-align: bottom;
+  @media (max-width: 768px) {
+    height: 34px;
+    margin-right: 20px;
   }
 }
 </style>

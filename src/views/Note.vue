@@ -299,7 +299,7 @@ export default Vue.extend({
   background-color: var(--white);
   cursor: pointer;
   img {
-    height: 20px;
+    height: 100%;
   }
   &:hover {
     background-color: var(--gray);
@@ -331,6 +331,7 @@ export default Vue.extend({
     width: 600px;
   }
   &__button {
+    font-size: 14px;
     margin: 3px 2px;
     display: flex;
     align-items: center;
@@ -353,12 +354,10 @@ export default Vue.extend({
   margin: 0 0 0 auto;
   width: 30px;
   height: 30px;
+  padding: 5px;
   background-color: var(--orange);
   &:hover {
     background-color: var(--orange);
-  }
-  img {
-    transform: scale(1.7);
   }
 }
 .pen {
