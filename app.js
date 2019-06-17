@@ -17,12 +17,16 @@ var apiRouter = require("./routes/api");
 var app = express();
 app.use(compression());
 
-let firebaseKey = JSON.parse(process.env.FIREBASE_KEY);
+if (process.env.ENVIRONMENT !== "dev") {
+  FIREBASE_KEY = process.env.FIREBASE_KEY || `{"hello": "firebase"}`;
 
-admin.initializeApp({
-  credential: admin.credential.cert(firebaseKey),
-  databaseURL: "https://https://pytatki-1559814016089.firebaseio.com"
-});
+  let firebaseKey = JSON.parse(FIREBASE_KEY);
+
+  admin.initializeApp({
+    credential: admin.credential.cert(firebaseKey),
+    databaseURL: "https://https://pytatki-1559814016089.firebaseio.com"
+  });
+}
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
