@@ -10,7 +10,6 @@ export default Vue.extend({
   props: {
     size: {
       type: String,
-      // prettier-ignore
       validator: size => size === 'small' || size === 'medium' || size === 'tiny',
     },
   },

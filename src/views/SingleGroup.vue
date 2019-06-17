@@ -1,42 +1,40 @@
 <template>
-  <base-container>
+  <base-container @click.native="hideContextMenu" @contextmenu.native="hideContextMenu">
     <current-location/>
-    <div class="pliki">
-      <base-modal :key="note.name" v-for="note in notes">
-        <template v-slot:modal-content>
-          <file-modal type="folder" :note="note"/>
-        </template>
-        <template v-slot:trigger>
-          <folder :name="note.name"/>
-        </template>
-      </base-modal>
-      <base-modal :key="note.name+'1'" v-for="note in notes">
-        <template v-slot:modal-content>
-          <file-modal type="file" :note="note"/>
-        </template>
-        <template v-slot:trigger>
-          <file :name="note.name" :type="note.type"/>
-        </template>
-      </base-modal>
-    </div>
+    <context-menu class="pliki" :note="selectedNote" :clickPosition="clickPosition">
+      <file
+        @open-context-menu="showContextMenu"
+        :key="note.name"
+        v-for="note in notes"
+        type="folder"
+        :name="note.name"
+      />
+      <file
+        @open-context-menu="showContextMenu"
+        :key="note.name+'1'"
+        v-for="note in notes"
+        :name="note.name"
+        :type="note.type"
+      />
+    </context-menu>
     <base-modal>
       <template v-slot:modal-content>
         <div class="add-note-container">
-          <div>
-            <folder class="negative-margin"/>
+          <div class="note-type-container">
+            <file type="folder" size="tiny" class="negative-margin"/>
             <p class="add-note-desc">Folder</p>
           </div>
-          <div>
-            <file class="negative-margin" type="download"/>
-            <p class="add-note-desc">Folder</p>
+          <div class="note-type-container">
+            <file size="tiny" class="negative-margin" type="download"/>
+            <p class="add-note-desc">Plik do pobrania</p>
           </div>
-          <div>
-            <file class="negative-margin" type="pytatki"/>
-            <p class="add-note-desc">Folder</p>
+          <div class="note-type-container">
+            <file size="tiny" class="negative-margin" type="pytatki"/>
+            <p class="add-note-desc">Notatka</p>
           </div>
-          <div>
-            <file class="negative-margin" type="external"/>
-            <p class="add-note-desc">Folder</p>
+          <div class="note-type-container">
+            <file size="tiny" class="negative-margin" type="external"/>
+            <p class="add-note-desc">Notatka zewnętrzna</p>
           </div>
         </div>
       </template>
@@ -52,23 +50,21 @@
 <script>
 import Vue from 'vue';
 import File from '@/components/File.vue';
-import Folder from '@/components/Folder.vue';
 import BaseContainer from '@/components/BaseContainer.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
-import FileModal from '@/components/FileModal.vue';
+import ContextMenu from '@/components/ContextMenu.vue';
 
 export default Vue.extend({
   name: 'singleGroup',
   components: {
     File,
-    Folder,
     BaseContainer,
     CurrentLocation,
     FloatingButton,
     BaseModal,
-    FileModal,
+    ContextMenu,
   },
   data() {
     return {
@@ -128,7 +124,21 @@ export default Vue.extend({
           type: 'external',
         },
       ],
+      selectedNote: {},
+      clickPosition: { x: 0, y: 0 },
     };
+  },
+  methods: {
+    showContextMenu(name, type, event) {
+      this.selectedNote.name = name;
+      this.selectedNote.type = type;
+      this.clickPosition.x = event.clientX;
+      this.clickPosition.y = event.clientY;
+    },
+    hideContextMenu() {
+      this.clickPosition.x = 0;
+      this.clickPosition.y = 0;
+    },
   },
 });
 </script>
@@ -141,16 +151,20 @@ export default Vue.extend({
 }
 .add-note-container {
   display: flex;
-  align-items: flex-end;
-  @media screen and (max-width: 550px) {
-    flex-direction: column;
-    align-items: initial;
-  }
+  flex-direction: column;
   .negative-margin {
     margin: -5px;
   }
 }
 .add-note-desc {
   margin: 0 0 0 20px;
+  &:first-child {
+    margin-left: 11px;
+  }
+}
+.note-type-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 </style>

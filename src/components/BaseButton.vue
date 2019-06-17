@@ -12,7 +12,6 @@ export default Vue.extend({
   props: {
     size: {
       type: String,
-      // prettier-ignore
       validator: size => size === 'huge' || size === 'small',
     },
   },
@@ -48,7 +47,7 @@ export default Vue.extend({
     height: 100px;
     width: 250px;
   }
-  &--small{
+  &--small {
     margin: 15px 0;
   }
 }

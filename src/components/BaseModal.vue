@@ -67,6 +67,6 @@ export default Vue.extend({
   border-radius: 10px;
   max-height: 90vh;
   max-width: 90vw;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>
