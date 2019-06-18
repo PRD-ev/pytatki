@@ -1,7 +1,8 @@
 <template>
   <div v-if="type==='folder'" class="folder" @contextmenu.prevent="openContextMenu">
     <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
-    {{name}}
+    <span v-if="!renaming">{{name}}</span>
+    <base-input v-else :value="name"/>
   </div>
   <div v-else class="file" @contextmenu.prevent="openContextMenu">
     <div class="file__symbol" :class="size?`symbol--${size}`:''">
@@ -24,15 +25,21 @@
         alt="notatka"
       >
     </div>
-    {{name}}
+    <span v-if="!renaming">{{name}}</span>
+    <base-input v-else :value="name"/>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import BaseInput from '@/components/BaseInput.vue';
+
 
 export default Vue.extend({
   name: 'File',
+  components: {
+    BaseInput,
+  },
   props: {
     name: String,
     type: {
@@ -44,6 +51,7 @@ export default Vue.extend({
       type: String,
       validator: size => size === 'tiny',
     },
+    renaming: Boolean,
   },
   methods: {
     openContextMenu($event) {
@@ -73,8 +81,8 @@ export default Vue.extend({
     background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
   }
   .symbol--tiny {
-    height: calc(95px * 0.3);
-    width: calc(75px * 0.3);
+    height: calc(95px * 0.4);
+    width: calc(75px * 0.4);
   }
 }
 .file-type {
@@ -96,8 +104,8 @@ export default Vue.extend({
     background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
   }
   .symbol--tiny {
-    height: calc(85px * 0.3);
-    width: calc(105px * 0.3);
+    height: calc(85px * 0.4);
+    width: calc(105px * 0.4);
   }
 }
 </style>

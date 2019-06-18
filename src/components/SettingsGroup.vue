@@ -20,7 +20,7 @@ export default Vue.extend({
 .settings-group {
   border: solid 1px var(--orange);
   border-radius: 10px;
-  padding: 25px;
+  padding: 40px;
   margin: 25px 0;
   @media screen and (min-width: 1050px) {
     width: 48%;

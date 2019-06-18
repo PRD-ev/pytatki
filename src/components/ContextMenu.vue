@@ -1,9 +1,9 @@
 <template>
   <div>
     <slot/>
-    <div class="context-menu" :style="`top: ${top}; left: ${left}`">
+    <div class="context-menu" :style="`top: ${top}; left: ${left}; ${transformToFit}`">
       <div class="context-menu__entry">Otwórz</div>
-      <div class="context-menu__entry">Zmień nazwę</div>
+      <div class="context-menu__entry" @click="$emit('rename-note')">Zmień nazwę</div>
       <base-modal>
         <template v-slot:modal-content>
           <div class="modal-content">
@@ -59,6 +59,13 @@ export default Vue.extend({
     },
     left() {
       return this.clickPosition.x === 0 ? '100%' : `${this.clickPosition.x}px`;
+    },
+    transformToFit() {
+      let transform = 'transform: ';
+      transform += this.clickPosition.x > window.innerWidth - 130 ? 'translateX(-100%) ' : '';
+      transform += this.clickPosition.y > window.innerHeight - 110 ? 'translateY(-100%) ' : '';
+      transform += ';';
+      return transform;
     },
   },
 });

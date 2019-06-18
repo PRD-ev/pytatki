@@ -115,7 +115,7 @@ export default Vue.extend({
   width: 100vw;
   height: 63px;
   background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
-  z-index: 2;
+  z-index: 1;
 }
 .current-location {
   margin-left: 70px;

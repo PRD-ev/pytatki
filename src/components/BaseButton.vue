@@ -42,6 +42,7 @@ export default Vue.extend({
   cursor: pointer;
   border: none;
   background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
   &--huge {
     padding: 10px 25px;
     height: 100px;

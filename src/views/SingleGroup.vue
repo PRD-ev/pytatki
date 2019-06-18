@@ -1,13 +1,19 @@
 <template>
   <base-container @click.native="hideContextMenu" @contextmenu.native="hideContextMenu">
     <current-location/>
-    <context-menu class="pliki" :note="selectedNote" :clickPosition="clickPosition">
+    <context-menu
+      @rename-note="renameNote"
+      class="pliki"
+      :note="selectedNote"
+      :clickPosition="clickPosition"
+    >
       <file
         @open-context-menu="showContextMenu"
         :key="note.name"
         v-for="note in notes"
         type="folder"
         :name="note.name"
+        :renaming="note.name === selectedNote.name && renaming"
       />
       <file
         @open-context-menu="showContextMenu"
@@ -15,6 +21,7 @@
         v-for="note in notes"
         :name="note.name"
         :type="note.type"
+        :renaming="selectedNote.name === 'Grupa Krzysia' && renaming"
       />
     </context-menu>
     <base-modal>
@@ -124,20 +131,30 @@ export default Vue.extend({
           type: 'external',
         },
       ],
-      selectedNote: {},
+      selectedNote: { name: '' },
       clickPosition: { x: 0, y: 0 },
+      renaming: false,
     };
   },
   methods: {
     showContextMenu(name, type, event) {
+      this.renaming = false;
       this.selectedNote.name = name;
       this.selectedNote.type = type;
       this.clickPosition.x = event.clientX;
       this.clickPosition.y = event.clientY;
     },
-    hideContextMenu() {
+    hideContextMenu(event) {
+      if (this.clickPosition.x === 0 && event.target.nodeName !== 'INPUT') {
+        this.renaming = false;
+        const renamedNote = this.notes.find(note => this.selectedNote.name === note.name);
+        renamedNote.name = 'zmieniona nazwa';
+      }
       this.clickPosition.x = 0;
       this.clickPosition.y = 0;
+    },
+    renameNote() {
+      this.renaming = true;
     },
   },
 });
