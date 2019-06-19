@@ -1,5 +1,11 @@
 <template>
-  <input class="base-input" :value="value" :class="size?`base-input--${size}`:''" type="text">
+  <input
+    @input="$emit('input', $event.target.value)"
+    class="base-input"
+    :value="value"
+    :class="size?`base-input--${size}`:''"
+    type="text"
+  >
 </template>
 
 <script>

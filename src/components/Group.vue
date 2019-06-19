@@ -32,8 +32,8 @@ export default Vue.extend({
   height: 140px;
   background-size: cover;
   border-radius: 50%;
-  border: 3px solid var(--orange);
   margin: 20px auto;
+  box-shadow: var(--box-shadow);
   @media screen and (max-width: 768px) {
     width: 130px;
     height: 130px;

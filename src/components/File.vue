@@ -4,7 +4,7 @@
       <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
     </div>
     <span v-if="!renaming">{{name}}</span>
-    <base-input v-else :value="name"/>
+    <base-input v-else v-model="newName"/>
   </div>
   <div v-else class="file" @contextmenu.prevent="openContextMenu">
     <div class="drop-shadow">
@@ -30,14 +30,13 @@
       </div>
     </div>
     <span v-if="!renaming">{{name}}</span>
-    <base-input v-else :value="name"/>
+    <base-input v-else v-model="newName"/>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
 import BaseInput from '@/components/BaseInput.vue';
-
 
 export default Vue.extend({
   name: 'File',
@@ -57,10 +56,24 @@ export default Vue.extend({
     },
     renaming: Boolean,
   },
+  data() {
+    return {
+      newName: this.name,
+    };
+  },
+  updated() {
+    document.addEventListener('click', this.renameNote);
+  },
   methods: {
     openContextMenu($event) {
       $event.stopPropagation();
       this.$emit('open-context-menu', this.name, this.type, $event);
+    },
+    renameNote(event) {
+      if (event.target.nodeName !== 'INPUT') {
+        this.$emit('rename-note', this.name, this.newName);
+        document.removeEventListener('click', this.renameNote);
+      }
     },
   },
 });
@@ -113,7 +126,7 @@ export default Vue.extend({
   }
 }
 
-.drop-shadow{
+.drop-shadow {
   filter: drop-shadow(var(--box-shadow));
 }
 </style>

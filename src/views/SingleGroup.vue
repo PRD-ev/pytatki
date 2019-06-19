@@ -5,12 +5,13 @@
       :location="[$store.state.currentGroup.name, ...currentDirectory]"
     />
     <context-menu
-      @rename-note="renameNote"
       class="pliki"
+      @rename-note-init="renameNoteInit"
       :note="selectedNote"
       :clickPosition="clickPosition"
     >
       <file
+        @rename-note="renameNote"
         @open-context-menu="showContextMenu"
         :key="note.name"
         v-for="note in notes"
@@ -141,22 +142,18 @@ export default Vue.extend({
       this.clickPosition.y = event.clientY;
     },
     hideContextMenu(event) {
-      if (
-        this.clickPosition.x === 0
-        && event.target.nodeName !== 'INPUT'
-        && this.selectedNote.name !== ''
-        && this.renaming === true
-      ) {
-        this.renaming = false;
-        const renamedNote = this.notes.find(note => this.selectedNote.name === note.name);
-        renamedNote.name = 'zmieniona nazwa';
-        this.selectedNote.name = '';
-      }
+      event.stopPropagation();
       this.clickPosition.x = 0;
       this.clickPosition.y = 0;
     },
-    renameNote() {
+    renameNoteInit() {
       this.renaming = true;
+    },
+    renameNote(oldName, newName) {
+      this.renaming = false;
+      const renamedNote = this.notes.find(note => note.name === oldName);
+      renamedNote.name = newName;
+      this.selectedNote.name = '';
     },
     changeLocation(newLocation) {
       const indexOfNewLocation = this.currentDirectory.indexOf(newLocation);

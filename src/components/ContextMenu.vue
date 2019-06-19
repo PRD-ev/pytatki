@@ -3,7 +3,7 @@
     <slot/>
     <div class="context-menu" :style="`top: ${top}; left: ${left}; ${transformToFit}`">
       <div class="context-menu__entry">Otwórz</div>
-      <div class="context-menu__entry" @click="$emit('rename-note')">Zmień nazwę</div>
+      <div class="context-menu__entry" @click="$emit('rename-note-init')">Zmień nazwę</div>
       <base-modal>
         <template v-slot:modal-content>
           <div class="modal-content">

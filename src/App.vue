@@ -40,8 +40,7 @@ export default Vue.extend({
   box-sizing: border-box;
 }
 ::selection {
-  background-color: var(--orange);
-  color: var(--white);
+  background-color: rgba(255, 151, 79, 0.3);
 }
 #app {
   font-family: 'Roboto', sans-serif;
