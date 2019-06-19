@@ -1,6 +1,9 @@
 <template>
   <base-container @click.native="hideContextMenu" @contextmenu.native="hideContextMenu">
-    <current-location/>
+    <current-location
+      @change-location="changeLocation"
+      :location="[$store.state.currentGroup.name, ...currentDirectory]"
+    />
     <context-menu
       @rename-note="renameNote"
       class="pliki"
@@ -49,8 +52,8 @@
 <script>
 import Vue from 'vue';
 import File from '@/components/File.vue';
-import BaseContainer from '@/components/BaseContainer.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
+import BaseContainer from '@/components/BaseContainer.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
@@ -59,8 +62,8 @@ export default Vue.extend({
   name: 'singleGroup',
   components: {
     File,
-    BaseContainer,
     CurrentLocation,
+    BaseContainer,
     FloatingButton,
     BaseModal,
     ContextMenu,
@@ -126,6 +129,7 @@ export default Vue.extend({
       selectedNote: { name: '' },
       clickPosition: { x: 0, y: 0 },
       renaming: false,
+      currentDirectory: ['Sieci', 'Dział II', 'Projekt'],
     };
   },
   methods: {
@@ -137,16 +141,26 @@ export default Vue.extend({
       this.clickPosition.y = event.clientY;
     },
     hideContextMenu(event) {
-      if (this.clickPosition.x === 0 && event.target.nodeName !== 'INPUT') {
+      if (
+        this.clickPosition.x === 0
+        && event.target.nodeName !== 'INPUT'
+        && this.selectedNote.name !== ''
+        && this.renaming === true
+      ) {
         this.renaming = false;
         const renamedNote = this.notes.find(note => this.selectedNote.name === note.name);
         renamedNote.name = 'zmieniona nazwa';
+        this.selectedNote.name = '';
       }
       this.clickPosition.x = 0;
       this.clickPosition.y = 0;
     },
     renameNote() {
       this.renaming = true;
+    },
+    changeLocation(newLocation) {
+      const indexOfNewLocation = this.currentDirectory.indexOf(newLocation);
+      this.currentDirectory = this.currentDirectory.slice(0, indexOfNewLocation + 1);
     },
   },
 });

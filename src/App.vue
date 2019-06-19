@@ -32,7 +32,7 @@ export default Vue.extend({
   --white: #fff;
   --red: #ed5252;
   --light-red: #f68888;
-  --box-shadow: 3px 3px 3px rgba(0,0,0,0.25);
+  --box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.25);
 }
 *,
 *::before,
@@ -76,6 +76,14 @@ img {
 
 .v-hidden {
   visibility: hidden;
+}
+
+.color-orange {
+  color: var(--orange);
+}
+
+.italic {
+  font-style: italic;
 }
 
 .ProseMirror {

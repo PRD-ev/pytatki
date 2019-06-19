@@ -7,9 +7,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: {},
+    currentGroup: {
+      name: 'Grupa Krzysia',
+    },
   },
-  getters: {
-  },
+  getters: {},
   mutations: {
     setUser(state, user) {
       state.user = user;
