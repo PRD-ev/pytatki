@@ -318,7 +318,7 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--box-shadow);
   display: flex;
   align-items: center;
   padding: 3px 20px;

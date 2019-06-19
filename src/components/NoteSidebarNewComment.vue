@@ -32,7 +32,7 @@ export default Vue.extend({
     display: block;
     border-radius: 10px;
     background-color: var(--white);
-    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--box-shadow);
     padding: 10px;
     word-wrap: break-word;
     width: 190px;

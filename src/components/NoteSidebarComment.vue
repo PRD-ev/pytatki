@@ -46,7 +46,7 @@ export default Vue.extend({
   padding: 20px 15px 5px 15px;
   margin: 15px 0 15px -15px;
   background-color: var(--white);
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--box-shadow);
   border-radius: 10px;
   &__content,
   &__text {

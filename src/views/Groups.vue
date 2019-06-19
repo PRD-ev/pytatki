@@ -4,7 +4,20 @@
     <div class="grupy">
       <group :key="group.name" v-for="group in groups" :name="group.name" :image="group.image"/>
     </div>
-    <floating-button><img src="@/assets/icons/plus.svg" alt="plus"></floating-button>
+    <base-modal>
+      <template v-slot:modal-content>
+        <input-with-label>
+          Nazwa grupy
+        </input-with-label>
+        <label for="group-thumbnail">
+          Zdjęcie grupy
+        </label>
+        <input type="file" name="" id="group-thumbnail">
+      </template>
+      <template v-slot:trigger>
+        <floating-button><img src="@/assets/icons/plus.svg" alt="plus"></floating-button>
+      </template>
+    </base-modal>
   </base-container>
 </template>
 
@@ -12,6 +25,8 @@
 import Vue from 'vue';
 import Group from '@/components/Group.vue';
 import BaseContainer from '@/components/BaseContainer.vue';
+import BaseModal from '@/components/BaseModal.vue';
+import InputWithLabel from '@/components/InputWithLabel.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 
@@ -20,6 +35,8 @@ export default Vue.extend({
   components: {
     Group,
     BaseContainer,
+    BaseModal,
+    InputWithLabel,
     CurrentLocation,
     FloatingButton,
   },

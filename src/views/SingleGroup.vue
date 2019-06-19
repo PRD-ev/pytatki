@@ -11,17 +11,9 @@
         @open-context-menu="showContextMenu"
         :key="note.name"
         v-for="note in notes"
-        type="folder"
+        :type="note.type"
         :name="note.name"
         :renaming="note.name === selectedNote.name && renaming"
-      />
-      <file
-        @open-context-menu="showContextMenu"
-        :key="note.name+'1'"
-        v-for="note in notes"
-        :name="note.name"
-        :type="note.type"
-        :renaming="selectedNote.name === 'Grupa Krzysia' && renaming"
       />
     </context-menu>
     <base-modal>
@@ -77,6 +69,18 @@ export default Vue.extend({
     return {
       notes: [
         {
+          name: 'Johny Krzaczek3',
+          image:
+            'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300',
+          type: 'folder',
+        },
+        {
+          name: 'Elita Przybylskiego3',
+          image:
+            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300',
+          type: 'folder',
+        },
+        {
           name: 'Grupa Krzysia',
           image:
             'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
@@ -116,18 +120,6 @@ export default Vue.extend({
           name: 'Grupa Krzysia3',
           image:
             'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
-          type: 'external',
-        },
-        {
-          name: 'Johny Krzaczek3',
-          image:
-            'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300',
-          type: 'external',
-        },
-        {
-          name: 'Elita Przybylskiego3',
-          image:
-            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300',
           type: 'external',
         },
       ],

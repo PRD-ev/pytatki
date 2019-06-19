@@ -1,29 +1,33 @@
 <template>
   <div v-if="type==='folder'" class="folder" @contextmenu.prevent="openContextMenu">
-    <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
+    <div class="drop-shadow">
+      <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
+    </div>
     <span v-if="!renaming">{{name}}</span>
     <base-input v-else :value="name"/>
   </div>
   <div v-else class="file" @contextmenu.prevent="openContextMenu">
-    <div class="file__symbol" :class="size?`symbol--${size}`:''">
-      <img
-        v-if="type==='external'"
-        class="file-type"
-        src="@/assets/icons/link.svg"
-        alt="notatka zewnętrzna"
-      >
-      <img
-        v-if="type==='download'"
-        class="file-type"
-        src="@/assets/icons/download-fill.svg"
-        alt="pobierz"
-      >
-      <img
-        v-if="type==='pytatki'"
-        class="file-type"
-        src="@/assets/icons/quill-pen-fill.svg"
-        alt="notatka"
-      >
+    <div class="drop-shadow">
+      <div class="file__symbol" :class="size?`symbol--${size}`:''">
+        <img
+          v-if="type==='external'"
+          class="file-type"
+          src="@/assets/icons/link.svg"
+          alt="notatka zewnętrzna"
+        >
+        <img
+          v-if="type==='download'"
+          class="file-type"
+          src="@/assets/icons/download-fill.svg"
+          alt="pobierz"
+        >
+        <img
+          v-if="type==='pytatki'"
+          class="file-type"
+          src="@/assets/icons/quill-pen-fill.svg"
+          alt="notatka"
+        >
+      </div>
     </div>
     <span v-if="!renaming">{{name}}</span>
     <base-input v-else :value="name"/>
@@ -107,5 +111,9 @@ export default Vue.extend({
     height: calc(85px * 0.4);
     width: calc(105px * 0.4);
   }
+}
+
+.drop-shadow{
+  filter: drop-shadow(var(--box-shadow));
 }
 </style>

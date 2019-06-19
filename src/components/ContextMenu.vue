@@ -78,7 +78,7 @@ export default Vue.extend({
   background-color: var(--white);
   padding: 10px 20px;
   border-radius: 10px;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--box-shadow);
   z-index: 1;
   &__entry {
     margin: 5px 0;

@@ -29,7 +29,7 @@ export default Vue.extend({
   color: var(--white);
   cursor: pointer;
   border: none;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--box-shadow);
   background: linear-gradient(
     90deg,
     var(--orange) 0%,
