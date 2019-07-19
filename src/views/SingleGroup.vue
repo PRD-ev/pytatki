@@ -1,5 +1,5 @@
 <template>
-  <base-container @click.native="hideContextMenu" @contextmenu.native="hideContextMenu">
+  <base-container @click.native.capture="hideContextMenu" @contextmenu.native="hideContextMenu">
     <current-location
       @change-location="changeLocation"
       :location="[$store.state.currentGroup.name, ...currentDirectory]"
@@ -141,8 +141,7 @@ export default Vue.extend({
       this.clickPosition.x = event.clientX;
       this.clickPosition.y = event.clientY;
     },
-    hideContextMenu(event) {
-      event.stopPropagation();
+    hideContextMenu() {
       this.clickPosition.x = 0;
       this.clickPosition.y = 0;
     },

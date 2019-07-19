@@ -4,7 +4,7 @@
       <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
     </div>
     <span v-if="!renaming">{{name}}</span>
-    <base-input v-else v-model="newName"/>
+    <base-input v-else v-model="newName" />
   </div>
   <div v-else class="file" @contextmenu.prevent="openContextMenu">
     <div class="drop-shadow">
@@ -14,23 +14,23 @@
           class="file-type"
           src="@/assets/icons/link.svg"
           alt="notatka zewnętrzna"
-        >
+        />
         <img
           v-if="type==='download'"
           class="file-type"
           src="@/assets/icons/download-fill.svg"
           alt="pobierz"
-        >
+        />
         <img
           v-if="type==='pytatki'"
           class="file-type"
           src="@/assets/icons/quill-pen-fill.svg"
           alt="notatka"
-        >
+        />
       </div>
     </div>
     <span v-if="!renaming">{{name}}</span>
-    <base-input v-else v-model="newName"/>
+    <base-input v-else v-model="newName" />
   </div>
 </template>
 
@@ -62,17 +62,19 @@ export default Vue.extend({
     };
   },
   updated() {
-    document.addEventListener('click', this.renameNote);
+    window.addEventListener('click', this.renameNote, { capture: true });
+    window.addEventListener('keypress', this.renameNote);
   },
   methods: {
-    openContextMenu($event) {
-      $event.stopPropagation();
-      this.$emit('open-context-menu', this.name, this.type, $event);
+    openContextMenu(event) {
+      event.stopPropagation();
+      this.$emit('open-context-menu', this.name, this.type, event);
     },
     renameNote(event) {
-      if (event.target.nodeName !== 'INPUT') {
+      const key = event.which || event.keyCode;
+      if (event.target.nodeName !== 'INPUT' || key === 13) {
         this.$emit('rename-note', this.name, this.newName);
-        document.removeEventListener('click', this.renameNote);
+        window.removeEventListener('click', this.renameNote, { capture: true });
       }
     },
   },
