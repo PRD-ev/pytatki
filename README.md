@@ -25,6 +25,10 @@ npm run start
 
 * Github: [@pniedzwiedzinski](https://github.com/pniedzwiedzinski)
 
+👤 **Filip Wachowiak**
+
+* Github: [@filipw01](https://github.com/filipw01)
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/prd-ev/pytatki-backend/issues).

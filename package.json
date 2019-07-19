@@ -12,20 +12,20 @@
     "babel-register": "^6.26.0",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "express": "~4.16.0",
-    "firebase-admin": "^8.0.0",
-    "graphql": "^14.3.1",
-    "http-errors": "~1.6.2",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "firebase-admin": "^8.2.0",
+    "graphql": "^14.4.2",
+    "http-errors": "^1.7.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "babel-jest": "^24.8.0",
     "chai": "^4.2.0",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "supertest": "^4.0.2"
   }
 }
