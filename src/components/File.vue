@@ -62,8 +62,10 @@ export default Vue.extend({
     };
   },
   updated() {
-    window.addEventListener('click', this.renameNote, { capture: true });
-    window.addEventListener('keypress', this.renameNote);
+    if (this.renaming === true) {
+      window.addEventListener('click', this.renameNote, { capture: true });
+      window.addEventListener('keypress', this.renameNote);
+    }
   },
   methods: {
     openContextMenu(event) {
@@ -75,6 +77,7 @@ export default Vue.extend({
       if (event.target.nodeName !== 'INPUT' || key === 13) {
         this.$emit('rename-note', this.name, this.newName);
         window.removeEventListener('click', this.renameNote, { capture: true });
+        window.removeEventListener('keypress', this.renameNote);
       }
     },
   },
