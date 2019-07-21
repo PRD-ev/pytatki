@@ -1,17 +1,8 @@
 import express from "express";
-import schema, { graphql } from "../schemas/query.js";
 import * as admin from "firebase-admin";
 
 var router = express.Router();
 
-// router.get(
-//   "/",
-//   graphqlHTTP({
-//     schema: schema,
-//     rootValue: root,
-//     graphiql: true
-//   })
-// );
 
 router.get("/", function(req, res) {
   let token = req.header("Authorization");
