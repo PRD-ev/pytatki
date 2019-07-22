@@ -3,11 +3,19 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateDirector {
+/* GraphQL */ `type AggregateFolder {
   count: Int!
 }
 
-type AggregateMovie {
+type AggregateGroup {
+  count: Int!
+}
+
+type AggregateNote {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -15,93 +23,261 @@ type BatchPayload {
   count: Long!
 }
 
-type Director {
+type Folder {
   id: ID!
-  name: String!
-  movies(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Movie!]
+  title: String!
+  author: User!
+  parentFolder: Folder
 }
 
-type DirectorConnection {
+type FolderConnection {
   pageInfo: PageInfo!
-  edges: [DirectorEdge]!
-  aggregate: AggregateDirector!
+  edges: [FolderEdge]!
+  aggregate: AggregateFolder!
 }
 
-input DirectorCreateInput {
+input FolderCreateInput {
   id: ID
-  name: String!
-  movies: MovieCreateManyWithoutDirectorInput
+  title: String!
+  author: UserCreateOneInput!
+  parentFolder: FolderCreateOneInput
 }
 
-input DirectorCreateOneWithoutMoviesInput {
-  create: DirectorCreateWithoutMoviesInput
-  connect: DirectorWhereUniqueInput
+input FolderCreateManyInput {
+  create: [FolderCreateInput!]
+  connect: [FolderWhereUniqueInput!]
 }
 
-input DirectorCreateWithoutMoviesInput {
-  id: ID
-  name: String!
+input FolderCreateOneInput {
+  create: FolderCreateInput
+  connect: FolderWhereUniqueInput
 }
 
-type DirectorEdge {
-  node: Director!
+type FolderEdge {
+  node: Folder!
   cursor: String!
 }
 
-enum DirectorOrderByInput {
+enum FolderOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  title_ASC
+  title_DESC
 }
 
-type DirectorPreviousValues {
+type FolderPreviousValues {
   id: ID!
-  name: String!
+  title: String!
 }
 
-type DirectorSubscriptionPayload {
+input FolderScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  AND: [FolderScalarWhereInput!]
+  OR: [FolderScalarWhereInput!]
+  NOT: [FolderScalarWhereInput!]
+}
+
+type FolderSubscriptionPayload {
   mutation: MutationType!
-  node: Director
+  node: Folder
   updatedFields: [String!]
-  previousValues: DirectorPreviousValues
+  previousValues: FolderPreviousValues
 }
 
-input DirectorSubscriptionWhereInput {
+input FolderSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: DirectorWhereInput
-  AND: [DirectorSubscriptionWhereInput!]
+  node: FolderWhereInput
+  AND: [FolderSubscriptionWhereInput!]
 }
 
-input DirectorUpdateInput {
-  name: String
-  movies: MovieUpdateManyWithoutDirectorInput
+input FolderUpdateDataInput {
+  title: String
+  author: UserUpdateOneRequiredInput
+  parentFolder: FolderUpdateOneInput
 }
 
-input DirectorUpdateManyMutationInput {
-  name: String
+input FolderUpdateInput {
+  title: String
+  author: UserUpdateOneRequiredInput
+  parentFolder: FolderUpdateOneInput
 }
 
-input DirectorUpdateOneRequiredWithoutMoviesInput {
-  create: DirectorCreateWithoutMoviesInput
-  update: DirectorUpdateWithoutMoviesDataInput
-  upsert: DirectorUpsertWithoutMoviesInput
-  connect: DirectorWhereUniqueInput
+input FolderUpdateManyDataInput {
+  title: String
 }
 
-input DirectorUpdateWithoutMoviesDataInput {
-  name: String
+input FolderUpdateManyInput {
+  create: [FolderCreateInput!]
+  update: [FolderUpdateWithWhereUniqueNestedInput!]
+  upsert: [FolderUpsertWithWhereUniqueNestedInput!]
+  delete: [FolderWhereUniqueInput!]
+  connect: [FolderWhereUniqueInput!]
+  set: [FolderWhereUniqueInput!]
+  disconnect: [FolderWhereUniqueInput!]
+  deleteMany: [FolderScalarWhereInput!]
+  updateMany: [FolderUpdateManyWithWhereNestedInput!]
 }
 
-input DirectorUpsertWithoutMoviesInput {
-  update: DirectorUpdateWithoutMoviesDataInput!
-  create: DirectorCreateWithoutMoviesInput!
+input FolderUpdateManyMutationInput {
+  title: String
 }
 
-input DirectorWhereInput {
+input FolderUpdateManyWithWhereNestedInput {
+  where: FolderScalarWhereInput!
+  data: FolderUpdateManyDataInput!
+}
+
+input FolderUpdateOneInput {
+  create: FolderCreateInput
+  update: FolderUpdateDataInput
+  upsert: FolderUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FolderWhereUniqueInput
+}
+
+input FolderUpdateWithWhereUniqueNestedInput {
+  where: FolderWhereUniqueInput!
+  data: FolderUpdateDataInput!
+}
+
+input FolderUpsertNestedInput {
+  update: FolderUpdateDataInput!
+  create: FolderCreateInput!
+}
+
+input FolderUpsertWithWhereUniqueNestedInput {
+  where: FolderWhereUniqueInput!
+  update: FolderUpdateDataInput!
+  create: FolderCreateInput!
+}
+
+input FolderWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  author: UserWhereInput
+  parentFolder: FolderWhereInput
+  AND: [FolderWhereInput!]
+}
+
+input FolderWhereUniqueInput {
+  id: ID
+}
+
+type Group {
+  id: ID!
+  name: String!
+  members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  image: String
+  folders(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Folder!]
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  edges: [GroupEdge]!
+  aggregate: AggregateGroup!
+}
+
+input GroupCreateInput {
+  id: ID
+  name: String!
+  members: UserCreateManyWithoutGroupsInput
+  image: String
+  folders: FolderCreateManyInput
+  notes: NoteCreateManyInput
+}
+
+input GroupCreateManyWithoutMembersInput {
+  create: [GroupCreateWithoutMembersInput!]
+  connect: [GroupWhereUniqueInput!]
+}
+
+input GroupCreateWithoutMembersInput {
+  id: ID
+  name: String!
+  image: String
+  folders: FolderCreateManyInput
+  notes: NoteCreateManyInput
+}
+
+type GroupEdge {
+  node: Group!
+  cursor: String!
+}
+
+enum GroupOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  image_ASC
+  image_DESC
+}
+
+type GroupPreviousValues {
+  id: ID!
+  name: String!
+  image: String
+}
+
+input GroupScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -130,232 +306,174 @@ input DirectorWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  movies_some: MovieWhereInput
-  AND: [DirectorWhereInput!]
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  AND: [GroupScalarWhereInput!]
+  OR: [GroupScalarWhereInput!]
+  NOT: [GroupScalarWhereInput!]
 }
 
-input DirectorWhereUniqueInput {
+type GroupSubscriptionPayload {
+  mutation: MutationType!
+  node: Group
+  updatedFields: [String!]
+  previousValues: GroupPreviousValues
+}
+
+input GroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GroupWhereInput
+  AND: [GroupSubscriptionWhereInput!]
+}
+
+input GroupUpdateInput {
+  name: String
+  members: UserUpdateManyWithoutGroupsInput
+  image: String
+  folders: FolderUpdateManyInput
+  notes: NoteUpdateManyInput
+}
+
+input GroupUpdateManyDataInput {
+  name: String
+  image: String
+}
+
+input GroupUpdateManyMutationInput {
+  name: String
+  image: String
+}
+
+input GroupUpdateManyWithoutMembersInput {
+  create: [GroupCreateWithoutMembersInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  set: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutMembersInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutMembersInput!]
+  deleteMany: [GroupScalarWhereInput!]
+  updateMany: [GroupUpdateManyWithWhereNestedInput!]
+}
+
+input GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput!
+  data: GroupUpdateManyDataInput!
+}
+
+input GroupUpdateWithoutMembersDataInput {
+  name: String
+  image: String
+  folders: FolderUpdateManyInput
+  notes: NoteUpdateManyInput
+}
+
+input GroupUpdateWithWhereUniqueWithoutMembersInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutMembersDataInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutMembersInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutMembersDataInput!
+  create: GroupCreateWithoutMembersInput!
+}
+
+input GroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  members_some: UserWhereInput
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  folders_some: FolderWhereInput
+  notes_some: NoteWhereInput
+  AND: [GroupWhereInput!]
+}
+
+input GroupWhereUniqueInput {
   id: ID
 }
 
 scalar Long
 
-type Movie {
-  id: ID!
-  title: String!
-  duration: Int!
-  director: Director!
-}
-
-type MovieConnection {
-  pageInfo: PageInfo!
-  edges: [MovieEdge]!
-  aggregate: AggregateMovie!
-}
-
-input MovieCreateInput {
-  id: ID
-  title: String!
-  duration: Int!
-  director: DirectorCreateOneWithoutMoviesInput!
-}
-
-input MovieCreateManyWithoutDirectorInput {
-  create: [MovieCreateWithoutDirectorInput!]
-  connect: [MovieWhereUniqueInput!]
-}
-
-input MovieCreateWithoutDirectorInput {
-  id: ID
-  title: String!
-  duration: Int!
-}
-
-type MovieEdge {
-  node: Movie!
-  cursor: String!
-}
-
-enum MovieOrderByInput {
-  id_ASC
-  id_DESC
-  title_ASC
-  title_DESC
-  duration_ASC
-  duration_DESC
-}
-
-type MoviePreviousValues {
-  id: ID!
-  title: String!
-  duration: Int!
-}
-
-input MovieScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  duration: Int
-  duration_not: Int
-  duration_in: [Int!]
-  duration_not_in: [Int!]
-  duration_lt: Int
-  duration_lte: Int
-  duration_gt: Int
-  duration_gte: Int
-  AND: [MovieScalarWhereInput!]
-  OR: [MovieScalarWhereInput!]
-  NOT: [MovieScalarWhereInput!]
-}
-
-type MovieSubscriptionPayload {
-  mutation: MutationType!
-  node: Movie
-  updatedFields: [String!]
-  previousValues: MoviePreviousValues
-}
-
-input MovieSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: MovieWhereInput
-  AND: [MovieSubscriptionWhereInput!]
-}
-
-input MovieUpdateInput {
-  title: String
-  duration: Int
-  director: DirectorUpdateOneRequiredWithoutMoviesInput
-}
-
-input MovieUpdateManyDataInput {
-  title: String
-  duration: Int
-}
-
-input MovieUpdateManyMutationInput {
-  title: String
-  duration: Int
-}
-
-input MovieUpdateManyWithoutDirectorInput {
-  create: [MovieCreateWithoutDirectorInput!]
-  delete: [MovieWhereUniqueInput!]
-  connect: [MovieWhereUniqueInput!]
-  set: [MovieWhereUniqueInput!]
-  disconnect: [MovieWhereUniqueInput!]
-  update: [MovieUpdateWithWhereUniqueWithoutDirectorInput!]
-  upsert: [MovieUpsertWithWhereUniqueWithoutDirectorInput!]
-  deleteMany: [MovieScalarWhereInput!]
-  updateMany: [MovieUpdateManyWithWhereNestedInput!]
-}
-
-input MovieUpdateManyWithWhereNestedInput {
-  where: MovieScalarWhereInput!
-  data: MovieUpdateManyDataInput!
-}
-
-input MovieUpdateWithoutDirectorDataInput {
-  title: String
-  duration: Int
-}
-
-input MovieUpdateWithWhereUniqueWithoutDirectorInput {
-  where: MovieWhereUniqueInput!
-  data: MovieUpdateWithoutDirectorDataInput!
-}
-
-input MovieUpsertWithWhereUniqueWithoutDirectorInput {
-  where: MovieWhereUniqueInput!
-  update: MovieUpdateWithoutDirectorDataInput!
-  create: MovieCreateWithoutDirectorInput!
-}
-
-input MovieWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  duration: Int
-  duration_not: Int
-  duration_in: [Int!]
-  duration_not_in: [Int!]
-  duration_lt: Int
-  duration_lte: Int
-  duration_gt: Int
-  duration_gte: Int
-  director: DirectorWhereInput
-  AND: [MovieWhereInput!]
-}
-
-input MovieWhereUniqueInput {
-  id: ID
-}
-
 type Mutation {
-  createDirector(data: DirectorCreateInput!): Director!
-  updateDirector(data: DirectorUpdateInput!, where: DirectorWhereUniqueInput!): Director
-  updateManyDirectors(data: DirectorUpdateManyMutationInput!, where: DirectorWhereInput): BatchPayload!
-  upsertDirector(where: DirectorWhereUniqueInput!, create: DirectorCreateInput!, update: DirectorUpdateInput!): Director!
-  deleteDirector(where: DirectorWhereUniqueInput!): Director
-  deleteManyDirectors(where: DirectorWhereInput): BatchPayload!
-  createMovie(data: MovieCreateInput!): Movie!
-  updateMovie(data: MovieUpdateInput!, where: MovieWhereUniqueInput!): Movie
-  updateManyMovies(data: MovieUpdateManyMutationInput!, where: MovieWhereInput): BatchPayload!
-  upsertMovie(where: MovieWhereUniqueInput!, create: MovieCreateInput!, update: MovieUpdateInput!): Movie!
-  deleteMovie(where: MovieWhereUniqueInput!): Movie
-  deleteManyMovies(where: MovieWhereInput): BatchPayload!
+  createFolder(data: FolderCreateInput!): Folder!
+  updateFolder(data: FolderUpdateInput!, where: FolderWhereUniqueInput!): Folder
+  updateManyFolders(data: FolderUpdateManyMutationInput!, where: FolderWhereInput): BatchPayload!
+  upsertFolder(where: FolderWhereUniqueInput!, create: FolderCreateInput!, update: FolderUpdateInput!): Folder!
+  deleteFolder(where: FolderWhereUniqueInput!): Folder
+  deleteManyFolders(where: FolderWhereInput): BatchPayload!
+  createGroup(data: GroupCreateInput!): Group!
+  updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
+  updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
+  upsertGroup(where: GroupWhereUniqueInput!, create: GroupCreateInput!, update: GroupUpdateInput!): Group!
+  deleteGroup(where: GroupWhereUniqueInput!): Group
+  deleteManyGroups(where: GroupWhereInput): BatchPayload!
+  createNote(data: NoteCreateInput!): Note!
+  updateNote(data: NoteUpdateInput!, where: NoteWhereUniqueInput!): Note
+  updateManyNotes(data: NoteUpdateManyMutationInput!, where: NoteWhereInput): BatchPayload!
+  upsertNote(where: NoteWhereUniqueInput!, create: NoteCreateInput!, update: NoteUpdateInput!): Note!
+  deleteNote(where: NoteWhereUniqueInput!): Note
+  deleteManyNotes(where: NoteWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -368,6 +486,248 @@ interface Node {
   id: ID!
 }
 
+type Note {
+  id: ID!
+  type: NoteType!
+  title: String!
+  author: User!
+  parentFolder: Folder
+}
+
+type NoteConnection {
+  pageInfo: PageInfo!
+  edges: [NoteEdge]!
+  aggregate: AggregateNote!
+}
+
+input NoteCreateInput {
+  id: ID
+  type: NoteType!
+  title: String!
+  author: UserCreateOneWithoutNotesInput!
+  parentFolder: FolderCreateOneInput
+}
+
+input NoteCreateManyInput {
+  create: [NoteCreateInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateManyWithoutAuthorInput {
+  create: [NoteCreateWithoutAuthorInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateWithoutAuthorInput {
+  id: ID
+  type: NoteType!
+  title: String!
+  parentFolder: FolderCreateOneInput
+}
+
+type NoteEdge {
+  node: Note!
+  cursor: String!
+}
+
+enum NoteOrderByInput {
+  id_ASC
+  id_DESC
+  type_ASC
+  type_DESC
+  title_ASC
+  title_DESC
+}
+
+type NotePreviousValues {
+  id: ID!
+  type: NoteType!
+  title: String!
+}
+
+input NoteScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  type: NoteType
+  type_not: NoteType
+  type_in: [NoteType!]
+  type_not_in: [NoteType!]
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  AND: [NoteScalarWhereInput!]
+  OR: [NoteScalarWhereInput!]
+  NOT: [NoteScalarWhereInput!]
+}
+
+type NoteSubscriptionPayload {
+  mutation: MutationType!
+  node: Note
+  updatedFields: [String!]
+  previousValues: NotePreviousValues
+}
+
+input NoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: NoteWhereInput
+  AND: [NoteSubscriptionWhereInput!]
+}
+
+enum NoteType {
+  DOWNLOAD
+  PYTATKI
+  EXTERNAL
+}
+
+input NoteUpdateDataInput {
+  type: NoteType
+  title: String
+  author: UserUpdateOneRequiredWithoutNotesInput
+  parentFolder: FolderUpdateOneInput
+}
+
+input NoteUpdateInput {
+  type: NoteType
+  title: String
+  author: UserUpdateOneRequiredWithoutNotesInput
+  parentFolder: FolderUpdateOneInput
+}
+
+input NoteUpdateManyDataInput {
+  type: NoteType
+  title: String
+}
+
+input NoteUpdateManyInput {
+  create: [NoteCreateInput!]
+  update: [NoteUpdateWithWhereUniqueNestedInput!]
+  upsert: [NoteUpsertWithWhereUniqueNestedInput!]
+  delete: [NoteWhereUniqueInput!]
+  connect: [NoteWhereUniqueInput!]
+  set: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  deleteMany: [NoteScalarWhereInput!]
+  updateMany: [NoteUpdateManyWithWhereNestedInput!]
+}
+
+input NoteUpdateManyMutationInput {
+  type: NoteType
+  title: String
+}
+
+input NoteUpdateManyWithoutAuthorInput {
+  create: [NoteCreateWithoutAuthorInput!]
+  delete: [NoteWhereUniqueInput!]
+  connect: [NoteWhereUniqueInput!]
+  set: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutAuthorInput!]
+  deleteMany: [NoteScalarWhereInput!]
+  updateMany: [NoteUpdateManyWithWhereNestedInput!]
+}
+
+input NoteUpdateManyWithWhereNestedInput {
+  where: NoteScalarWhereInput!
+  data: NoteUpdateManyDataInput!
+}
+
+input NoteUpdateWithoutAuthorDataInput {
+  type: NoteType
+  title: String
+  parentFolder: FolderUpdateOneInput
+}
+
+input NoteUpdateWithWhereUniqueNestedInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateDataInput!
+}
+
+input NoteUpdateWithWhereUniqueWithoutAuthorInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutAuthorDataInput!
+}
+
+input NoteUpsertWithWhereUniqueNestedInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateDataInput!
+  create: NoteCreateInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutAuthorInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutAuthorDataInput!
+  create: NoteCreateWithoutAuthorInput!
+}
+
+input NoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  type: NoteType
+  type_not: NoteType
+  type_in: [NoteType!]
+  type_not_in: [NoteType!]
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  author: UserWhereInput
+  parentFolder: FolderWhereInput
+  AND: [NoteWhereInput!]
+}
+
+input NoteWhereUniqueInput {
+  id: ID
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -376,18 +736,301 @@ type PageInfo {
 }
 
 type Query {
-  director(where: DirectorWhereUniqueInput!): Director
-  directors(where: DirectorWhereInput, orderBy: DirectorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Director]!
-  directorsConnection(where: DirectorWhereInput, orderBy: DirectorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DirectorConnection!
-  movie(where: MovieWhereUniqueInput!): Movie
-  movies(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Movie]!
-  moviesConnection(where: MovieWhereInput, orderBy: MovieOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MovieConnection!
+  folder(where: FolderWhereUniqueInput!): Folder
+  folders(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Folder]!
+  foldersConnection(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FolderConnection!
+  group(where: GroupWhereUniqueInput!): Group
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
+  groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
+  note(where: NoteWhereUniqueInput!): Note
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note]!
+  notesConnection(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NoteConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
-  director(where: DirectorSubscriptionWhereInput): DirectorSubscriptionPayload
-  movie(where: MovieSubscriptionWhereInput): MovieSubscriptionPayload
+  folder(where: FolderSubscriptionWhereInput): FolderSubscriptionPayload
+  group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
+  note(where: NoteSubscriptionWhereInput): NoteSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type User {
+  id: ID!
+  name: String!
+  image: String
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
+}
+
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  id: ID
+  name: String!
+  image: String
+  notes: NoteCreateManyWithoutAuthorInput
+  groups: GroupCreateManyWithoutMembersInput
+}
+
+input UserCreateManyWithoutGroupsInput {
+  create: [UserCreateWithoutGroupsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutGroupsInput {
+  id: ID
+  name: String!
+  image: String
+  notes: NoteCreateManyWithoutAuthorInput
+}
+
+input UserCreateWithoutNotesInput {
+  id: ID
+  name: String!
+  image: String
+  groups: GroupCreateManyWithoutMembersInput
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  image_ASC
+  image_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  name: String!
+  image: String
+}
+
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+  AND: [UserSubscriptionWhereInput!]
+}
+
+input UserUpdateDataInput {
+  name: String
+  image: String
+  notes: NoteUpdateManyWithoutAuthorInput
+  groups: GroupUpdateManyWithoutMembersInput
+}
+
+input UserUpdateInput {
+  name: String
+  image: String
+  notes: NoteUpdateManyWithoutAuthorInput
+  groups: GroupUpdateManyWithoutMembersInput
+}
+
+input UserUpdateManyDataInput {
+  name: String
+  image: String
+}
+
+input UserUpdateManyMutationInput {
+  name: String
+  image: String
+}
+
+input UserUpdateManyWithoutGroupsInput {
+  create: [UserCreateWithoutGroupsInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutGroupsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutGroupsInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  update: UserUpdateWithoutNotesDataInput
+  upsert: UserUpsertWithoutNotesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutGroupsDataInput {
+  name: String
+  image: String
+  notes: NoteUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithoutNotesDataInput {
+  name: String
+  image: String
+  groups: GroupUpdateManyWithoutMembersInput
+}
+
+input UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutGroupsDataInput!
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
+}
+
+input UserUpsertWithoutNotesInput {
+  update: UserUpdateWithoutNotesDataInput!
+  create: UserCreateWithoutNotesInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutGroupsDataInput!
+  create: UserCreateWithoutGroupsInput!
+}
+
+input UserWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
+  notes_some: NoteWhereInput
+  groups_some: GroupWhereInput
+  AND: [UserWhereInput!]
+}
+
+input UserWhereUniqueInput {
+  id: ID
 }
 `
       }

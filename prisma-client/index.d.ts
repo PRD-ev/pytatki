@@ -16,8 +16,10 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
-  director: (where?: DirectorWhereInput) => Promise<boolean>;
-  movie: (where?: MovieWhereInput) => Promise<boolean>;
+  folder: (where?: FolderWhereInput) => Promise<boolean>;
+  group: (where?: GroupWhereInput) => Promise<boolean>;
+  note: (where?: NoteWhereInput) => Promise<boolean>;
+  user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -39,82 +41,152 @@ export interface Prisma {
    * Queries
    */
 
-  director: (where: DirectorWhereUniqueInput) => DirectorNullablePromise;
-  directors: (args?: {
-    where?: DirectorWhereInput;
-    orderBy?: DirectorOrderByInput;
+  folder: (where: FolderWhereUniqueInput) => FolderNullablePromise;
+  folders: (args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => FragmentableArray<Director>;
-  directorsConnection: (args?: {
-    where?: DirectorWhereInput;
-    orderBy?: DirectorOrderByInput;
+  }) => FragmentableArray<Folder>;
+  foldersConnection: (args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => DirectorConnectionPromise;
-  movie: (where: MovieWhereUniqueInput) => MovieNullablePromise;
-  movies: (args?: {
-    where?: MovieWhereInput;
-    orderBy?: MovieOrderByInput;
+  }) => FolderConnectionPromise;
+  group: (where: GroupWhereUniqueInput) => GroupNullablePromise;
+  groups: (args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => FragmentableArray<Movie>;
-  moviesConnection: (args?: {
-    where?: MovieWhereInput;
-    orderBy?: MovieOrderByInput;
+  }) => FragmentableArray<Group>;
+  groupsConnection: (args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => MovieConnectionPromise;
+  }) => GroupConnectionPromise;
+  note: (where: NoteWhereUniqueInput) => NoteNullablePromise;
+  notes: (args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Note>;
+  notesConnection: (args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => NoteConnectionPromise;
+  user: (where: UserWhereUniqueInput) => UserNullablePromise;
+  users: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<User>;
+  usersConnection: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
    * Mutations
    */
 
-  createDirector: (data: DirectorCreateInput) => DirectorPromise;
-  updateDirector: (args: {
-    data: DirectorUpdateInput;
-    where: DirectorWhereUniqueInput;
-  }) => DirectorPromise;
-  updateManyDirectors: (args: {
-    data: DirectorUpdateManyMutationInput;
-    where?: DirectorWhereInput;
+  createFolder: (data: FolderCreateInput) => FolderPromise;
+  updateFolder: (args: {
+    data: FolderUpdateInput;
+    where: FolderWhereUniqueInput;
+  }) => FolderPromise;
+  updateManyFolders: (args: {
+    data: FolderUpdateManyMutationInput;
+    where?: FolderWhereInput;
   }) => BatchPayloadPromise;
-  upsertDirector: (args: {
-    where: DirectorWhereUniqueInput;
-    create: DirectorCreateInput;
-    update: DirectorUpdateInput;
-  }) => DirectorPromise;
-  deleteDirector: (where: DirectorWhereUniqueInput) => DirectorPromise;
-  deleteManyDirectors: (where?: DirectorWhereInput) => BatchPayloadPromise;
-  createMovie: (data: MovieCreateInput) => MoviePromise;
-  updateMovie: (args: {
-    data: MovieUpdateInput;
-    where: MovieWhereUniqueInput;
-  }) => MoviePromise;
-  updateManyMovies: (args: {
-    data: MovieUpdateManyMutationInput;
-    where?: MovieWhereInput;
+  upsertFolder: (args: {
+    where: FolderWhereUniqueInput;
+    create: FolderCreateInput;
+    update: FolderUpdateInput;
+  }) => FolderPromise;
+  deleteFolder: (where: FolderWhereUniqueInput) => FolderPromise;
+  deleteManyFolders: (where?: FolderWhereInput) => BatchPayloadPromise;
+  createGroup: (data: GroupCreateInput) => GroupPromise;
+  updateGroup: (args: {
+    data: GroupUpdateInput;
+    where: GroupWhereUniqueInput;
+  }) => GroupPromise;
+  updateManyGroups: (args: {
+    data: GroupUpdateManyMutationInput;
+    where?: GroupWhereInput;
   }) => BatchPayloadPromise;
-  upsertMovie: (args: {
-    where: MovieWhereUniqueInput;
-    create: MovieCreateInput;
-    update: MovieUpdateInput;
-  }) => MoviePromise;
-  deleteMovie: (where: MovieWhereUniqueInput) => MoviePromise;
-  deleteManyMovies: (where?: MovieWhereInput) => BatchPayloadPromise;
+  upsertGroup: (args: {
+    where: GroupWhereUniqueInput;
+    create: GroupCreateInput;
+    update: GroupUpdateInput;
+  }) => GroupPromise;
+  deleteGroup: (where: GroupWhereUniqueInput) => GroupPromise;
+  deleteManyGroups: (where?: GroupWhereInput) => BatchPayloadPromise;
+  createNote: (data: NoteCreateInput) => NotePromise;
+  updateNote: (args: {
+    data: NoteUpdateInput;
+    where: NoteWhereUniqueInput;
+  }) => NotePromise;
+  updateManyNotes: (args: {
+    data: NoteUpdateManyMutationInput;
+    where?: NoteWhereInput;
+  }) => BatchPayloadPromise;
+  upsertNote: (args: {
+    where: NoteWhereUniqueInput;
+    create: NoteCreateInput;
+    update: NoteUpdateInput;
+  }) => NotePromise;
+  deleteNote: (where: NoteWhereUniqueInput) => NotePromise;
+  deleteManyNotes: (where?: NoteWhereInput) => BatchPayloadPromise;
+  createUser: (data: UserCreateInput) => UserPromise;
+  updateUser: (args: {
+    data: UserUpdateInput;
+    where: UserWhereUniqueInput;
+  }) => UserPromise;
+  updateManyUsers: (args: {
+    data: UserUpdateManyMutationInput;
+    where?: UserWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUser: (args: {
+    where: UserWhereUniqueInput;
+    create: UserCreateInput;
+    update: UserUpdateInput;
+  }) => UserPromise;
+  deleteUser: (where: UserWhereUniqueInput) => UserPromise;
+  deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -124,12 +196,18 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  director: (
-    where?: DirectorSubscriptionWhereInput
-  ) => DirectorSubscriptionPayloadSubscription;
-  movie: (
-    where?: MovieSubscriptionWhereInput
-  ) => MovieSubscriptionPayloadSubscription;
+  folder: (
+    where?: FolderSubscriptionWhereInput
+  ) => FolderSubscriptionPayloadSubscription;
+  group: (
+    where?: GroupSubscriptionWhereInput
+  ) => GroupSubscriptionPayloadSubscription;
+  note: (
+    where?: NoteSubscriptionWhereInput
+  ) => NoteSubscriptionPayloadSubscription;
+  user: (
+    where?: UserSubscriptionWhereInput
+  ) => UserSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -140,27 +218,45 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type MovieOrderByInput =
+export type NoteType = "DOWNLOAD" | "PYTATKI" | "EXTERNAL";
+
+export type NoteOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "type_ASC"
+  | "type_DESC"
   | "title_ASC"
-  | "title_DESC"
-  | "duration_ASC"
-  | "duration_DESC";
+  | "title_DESC";
 
-export type DirectorOrderByInput =
+export type GroupOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
-  | "name_DESC";
+  | "name_DESC"
+  | "image_ASC"
+  | "image_DESC";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "image_ASC"
+  | "image_DESC";
+
+export type FolderOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "title_ASC"
+  | "title_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type DirectorWhereUniqueInput = AtLeastOne<{
+export type FolderWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface MovieWhereInput {
+export interface NoteWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -175,6 +271,10 @@ export interface MovieWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  type?: Maybe<NoteType>;
+  type_not?: Maybe<NoteType>;
+  type_in?: Maybe<NoteType[] | NoteType>;
+  type_not_in?: Maybe<NoteType[] | NoteType>;
   title?: Maybe<String>;
   title_not?: Maybe<String>;
   title_in?: Maybe<String[] | String>;
@@ -189,19 +289,12 @@ export interface MovieWhereInput {
   title_not_starts_with?: Maybe<String>;
   title_ends_with?: Maybe<String>;
   title_not_ends_with?: Maybe<String>;
-  duration?: Maybe<Int>;
-  duration_not?: Maybe<Int>;
-  duration_in?: Maybe<Int[] | Int>;
-  duration_not_in?: Maybe<Int[] | Int>;
-  duration_lt?: Maybe<Int>;
-  duration_lte?: Maybe<Int>;
-  duration_gt?: Maybe<Int>;
-  duration_gte?: Maybe<Int>;
-  director?: Maybe<DirectorWhereInput>;
-  AND?: Maybe<MovieWhereInput[] | MovieWhereInput>;
+  author?: Maybe<UserWhereInput>;
+  parentFolder?: Maybe<FolderWhereInput>;
+  AND?: Maybe<NoteWhereInput[] | NoteWhereInput>;
 }
 
-export interface DirectorWhereInput {
+export interface UserWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -230,77 +323,75 @@ export interface DirectorWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  movies_some?: Maybe<MovieWhereInput>;
-  AND?: Maybe<DirectorWhereInput[] | DirectorWhereInput>;
+  image?: Maybe<String>;
+  image_not?: Maybe<String>;
+  image_in?: Maybe<String[] | String>;
+  image_not_in?: Maybe<String[] | String>;
+  image_lt?: Maybe<String>;
+  image_lte?: Maybe<String>;
+  image_gt?: Maybe<String>;
+  image_gte?: Maybe<String>;
+  image_contains?: Maybe<String>;
+  image_not_contains?: Maybe<String>;
+  image_starts_with?: Maybe<String>;
+  image_not_starts_with?: Maybe<String>;
+  image_ends_with?: Maybe<String>;
+  image_not_ends_with?: Maybe<String>;
+  notes_some?: Maybe<NoteWhereInput>;
+  groups_some?: Maybe<GroupWhereInput>;
+  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export type MovieWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface DirectorCreateInput {
+export interface GroupWhereInput {
   id?: Maybe<ID_Input>;
-  name: String;
-  movies?: Maybe<MovieCreateManyWithoutDirectorInput>;
-}
-
-export interface MovieCreateManyWithoutDirectorInput {
-  create?: Maybe<
-    MovieCreateWithoutDirectorInput[] | MovieCreateWithoutDirectorInput
-  >;
-  connect?: Maybe<MovieWhereUniqueInput[] | MovieWhereUniqueInput>;
-}
-
-export interface MovieCreateWithoutDirectorInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  duration: Int;
-}
-
-export interface DirectorUpdateInput {
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
   name?: Maybe<String>;
-  movies?: Maybe<MovieUpdateManyWithoutDirectorInput>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  members_some?: Maybe<UserWhereInput>;
+  image?: Maybe<String>;
+  image_not?: Maybe<String>;
+  image_in?: Maybe<String[] | String>;
+  image_not_in?: Maybe<String[] | String>;
+  image_lt?: Maybe<String>;
+  image_lte?: Maybe<String>;
+  image_gt?: Maybe<String>;
+  image_gte?: Maybe<String>;
+  image_contains?: Maybe<String>;
+  image_not_contains?: Maybe<String>;
+  image_starts_with?: Maybe<String>;
+  image_not_starts_with?: Maybe<String>;
+  image_ends_with?: Maybe<String>;
+  image_not_ends_with?: Maybe<String>;
+  folders_some?: Maybe<FolderWhereInput>;
+  notes_some?: Maybe<NoteWhereInput>;
+  AND?: Maybe<GroupWhereInput[] | GroupWhereInput>;
 }
 
-export interface MovieUpdateManyWithoutDirectorInput {
-  create?: Maybe<
-    MovieCreateWithoutDirectorInput[] | MovieCreateWithoutDirectorInput
-  >;
-  delete?: Maybe<MovieWhereUniqueInput[] | MovieWhereUniqueInput>;
-  connect?: Maybe<MovieWhereUniqueInput[] | MovieWhereUniqueInput>;
-  set?: Maybe<MovieWhereUniqueInput[] | MovieWhereUniqueInput>;
-  disconnect?: Maybe<MovieWhereUniqueInput[] | MovieWhereUniqueInput>;
-  update?: Maybe<
-    | MovieUpdateWithWhereUniqueWithoutDirectorInput[]
-    | MovieUpdateWithWhereUniqueWithoutDirectorInput
-  >;
-  upsert?: Maybe<
-    | MovieUpsertWithWhereUniqueWithoutDirectorInput[]
-    | MovieUpsertWithWhereUniqueWithoutDirectorInput
-  >;
-  deleteMany?: Maybe<MovieScalarWhereInput[] | MovieScalarWhereInput>;
-  updateMany?: Maybe<
-    MovieUpdateManyWithWhereNestedInput[] | MovieUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface MovieUpdateWithWhereUniqueWithoutDirectorInput {
-  where: MovieWhereUniqueInput;
-  data: MovieUpdateWithoutDirectorDataInput;
-}
-
-export interface MovieUpdateWithoutDirectorDataInput {
-  title?: Maybe<String>;
-  duration?: Maybe<Int>;
-}
-
-export interface MovieUpsertWithWhereUniqueWithoutDirectorInput {
-  where: MovieWhereUniqueInput;
-  update: MovieUpdateWithoutDirectorDataInput;
-  create: MovieCreateWithoutDirectorInput;
-}
-
-export interface MovieScalarWhereInput {
+export interface FolderWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -329,202 +420,935 @@ export interface MovieScalarWhereInput {
   title_not_starts_with?: Maybe<String>;
   title_ends_with?: Maybe<String>;
   title_not_ends_with?: Maybe<String>;
-  duration?: Maybe<Int>;
-  duration_not?: Maybe<Int>;
-  duration_in?: Maybe<Int[] | Int>;
-  duration_not_in?: Maybe<Int[] | Int>;
-  duration_lt?: Maybe<Int>;
-  duration_lte?: Maybe<Int>;
-  duration_gt?: Maybe<Int>;
-  duration_gte?: Maybe<Int>;
-  AND?: Maybe<MovieScalarWhereInput[] | MovieScalarWhereInput>;
-  OR?: Maybe<MovieScalarWhereInput[] | MovieScalarWhereInput>;
-  NOT?: Maybe<MovieScalarWhereInput[] | MovieScalarWhereInput>;
+  author?: Maybe<UserWhereInput>;
+  parentFolder?: Maybe<FolderWhereInput>;
+  AND?: Maybe<FolderWhereInput[] | FolderWhereInput>;
 }
 
-export interface MovieUpdateManyWithWhereNestedInput {
-  where: MovieScalarWhereInput;
-  data: MovieUpdateManyDataInput;
-}
+export type GroupWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
-export interface MovieUpdateManyDataInput {
-  title?: Maybe<String>;
-  duration?: Maybe<Int>;
-}
+export type NoteWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
-export interface DirectorUpdateManyMutationInput {
-  name?: Maybe<String>;
-}
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
-export interface MovieCreateInput {
+export interface FolderCreateInput {
   id?: Maybe<ID_Input>;
   title: String;
-  duration: Int;
-  director: DirectorCreateOneWithoutMoviesInput;
+  author: UserCreateOneInput;
+  parentFolder?: Maybe<FolderCreateOneInput>;
 }
 
-export interface DirectorCreateOneWithoutMoviesInput {
-  create?: Maybe<DirectorCreateWithoutMoviesInput>;
-  connect?: Maybe<DirectorWhereUniqueInput>;
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface DirectorCreateWithoutMoviesInput {
+export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   name: String;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteCreateManyWithoutAuthorInput>;
+  groups?: Maybe<GroupCreateManyWithoutMembersInput>;
 }
 
-export interface MovieUpdateInput {
+export interface NoteCreateManyWithoutAuthorInput {
+  create?: Maybe<NoteCreateWithoutAuthorInput[] | NoteCreateWithoutAuthorInput>;
+  connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+}
+
+export interface NoteCreateWithoutAuthorInput {
+  id?: Maybe<ID_Input>;
+  type: NoteType;
+  title: String;
+  parentFolder?: Maybe<FolderCreateOneInput>;
+}
+
+export interface FolderCreateOneInput {
+  create?: Maybe<FolderCreateInput>;
+  connect?: Maybe<FolderWhereUniqueInput>;
+}
+
+export interface GroupCreateManyWithoutMembersInput {
+  create?: Maybe<
+    GroupCreateWithoutMembersInput[] | GroupCreateWithoutMembersInput
+  >;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+}
+
+export interface GroupCreateWithoutMembersInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderCreateManyInput>;
+  notes?: Maybe<NoteCreateManyInput>;
+}
+
+export interface FolderCreateManyInput {
+  create?: Maybe<FolderCreateInput[] | FolderCreateInput>;
+  connect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+}
+
+export interface NoteCreateManyInput {
+  create?: Maybe<NoteCreateInput[] | NoteCreateInput>;
+  connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+}
+
+export interface NoteCreateInput {
+  id?: Maybe<ID_Input>;
+  type: NoteType;
+  title: String;
+  author: UserCreateOneWithoutNotesInput;
+  parentFolder?: Maybe<FolderCreateOneInput>;
+}
+
+export interface UserCreateOneWithoutNotesInput {
+  create?: Maybe<UserCreateWithoutNotesInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutNotesInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  image?: Maybe<String>;
+  groups?: Maybe<GroupCreateManyWithoutMembersInput>;
+}
+
+export interface FolderUpdateInput {
   title?: Maybe<String>;
-  duration?: Maybe<Int>;
-  director?: Maybe<DirectorUpdateOneRequiredWithoutMoviesInput>;
+  author?: Maybe<UserUpdateOneRequiredInput>;
+  parentFolder?: Maybe<FolderUpdateOneInput>;
 }
 
-export interface DirectorUpdateOneRequiredWithoutMoviesInput {
-  create?: Maybe<DirectorCreateWithoutMoviesInput>;
-  update?: Maybe<DirectorUpdateWithoutMoviesDataInput>;
-  upsert?: Maybe<DirectorUpsertWithoutMoviesInput>;
-  connect?: Maybe<DirectorWhereUniqueInput>;
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface DirectorUpdateWithoutMoviesDataInput {
+export interface UserUpdateDataInput {
   name?: Maybe<String>;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
+  groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
 }
 
-export interface DirectorUpsertWithoutMoviesInput {
-  update: DirectorUpdateWithoutMoviesDataInput;
-  create: DirectorCreateWithoutMoviesInput;
-}
-
-export interface MovieUpdateManyMutationInput {
-  title?: Maybe<String>;
-  duration?: Maybe<Int>;
-}
-
-export interface DirectorSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<DirectorWhereInput>;
-  AND?: Maybe<
-    DirectorSubscriptionWhereInput[] | DirectorSubscriptionWhereInput
+export interface NoteUpdateManyWithoutAuthorInput {
+  create?: Maybe<NoteCreateWithoutAuthorInput[] | NoteCreateWithoutAuthorInput>;
+  delete?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  set?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  disconnect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  update?: Maybe<
+    | NoteUpdateWithWhereUniqueWithoutAuthorInput[]
+    | NoteUpdateWithWhereUniqueWithoutAuthorInput
+  >;
+  upsert?: Maybe<
+    | NoteUpsertWithWhereUniqueWithoutAuthorInput[]
+    | NoteUpsertWithWhereUniqueWithoutAuthorInput
+  >;
+  deleteMany?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
+  updateMany?: Maybe<
+    NoteUpdateManyWithWhereNestedInput[] | NoteUpdateManyWithWhereNestedInput
   >;
 }
 
-export interface MovieSubscriptionWhereInput {
+export interface NoteUpdateWithWhereUniqueWithoutAuthorInput {
+  where: NoteWhereUniqueInput;
+  data: NoteUpdateWithoutAuthorDataInput;
+}
+
+export interface NoteUpdateWithoutAuthorDataInput {
+  type?: Maybe<NoteType>;
+  title?: Maybe<String>;
+  parentFolder?: Maybe<FolderUpdateOneInput>;
+}
+
+export interface FolderUpdateOneInput {
+  create?: Maybe<FolderCreateInput>;
+  update?: Maybe<FolderUpdateDataInput>;
+  upsert?: Maybe<FolderUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<FolderWhereUniqueInput>;
+}
+
+export interface FolderUpdateDataInput {
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredInput>;
+  parentFolder?: Maybe<FolderUpdateOneInput>;
+}
+
+export interface FolderUpsertNestedInput {
+  update: FolderUpdateDataInput;
+  create: FolderCreateInput;
+}
+
+export interface NoteUpsertWithWhereUniqueWithoutAuthorInput {
+  where: NoteWhereUniqueInput;
+  update: NoteUpdateWithoutAuthorDataInput;
+  create: NoteCreateWithoutAuthorInput;
+}
+
+export interface NoteScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  type?: Maybe<NoteType>;
+  type_not?: Maybe<NoteType>;
+  type_in?: Maybe<NoteType[] | NoteType>;
+  type_not_in?: Maybe<NoteType[] | NoteType>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  AND?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
+  OR?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
+  NOT?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
+}
+
+export interface NoteUpdateManyWithWhereNestedInput {
+  where: NoteScalarWhereInput;
+  data: NoteUpdateManyDataInput;
+}
+
+export interface NoteUpdateManyDataInput {
+  type?: Maybe<NoteType>;
+  title?: Maybe<String>;
+}
+
+export interface GroupUpdateManyWithoutMembersInput {
+  create?: Maybe<
+    GroupCreateWithoutMembersInput[] | GroupCreateWithoutMembersInput
+  >;
+  delete?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  set?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  disconnect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  update?: Maybe<
+    | GroupUpdateWithWhereUniqueWithoutMembersInput[]
+    | GroupUpdateWithWhereUniqueWithoutMembersInput
+  >;
+  upsert?: Maybe<
+    | GroupUpsertWithWhereUniqueWithoutMembersInput[]
+    | GroupUpsertWithWhereUniqueWithoutMembersInput
+  >;
+  deleteMany?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  updateMany?: Maybe<
+    GroupUpdateManyWithWhereNestedInput[] | GroupUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface GroupUpdateWithWhereUniqueWithoutMembersInput {
+  where: GroupWhereUniqueInput;
+  data: GroupUpdateWithoutMembersDataInput;
+}
+
+export interface GroupUpdateWithoutMembersDataInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderUpdateManyInput>;
+  notes?: Maybe<NoteUpdateManyInput>;
+}
+
+export interface FolderUpdateManyInput {
+  create?: Maybe<FolderCreateInput[] | FolderCreateInput>;
+  update?: Maybe<
+    | FolderUpdateWithWhereUniqueNestedInput[]
+    | FolderUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | FolderUpsertWithWhereUniqueNestedInput[]
+    | FolderUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  connect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  set?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  disconnect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  deleteMany?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  updateMany?: Maybe<
+    | FolderUpdateManyWithWhereNestedInput[]
+    | FolderUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface FolderUpdateWithWhereUniqueNestedInput {
+  where: FolderWhereUniqueInput;
+  data: FolderUpdateDataInput;
+}
+
+export interface FolderUpsertWithWhereUniqueNestedInput {
+  where: FolderWhereUniqueInput;
+  update: FolderUpdateDataInput;
+  create: FolderCreateInput;
+}
+
+export interface FolderScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  AND?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  OR?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  NOT?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+}
+
+export interface FolderUpdateManyWithWhereNestedInput {
+  where: FolderScalarWhereInput;
+  data: FolderUpdateManyDataInput;
+}
+
+export interface FolderUpdateManyDataInput {
+  title?: Maybe<String>;
+}
+
+export interface NoteUpdateManyInput {
+  create?: Maybe<NoteCreateInput[] | NoteCreateInput>;
+  update?: Maybe<
+    | NoteUpdateWithWhereUniqueNestedInput[]
+    | NoteUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | NoteUpsertWithWhereUniqueNestedInput[]
+    | NoteUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  set?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  disconnect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  deleteMany?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
+  updateMany?: Maybe<
+    NoteUpdateManyWithWhereNestedInput[] | NoteUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface NoteUpdateWithWhereUniqueNestedInput {
+  where: NoteWhereUniqueInput;
+  data: NoteUpdateDataInput;
+}
+
+export interface NoteUpdateDataInput {
+  type?: Maybe<NoteType>;
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
+  parentFolder?: Maybe<FolderUpdateOneInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutNotesInput {
+  create?: Maybe<UserCreateWithoutNotesInput>;
+  update?: Maybe<UserUpdateWithoutNotesDataInput>;
+  upsert?: Maybe<UserUpsertWithoutNotesInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutNotesDataInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+  groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
+}
+
+export interface UserUpsertWithoutNotesInput {
+  update: UserUpdateWithoutNotesDataInput;
+  create: UserCreateWithoutNotesInput;
+}
+
+export interface NoteUpsertWithWhereUniqueNestedInput {
+  where: NoteWhereUniqueInput;
+  update: NoteUpdateDataInput;
+  create: NoteCreateInput;
+}
+
+export interface GroupUpsertWithWhereUniqueWithoutMembersInput {
+  where: GroupWhereUniqueInput;
+  update: GroupUpdateWithoutMembersDataInput;
+  create: GroupCreateWithoutMembersInput;
+}
+
+export interface GroupScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  image?: Maybe<String>;
+  image_not?: Maybe<String>;
+  image_in?: Maybe<String[] | String>;
+  image_not_in?: Maybe<String[] | String>;
+  image_lt?: Maybe<String>;
+  image_lte?: Maybe<String>;
+  image_gt?: Maybe<String>;
+  image_gte?: Maybe<String>;
+  image_contains?: Maybe<String>;
+  image_not_contains?: Maybe<String>;
+  image_starts_with?: Maybe<String>;
+  image_not_starts_with?: Maybe<String>;
+  image_ends_with?: Maybe<String>;
+  image_not_ends_with?: Maybe<String>;
+  AND?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  OR?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  NOT?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+}
+
+export interface GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput;
+  data: GroupUpdateManyDataInput;
+}
+
+export interface GroupUpdateManyDataInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface FolderUpdateManyMutationInput {
+  title?: Maybe<String>;
+}
+
+export interface GroupCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  members?: Maybe<UserCreateManyWithoutGroupsInput>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderCreateManyInput>;
+  notes?: Maybe<NoteCreateManyInput>;
+}
+
+export interface UserCreateManyWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutGroupsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteCreateManyWithoutAuthorInput>;
+}
+
+export interface GroupUpdateInput {
+  name?: Maybe<String>;
+  members?: Maybe<UserUpdateManyWithoutGroupsInput>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderUpdateManyInput>;
+  notes?: Maybe<NoteUpdateManyInput>;
+}
+
+export interface UserUpdateManyWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput>;
+  delete?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  set?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  disconnect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  update?: Maybe<
+    | UserUpdateWithWhereUniqueWithoutGroupsInput[]
+    | UserUpdateWithWhereUniqueWithoutGroupsInput
+  >;
+  upsert?: Maybe<
+    | UserUpsertWithWhereUniqueWithoutGroupsInput[]
+    | UserUpsertWithWhereUniqueWithoutGroupsInput
+  >;
+  deleteMany?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  updateMany?: Maybe<
+    UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutGroupsDataInput;
+}
+
+export interface UserUpdateWithoutGroupsDataInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutGroupsDataInput;
+  create: UserCreateWithoutGroupsInput;
+}
+
+export interface UserScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  image?: Maybe<String>;
+  image_not?: Maybe<String>;
+  image_in?: Maybe<String[] | String>;
+  image_not_in?: Maybe<String[] | String>;
+  image_lt?: Maybe<String>;
+  image_lte?: Maybe<String>;
+  image_gt?: Maybe<String>;
+  image_gte?: Maybe<String>;
+  image_contains?: Maybe<String>;
+  image_not_contains?: Maybe<String>;
+  image_starts_with?: Maybe<String>;
+  image_not_starts_with?: Maybe<String>;
+  image_ends_with?: Maybe<String>;
+  image_not_ends_with?: Maybe<String>;
+  AND?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  OR?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  NOT?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+}
+
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface UserUpdateManyDataInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+}
+
+export interface GroupUpdateManyMutationInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+}
+
+export interface NoteUpdateInput {
+  type?: Maybe<NoteType>;
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
+  parentFolder?: Maybe<FolderUpdateOneInput>;
+}
+
+export interface NoteUpdateManyMutationInput {
+  type?: Maybe<NoteType>;
+  title?: Maybe<String>;
+}
+
+export interface UserUpdateInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
+  groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+}
+
+export interface FolderSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<MovieWhereInput>;
-  AND?: Maybe<MovieSubscriptionWhereInput[] | MovieSubscriptionWhereInput>;
+  node?: Maybe<FolderWhereInput>;
+  AND?: Maybe<FolderSubscriptionWhereInput[] | FolderSubscriptionWhereInput>;
+}
+
+export interface GroupSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<GroupWhereInput>;
+  AND?: Maybe<GroupSubscriptionWhereInput[] | GroupSubscriptionWhereInput>;
+}
+
+export interface NoteSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<NoteWhereInput>;
+  AND?: Maybe<NoteSubscriptionWhereInput[] | NoteSubscriptionWhereInput>;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Director {
-  id: ID_Output;
-  name: String;
-}
-
-export interface DirectorPromise extends Promise<Director>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  movies: <T = FragmentableArray<Movie>>(args?: {
-    where?: MovieWhereInput;
-    orderBy?: MovieOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface DirectorSubscription
-  extends Promise<AsyncIterator<Director>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  movies: <T = Promise<AsyncIterator<MovieSubscription>>>(args?: {
-    where?: MovieWhereInput;
-    orderBy?: MovieOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface DirectorNullablePromise
-  extends Promise<Director | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  movies: <T = FragmentableArray<Movie>>(args?: {
-    where?: MovieWhereInput;
-    orderBy?: MovieOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface Movie {
+export interface Folder {
   id: ID_Output;
   title: String;
-  duration: Int;
 }
 
-export interface MoviePromise extends Promise<Movie>, Fragmentable {
+export interface FolderPromise extends Promise<Folder>, Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
-  duration: () => Promise<Int>;
-  director: <T = DirectorPromise>() => T;
+  author: <T = UserPromise>() => T;
+  parentFolder: <T = FolderPromise>() => T;
 }
 
-export interface MovieSubscription
-  extends Promise<AsyncIterator<Movie>>,
+export interface FolderSubscription
+  extends Promise<AsyncIterator<Folder>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
-  duration: () => Promise<AsyncIterator<Int>>;
-  director: <T = DirectorSubscription>() => T;
+  author: <T = UserSubscription>() => T;
+  parentFolder: <T = FolderSubscription>() => T;
 }
 
-export interface MovieNullablePromise
-  extends Promise<Movie | null>,
+export interface FolderNullablePromise
+  extends Promise<Folder | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
-  duration: () => Promise<Int>;
-  director: <T = DirectorPromise>() => T;
+  author: <T = UserPromise>() => T;
+  parentFolder: <T = FolderPromise>() => T;
 }
 
-export interface DirectorConnection {
+export interface User {
+  id: ID_Output;
+  name: String;
+  image?: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  image: () => Promise<String>;
+  notes: <T = FragmentableArray<Note>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  groups: <T = FragmentableArray<Group>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
+  notes: <T = Promise<AsyncIterator<NoteSubscription>>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  groups: <T = Promise<AsyncIterator<GroupSubscription>>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  image: () => Promise<String>;
+  notes: <T = FragmentableArray<Note>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  groups: <T = FragmentableArray<Group>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface Note {
+  id: ID_Output;
+  type: NoteType;
+  title: String;
+}
+
+export interface NotePromise extends Promise<Note>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<NoteType>;
+  title: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+  parentFolder: <T = FolderPromise>() => T;
+}
+
+export interface NoteSubscription
+  extends Promise<AsyncIterator<Note>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  type: () => Promise<AsyncIterator<NoteType>>;
+  title: () => Promise<AsyncIterator<String>>;
+  author: <T = UserSubscription>() => T;
+  parentFolder: <T = FolderSubscription>() => T;
+}
+
+export interface NoteNullablePromise
+  extends Promise<Note | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<NoteType>;
+  title: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+  parentFolder: <T = FolderPromise>() => T;
+}
+
+export interface Group {
+  id: ID_Output;
+  name: String;
+  image?: String;
+}
+
+export interface GroupPromise extends Promise<Group>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  members: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  image: () => Promise<String>;
+  folders: <T = FragmentableArray<Folder>>(args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  notes: <T = FragmentableArray<Note>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface GroupSubscription
+  extends Promise<AsyncIterator<Group>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  members: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  image: () => Promise<AsyncIterator<String>>;
+  folders: <T = Promise<AsyncIterator<FolderSubscription>>>(args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  notes: <T = Promise<AsyncIterator<NoteSubscription>>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface GroupNullablePromise
+  extends Promise<Group | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  members: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  image: () => Promise<String>;
+  folders: <T = FragmentableArray<Folder>>(args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  notes: <T = FragmentableArray<Note>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface FolderConnection {
   pageInfo: PageInfo;
-  edges: DirectorEdge[];
+  edges: FolderEdge[];
 }
 
-export interface DirectorConnectionPromise
-  extends Promise<DirectorConnection>,
+export interface FolderConnectionPromise
+  extends Promise<FolderConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<DirectorEdge>>() => T;
-  aggregate: <T = AggregateDirectorPromise>() => T;
+  edges: <T = FragmentableArray<FolderEdge>>() => T;
+  aggregate: <T = AggregateFolderPromise>() => T;
 }
 
-export interface DirectorConnectionSubscription
-  extends Promise<AsyncIterator<DirectorConnection>>,
+export interface FolderConnectionSubscription
+  extends Promise<AsyncIterator<FolderConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<DirectorEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateDirectorSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FolderEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFolderSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -550,91 +1374,197 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface DirectorEdge {
-  node: Director;
+export interface FolderEdge {
+  node: Folder;
   cursor: String;
 }
 
-export interface DirectorEdgePromise
-  extends Promise<DirectorEdge>,
-    Fragmentable {
-  node: <T = DirectorPromise>() => T;
+export interface FolderEdgePromise extends Promise<FolderEdge>, Fragmentable {
+  node: <T = FolderPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface DirectorEdgeSubscription
-  extends Promise<AsyncIterator<DirectorEdge>>,
+export interface FolderEdgeSubscription
+  extends Promise<AsyncIterator<FolderEdge>>,
     Fragmentable {
-  node: <T = DirectorSubscription>() => T;
+  node: <T = FolderSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateDirector {
+export interface AggregateFolder {
   count: Int;
 }
 
-export interface AggregateDirectorPromise
-  extends Promise<AggregateDirector>,
+export interface AggregateFolderPromise
+  extends Promise<AggregateFolder>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateDirectorSubscription
-  extends Promise<AsyncIterator<AggregateDirector>>,
+export interface AggregateFolderSubscription
+  extends Promise<AsyncIterator<AggregateFolder>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface MovieConnection {
+export interface GroupConnection {
   pageInfo: PageInfo;
-  edges: MovieEdge[];
+  edges: GroupEdge[];
 }
 
-export interface MovieConnectionPromise
-  extends Promise<MovieConnection>,
+export interface GroupConnectionPromise
+  extends Promise<GroupConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<MovieEdge>>() => T;
-  aggregate: <T = AggregateMoviePromise>() => T;
+  edges: <T = FragmentableArray<GroupEdge>>() => T;
+  aggregate: <T = AggregateGroupPromise>() => T;
 }
 
-export interface MovieConnectionSubscription
-  extends Promise<AsyncIterator<MovieConnection>>,
+export interface GroupConnectionSubscription
+  extends Promise<AsyncIterator<GroupConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MovieEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMovieSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GroupEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGroupSubscription>() => T;
 }
 
-export interface MovieEdge {
-  node: Movie;
+export interface GroupEdge {
+  node: Group;
   cursor: String;
 }
 
-export interface MovieEdgePromise extends Promise<MovieEdge>, Fragmentable {
-  node: <T = MoviePromise>() => T;
+export interface GroupEdgePromise extends Promise<GroupEdge>, Fragmentable {
+  node: <T = GroupPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface MovieEdgeSubscription
-  extends Promise<AsyncIterator<MovieEdge>>,
+export interface GroupEdgeSubscription
+  extends Promise<AsyncIterator<GroupEdge>>,
     Fragmentable {
-  node: <T = MovieSubscription>() => T;
+  node: <T = GroupSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateMovie {
+export interface AggregateGroup {
   count: Int;
 }
 
-export interface AggregateMoviePromise
-  extends Promise<AggregateMovie>,
+export interface AggregateGroupPromise
+  extends Promise<AggregateGroup>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateMovieSubscription
-  extends Promise<AsyncIterator<AggregateMovie>>,
+export interface AggregateGroupSubscription
+  extends Promise<AsyncIterator<AggregateGroup>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface NoteConnection {
+  pageInfo: PageInfo;
+  edges: NoteEdge[];
+}
+
+export interface NoteConnectionPromise
+  extends Promise<NoteConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<NoteEdge>>() => T;
+  aggregate: <T = AggregateNotePromise>() => T;
+}
+
+export interface NoteConnectionSubscription
+  extends Promise<AsyncIterator<NoteConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<NoteEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateNoteSubscription>() => T;
+}
+
+export interface NoteEdge {
+  node: Note;
+  cursor: String;
+}
+
+export interface NoteEdgePromise extends Promise<NoteEdge>, Fragmentable {
+  node: <T = NotePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface NoteEdgeSubscription
+  extends Promise<AsyncIterator<NoteEdge>>,
+    Fragmentable {
+  node: <T = NoteSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateNote {
+  count: Int;
+}
+
+export interface AggregateNotePromise
+  extends Promise<AggregateNote>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateNoteSubscription
+  extends Promise<AsyncIterator<AggregateNote>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -655,95 +1585,189 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface DirectorSubscriptionPayload {
+export interface FolderSubscriptionPayload {
   mutation: MutationType;
-  node: Director;
+  node: Folder;
   updatedFields: String[];
-  previousValues: DirectorPreviousValues;
+  previousValues: FolderPreviousValues;
 }
 
-export interface DirectorSubscriptionPayloadPromise
-  extends Promise<DirectorSubscriptionPayload>,
+export interface FolderSubscriptionPayloadPromise
+  extends Promise<FolderSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = DirectorPromise>() => T;
+  node: <T = FolderPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = DirectorPreviousValuesPromise>() => T;
+  previousValues: <T = FolderPreviousValuesPromise>() => T;
 }
 
-export interface DirectorSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<DirectorSubscriptionPayload>>,
+export interface FolderSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FolderSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = DirectorSubscription>() => T;
+  node: <T = FolderSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = DirectorPreviousValuesSubscription>() => T;
+  previousValues: <T = FolderPreviousValuesSubscription>() => T;
 }
 
-export interface DirectorPreviousValues {
-  id: ID_Output;
-  name: String;
-}
-
-export interface DirectorPreviousValuesPromise
-  extends Promise<DirectorPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface DirectorPreviousValuesSubscription
-  extends Promise<AsyncIterator<DirectorPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface MovieSubscriptionPayload {
-  mutation: MutationType;
-  node: Movie;
-  updatedFields: String[];
-  previousValues: MoviePreviousValues;
-}
-
-export interface MovieSubscriptionPayloadPromise
-  extends Promise<MovieSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = MoviePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = MoviePreviousValuesPromise>() => T;
-}
-
-export interface MovieSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<MovieSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = MovieSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = MoviePreviousValuesSubscription>() => T;
-}
-
-export interface MoviePreviousValues {
+export interface FolderPreviousValues {
   id: ID_Output;
   title: String;
-  duration: Int;
 }
 
-export interface MoviePreviousValuesPromise
-  extends Promise<MoviePreviousValues>,
+export interface FolderPreviousValuesPromise
+  extends Promise<FolderPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
-  duration: () => Promise<Int>;
 }
 
-export interface MoviePreviousValuesSubscription
-  extends Promise<AsyncIterator<MoviePreviousValues>>,
+export interface FolderPreviousValuesSubscription
+  extends Promise<AsyncIterator<FolderPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
-  duration: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GroupSubscriptionPayload {
+  mutation: MutationType;
+  node: Group;
+  updatedFields: String[];
+  previousValues: GroupPreviousValues;
+}
+
+export interface GroupSubscriptionPayloadPromise
+  extends Promise<GroupSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GroupPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GroupPreviousValuesPromise>() => T;
+}
+
+export interface GroupSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GroupSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GroupSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GroupPreviousValuesSubscription>() => T;
+}
+
+export interface GroupPreviousValues {
+  id: ID_Output;
+  name: String;
+  image?: String;
+}
+
+export interface GroupPreviousValuesPromise
+  extends Promise<GroupPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  image: () => Promise<String>;
+}
+
+export interface GroupPreviousValuesSubscription
+  extends Promise<AsyncIterator<GroupPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
+}
+
+export interface NoteSubscriptionPayload {
+  mutation: MutationType;
+  node: Note;
+  updatedFields: String[];
+  previousValues: NotePreviousValues;
+}
+
+export interface NoteSubscriptionPayloadPromise
+  extends Promise<NoteSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = NotePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = NotePreviousValuesPromise>() => T;
+}
+
+export interface NoteSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<NoteSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = NoteSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = NotePreviousValuesSubscription>() => T;
+}
+
+export interface NotePreviousValues {
+  id: ID_Output;
+  type: NoteType;
+  title: String;
+}
+
+export interface NotePreviousValuesPromise
+  extends Promise<NotePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  type: () => Promise<NoteType>;
+  title: () => Promise<String>;
+}
+
+export interface NotePreviousValuesSubscription
+  extends Promise<AsyncIterator<NotePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  type: () => Promise<AsyncIterator<NoteType>>;
+  title: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface UserPreviousValues {
+  id: ID_Output;
+  name: String;
+  image?: String;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  image: () => Promise<String>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -775,15 +1799,23 @@ export type Long = string;
 
 export const models: Model[] = [
   {
-    name: "Movie",
+    name: "User",
     embedded: false
   },
   {
-    name: "Director",
+    name: "Note",
     embedded: false
   },
   {
-    name: "TimeUnit",
+    name: "Folder",
+    embedded: false
+  },
+  {
+    name: "Group",
+    embedded: false
+  },
+  {
+    name: "NoteType",
     embedded: false
   }
 ];

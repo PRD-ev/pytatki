@@ -1,18 +1,37 @@
-type Movie {
-  id: ID! @id
-  title: String!
-  duration(unit: TimeUnit = SECONDS): Int!
-  director: Director! @relation(link: INLINE)
-}
-
-type Director {
+type User {
   id: ID! @id
   name: String!
-  movies: [Movie!]
+  image: String
+  notes: [Note!] @relation(link: INLINE)
+  groups: [Group!] @relation(link: INLINE)
 }
 
-enum TimeUnit {
-  SECONDS
-  MINUTES
-  HOURS
+type Note {
+  id: ID! @id
+  type: NoteType!
+  title: String!
+  author: User!
+  parentFolder: Folder @relation(link: INLINE)
+}
+
+type Folder {
+  id: ID! @id
+  title: String!
+  author: User! @relation(link: INLINE)
+  parentFolder: Folder @relation(link: INLINE)
+}
+
+type Group {
+  id: ID! @id
+  name: String!
+  members: [User!]
+  image: String
+  folders: [Folder!] @relation(link: INLINE)
+  notes: [Note!] @relation(link: INLINE)
+}
+
+enum NoteType {
+  DOWNLOAD
+  PYTATKI
+  EXTERNAL
 }

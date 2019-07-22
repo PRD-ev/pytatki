@@ -5,15 +5,23 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
-    name: "Movie",
+    name: "User",
     embedded: false
   },
   {
-    name: "Director",
+    name: "Note",
     embedded: false
   },
   {
-    name: "TimeUnit",
+    name: "Folder",
+    embedded: false
+  },
+  {
+    name: "Group",
+    embedded: false
+  },
+  {
+    name: "NoteType",
     embedded: false
   }
 ];

@@ -13,79 +13,81 @@ var admin = require("firebase-admin");
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 
-
-const { ApolloServer, gql } = require('apollo-server');
-const { readFileSync } = require('fs');
-const { prisma } = require('./prisma-client');
-
+const { ApolloServer, gql } = require("apollo-server");
+const { readFileSync } = require("fs");
+const { prisma } = require("./prisma-client");
 
 const resolvers = {
   Query: {
-    movies: async () => await prisma.movies(),
-    directors: async () => await prisma.directors(),
-    movie: async (parent, args, context, info) => {
-      return prisma.movie({ id: args.id });
+    user: async (parent, args, context, info) => {
+      return prisma.user({ id: args.id });
     },
-    director: async (parent, args, context, info) => {
-      return prisma.director({ id: args.id });
+    group: async (parent, args, context, info) => {
+      return prisma.group({ id: args.id });
+    },
+    folder: async (paren, args, context, info) => {
+      return prisma.folder({ id: args.id });
     }
   },
   Mutation: {
-    createMovie: async(parent, args) => {
-      const movie = { title: args.title, duration: args.duration, director: {
-        connect: { id: args.director }
-      } };
-      return prisma.createMovie(movie);
+    createGroup: async (parent, args) => {
+      const group = {
+        name: args.name,
+      };
+      return prisma.createGroup(group);
     },
-    createDirector: async(parent, args) => {
-      const director = { name: args.name };
-      return prisma.createDirector(director);
-    }
-  },
-  Movie: {
-    duration: ({ duration }, args) => {
-      if (args.unit == 'MINUTES') return Math.round(duration / 60);
-      if (args.unit == 'HOURS') return Math.round(duration / 3600);
-
-      return duration;
+    createNote: async (parent, args) => {
+      const note = {
+        title: args.title,
+      };
+      return prisma.createNote(note);
     },
-    director: async (parent, args, context, info) => {
-      return prisma.movie({ id: parent.id }).director()
-    }
+    createFolder: async (parent, args) => {
+      const folder = {
+        title: args.title,
+      };
+      return prisma.createFolder(folder);
+    },
   },
-  Director: {
-    movies: (parent, args, context, info) => {
-      return moviesList.filter(movie => movie.director_id == parent.id);
-    }
+  User: {
+    notes: (parent, args) => {
+      return prisma.user({id: parent.id}).note();
+    },
+    groups: (parent, args) => {
+      return prisma.user({id: parent.id}).group();
+    },
+  },
+  Note: {
+    author: (parent, args) => {
+      return prisma.note({id: parent.id}).author();
+    },
+    parentFolder: (parent, args) => {
+      return prisma.note({id: parent.id}).folder();
+    },
+  },
+  Folder: {
+    author: (parent, args) => {
+      return prisma.folder({id: parent.id}).author();
+    },
+    parentFolder: (parent, args) => {
+      return prisma.folder({id: parent.id}).folder();
+    },
   }
-}
-
-
+};
 
 const server = new ApolloServer({
-  typeDefs: gql`${readFileSync(__dirname.concat('/schema/schema.graphql'), 'utf8')}`,
-  resolvers,
+  typeDefs: gql`
+    ${readFileSync(__dirname.concat("/schema/schema.graphql"), "utf8")}
+  `,
+  resolvers
 });
 
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
 
-
-
 var app = express();
 app.use(compression());
-
-if (process.env.ENVIRONMENT !== "dev") {
-  FIREBASE_KEY = process.env.FIREBASE_KEY || `{"hello": "firebase"}`;
-
-  let firebaseKey = JSON.parse(FIREBASE_KEY);
-
-  admin.initializeApp({
-    credential: admin.credential.cert(firebaseKey),
-    databaseURL: "https://https://pytatki-1559814016089.firebaseio.com"
-  });
-}
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
