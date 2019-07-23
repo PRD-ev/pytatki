@@ -12,6 +12,7 @@ type Note {
   title: String!
   author: User!
   parentFolder: Folder @relation(link: INLINE)
+  group: Group! @relation(link: INLINE)
 }
 
 type Folder {
@@ -19,6 +20,7 @@ type Folder {
   title: String!
   author: User! @relation(link: INLINE)
   parentFolder: Folder @relation(link: INLINE)
+  group: Group! @relation(link: INLINE)
 }
 
 type Group {
@@ -26,8 +28,8 @@ type Group {
   name: String!
   members: [User!]
   image: String
-  folders: [Folder!] @relation(link: INLINE)
-  notes: [Note!] @relation(link: INLINE)
+  folders: [Folder!] 
+  notes: [Note!]
 }
 
 enum NoteType {

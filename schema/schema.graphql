@@ -1,17 +1,23 @@
 # Query
 type Query {
+  users: [User!]
   user(id: ID!): User!
   group(id: ID!): Group!
   folder(id: ID!): Folder!
-} 
+}
 
 type Mutation {
   createGroup(name: String!): Group!
-  deleteGroup(id: ID!): Group!
-  createNote(name: String!): Note!
-  deleteNote(id: ID!): Note!
-  createFolder(name: String!): Folder!
-  deleteFolder(id: ID!): Folder!
+  updateGroup(id: ID!, name: String, image: String): Group
+  deleteGroup(id: ID!): Group
+  createNote(title: String! type:NoteType! authorId: ID! groupId: ID! parentFolderId: ID!): Note!
+  updateNote(id: ID!, title: String, image: String): Note
+  deleteNote(id: ID!): Note
+  createFolder(title: String! authorId: ID! groupId: ID! parentFolderId: ID!): Folder!
+  updateFolder(id: ID!, name: String, image: String): Folder
+  deleteFolder(id: ID!): Folder
+  removeUserFromGroup(groupId: ID!, userId: ID!): Group
+  addUserToGroup(groupId: ID!, userId: ID!): Group
 }
 
 # Types
@@ -29,6 +35,7 @@ type Note {
   title: String!
   author: User!
   parentFolder: Folder
+  group: Group!
 }
 
 type Folder {
@@ -36,13 +43,14 @@ type Folder {
   title: String!
   author: User!
   parentFolder: Folder
+  group: Group!
 }
 
 type Group {
   id: ID!
   name: String!
-  members: [User!]
   image: String
+  members: [User!]
   folders: [Folder!]
   notes: [Note!]
 }
