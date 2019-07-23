@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-  res.redirect(301, "http://pytatki.netlify.com/api");
+  res.redirect(301, "/api");
 });
 
 module.exports = router;
