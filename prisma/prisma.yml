@@ -3,4 +3,4 @@ datamodel: datamodel.prisma
 databaseType: document
 generate:
   - generator: javascript-client
-    output: ./prisma-client/
+    output: ../prisma-client/
