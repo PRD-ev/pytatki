@@ -1,9 +1,9 @@
 # Query
 type Query {
   users: [User!]
-  user(id: ID!): User!
-  group(id: ID!): Group!
-  folder(id: ID!): Folder!
+  user(id: ID!): User
+  group(id: ID!): Group
+  folder(id: ID!): Folder
 }
 
 type Mutation {
