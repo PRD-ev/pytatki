@@ -1,17 +1,23 @@
 const { prisma } = require("../prisma-client");
 
 const Query = {
-  users: async (parent, args, context, info) => {
-    return prisma.users();
+  users: (parent, args, context, info) => {
+    if (context.role === "ADMIN") {
+      return prisma.users();
+    }
+    throw new Error("You don't have permission for that action");
   },
-  user: async (parent, args, context, info) => {
+  user: (parent, args, context, info) => {
     return prisma.user({ id: args.id });
   },
-  group: async (parent, args, context, info) => {
+  group: (parent, args, context, info) => {
     return prisma.group({ id: args.id });
   },
-  folder: async (paren, args, context, info) => {
+  folder: (paren, args, context, info) => {
     return prisma.folder({ id: args.id });
+  },
+  note: (paren, args, context, info) => {
+    return prisma.note({ id: args.id });
   }
 };
 

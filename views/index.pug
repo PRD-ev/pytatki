@@ -2,4 +2,15 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p= message
+
+  form(action="/register" method="POST")
+    input#name(type="text", name="name")
+    input#email(type="email", name="email")
+    input#password(type="password", name="password")
+    input(type="submit", value="Send")
+
+  form(action="/login" method="POST")
+    input#email(type="email", name="email")
+    input#password(type="password", name="password")
+    input(type="submit", value="Send")

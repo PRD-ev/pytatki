@@ -1,6 +1,9 @@
 type User {
   id: ID! @id
   name: String!
+  password: String!
+  email: String! @unique
+  role: String!
   image: String
   notes: [Note!] @relation(link: INLINE)
   groups: [Group!] @relation(link: INLINE)
@@ -11,6 +14,7 @@ type Note {
   type: NoteType!
   title: String!
   author: User!
+  content: String!
   parentFolder: Folder @relation(link: INLINE)
   group: Group! @relation(link: INLINE)
 }

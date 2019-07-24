@@ -4,6 +4,7 @@ type Query {
   user(id: ID!): User
   group(id: ID!): Group
   folder(id: ID!): Folder
+  note(id: ID!): Note
 }
 
 type Mutation {
@@ -24,6 +25,9 @@ type Mutation {
 type User {
   id: ID!
   name: String!
+  password: String!
+  email: String!
+  role: String!
   image: String
   notes: [Note!]
   groups: [Group!]
@@ -36,6 +40,7 @@ type Note {
   author: User!
   parentFolder: Folder
   group: Group!
+  content: String!
 }
 
 type Folder {

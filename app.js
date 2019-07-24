@@ -9,42 +9,16 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const compression = require("compression");
 const jsonWebToken = require("jsonwebtoken");
+const { prisma } = require("./prisma-client");
 
 const { ApolloServer, gql } = require("apollo-server-express");
 const { readFileSync } = require("fs");
 const { resolvers } = require("./resolvers");
 
 const JWTSecretKey = "super-secret-key";
-
-const user = {
-  email: "arjunphp@gmail.com",
-  id: 1,
-  name: "Arjun A"
-};
-// sign with default (HMAC SHA256)
-const token = jsonWebToken.sign(user, JWTSecretKey);
-
-const server = new ApolloServer({
-  typeDefs: gql`
-    ${readFileSync(__dirname.concat("/schema/schema.graphql"), "utf8")}
-  `,
-  resolvers
-});
+const bcrypt = require("bcrypt");
 
 const app = express();
-
-app.get("/", (res, req) => {
-  const SECONDS_IN_HOUR = 3600;
-  const user = {
-    email: "arjunphp@gmail.com",
-    id: 1,
-    name: "Arjun A"
-  };
-  const token = jsonWebToken.sign(user, JWTSecretKey);
-  res.cookie("jwt", token, { maxAge: SECONDS_IN_HOUR, httpOnly: true });
-});
-
-server.applyMiddleware({ app });
 
 app.use(compression());
 
@@ -57,27 +31,88 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(function(req, res, next) {
-  // check if client sent cookie
-  var cookie = req.cookies.jwt;
-  if (cookie === undefined) {
-    res.redirect("/");
-  } else {
-    try {
-      const tokenDecodedData = jsonWebToken.verify(cookie, JWTSecretKey);
-      return res.json({
-        error: false,
-        data: tokenDecodedData
-      });
-    } catch (error) {
-      res.json({
-        error: true,
-        data: error
+app.get("/", (req, res) => {
+  res.render("index", { title: "Hey", message: "Hello from router!" });
+});
+
+app.post("/register", (req, res) => {
+  const MILLISECONDS_IN_HOUR = 3600000;
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(req.body.password, salt, async function(err, hash) {
+      try {
+        const user = await prisma.createUser({
+          name: req.body.name,
+          email: req.body.email,
+          password: hash,
+          role: "USER"
+        });
+        const token = jsonWebToken.sign(user, JWTSecretKey);
+        res.cookie("jwt", token, {
+          maxAge: MILLISECONDS_IN_HOUR,
+          httpOnly: true
+        });
+        res.redirect("/");
+      } catch (error) {
+        res.send({ error: true, data: error });
+      }
+    });
+  });
+});
+
+app.post("/login", async (req, res) => {
+  const MILLISECONDS_IN_HOUR = 3600000;
+  try {
+    const user = await prisma.user({
+      email: req.body.email
+    });
+    bcrypt.compare(req.body.password, user.password, function(err, result) {
+      if (result) {
+        const tokenData = {
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          id: user.id
+        };
+        const token = jsonWebToken.sign(tokenData, JWTSecretKey);
+        res.cookie("jwt", token, {
+          maxAge: MILLISECONDS_IN_HOUR,
+          httpOnly: true
+        });
+        res.redirect("/");
+      } else {
+        res.send({ error: true, data: "Invalid email or password" });
+      }
+    });
+  } catch (error) {
+    res.send({ error: true, data: error });
+  }
+});
+
+const server = new ApolloServer({
+  typeDefs: gql`
+    ${readFileSync(__dirname.concat("/schema/schema.graphql"), "utf8")}
+  `,
+  resolvers,
+  context: ({ req, res }) => {
+    const MILLISECONDS_IN_HOUR = 3600000;
+    const cookie = req.cookies.jwt;
+    if (cookie === undefined) {
+      res.send({ error: true, data: "You must be logged in" }, 403);
+    } else {
+      res.cookie("jwt", cookie, {
+        maxAge: MILLISECONDS_IN_HOUR,
+        httpOnly: true
       });
     }
+    try {
+      return jsonWebToken.verify(cookie, JWTSecretKey);
+    } catch (error) {
+      res.send({ error: true, data: error }, 403);
+      return {}
+    }
   }
-  next(); // <-- important!
 });
+server.applyMiddleware({ app });
 
 app.use(express.static(path.join(__dirname, "public")));
 
