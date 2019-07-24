@@ -404,6 +404,7 @@ export interface UserWhereInput {
   image_not_ends_with?: Maybe<String>;
   notes_some?: Maybe<NoteWhereInput>;
   groups_some?: Maybe<GroupWhereInput>;
+  adminOf_some?: Maybe<GroupWhereInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
@@ -436,6 +437,7 @@ export interface GroupWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  admins_some?: Maybe<UserWhereInput>;
   members_some?: Maybe<UserWhereInput>;
   image?: Maybe<String>;
   image_not?: Maybe<String>;
@@ -488,6 +490,8 @@ export interface FolderWhereInput {
   author?: Maybe<UserWhereInput>;
   parentFolder?: Maybe<FolderWhereInput>;
   group?: Maybe<GroupWhereInput>;
+  notes_some?: Maybe<NoteWhereInput>;
+  folders_some?: Maybe<FolderWhereInput>;
   AND?: Maybe<FolderWhereInput[] | FolderWhereInput>;
 }
 
@@ -508,8 +512,10 @@ export interface FolderCreateInput {
   id?: Maybe<ID_Input>;
   title: String;
   author: UserCreateOneInput;
-  parentFolder?: Maybe<FolderCreateOneInput>;
+  parentFolder?: Maybe<FolderCreateOneWithoutFoldersInput>;
   group: GroupCreateOneWithoutFoldersInput;
+  notes?: Maybe<NoteCreateManyWithoutParentFolderInput>;
+  folders?: Maybe<FolderCreateManyWithoutParentFolderInput>;
 }
 
 export interface UserCreateOneInput {
@@ -526,6 +532,7 @@ export interface UserCreateInput {
   image?: Maybe<String>;
   notes?: Maybe<NoteCreateManyWithoutAuthorInput>;
   groups?: Maybe<GroupCreateManyWithoutMembersInput>;
+  adminOf?: Maybe<GroupCreateManyWithoutAdminsInput>;
 }
 
 export interface NoteCreateManyWithoutAuthorInput {
@@ -538,34 +545,60 @@ export interface NoteCreateWithoutAuthorInput {
   type: NoteType;
   title: String;
   content: String;
-  parentFolder?: Maybe<FolderCreateOneInput>;
+  parentFolder?: Maybe<FolderCreateOneWithoutNotesInput>;
   group: GroupCreateOneWithoutNotesInput;
 }
 
-export interface FolderCreateOneInput {
-  create?: Maybe<FolderCreateInput>;
+export interface FolderCreateOneWithoutNotesInput {
+  create?: Maybe<FolderCreateWithoutNotesInput>;
   connect?: Maybe<FolderWhereUniqueInput>;
 }
 
-export interface GroupCreateOneWithoutNotesInput {
-  create?: Maybe<GroupCreateWithoutNotesInput>;
+export interface FolderCreateWithoutNotesInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  author: UserCreateOneInput;
+  parentFolder?: Maybe<FolderCreateOneWithoutFoldersInput>;
+  group: GroupCreateOneWithoutFoldersInput;
+  folders?: Maybe<FolderCreateManyWithoutParentFolderInput>;
+}
+
+export interface FolderCreateOneWithoutFoldersInput {
+  create?: Maybe<FolderCreateWithoutFoldersInput>;
+  connect?: Maybe<FolderWhereUniqueInput>;
+}
+
+export interface FolderCreateWithoutFoldersInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  author: UserCreateOneInput;
+  parentFolder?: Maybe<FolderCreateOneWithoutFoldersInput>;
+  group: GroupCreateOneWithoutFoldersInput;
+  notes?: Maybe<NoteCreateManyWithoutParentFolderInput>;
+}
+
+export interface GroupCreateOneWithoutFoldersInput {
+  create?: Maybe<GroupCreateWithoutFoldersInput>;
   connect?: Maybe<GroupWhereUniqueInput>;
 }
 
-export interface GroupCreateWithoutNotesInput {
+export interface GroupCreateWithoutFoldersInput {
   id?: Maybe<ID_Input>;
   name: String;
+  admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  folders?: Maybe<FolderCreateManyWithoutGroupInput>;
+  notes?: Maybe<NoteCreateManyWithoutGroupInput>;
 }
 
-export interface UserCreateManyWithoutGroupsInput {
-  create?: Maybe<UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput>;
+export interface UserCreateManyWithoutAdminOfInput {
+  create?: Maybe<
+    UserCreateWithoutAdminOfInput[] | UserCreateWithoutAdminOfInput
+  >;
   connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
 }
 
-export interface UserCreateWithoutGroupsInput {
+export interface UserCreateWithoutAdminOfInput {
   id?: Maybe<ID_Input>;
   name: String;
   password: String;
@@ -573,6 +606,23 @@ export interface UserCreateWithoutGroupsInput {
   role: String;
   image?: Maybe<String>;
   notes?: Maybe<NoteCreateManyWithoutAuthorInput>;
+  groups?: Maybe<GroupCreateManyWithoutMembersInput>;
+}
+
+export interface GroupCreateManyWithoutMembersInput {
+  create?: Maybe<
+    GroupCreateWithoutMembersInput[] | GroupCreateWithoutMembersInput
+  >;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+}
+
+export interface GroupCreateWithoutMembersInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderCreateManyWithoutGroupInput>;
+  notes?: Maybe<NoteCreateManyWithoutGroupInput>;
 }
 
 export interface FolderCreateManyWithoutGroupInput {
@@ -586,36 +636,25 @@ export interface FolderCreateWithoutGroupInput {
   id?: Maybe<ID_Input>;
   title: String;
   author: UserCreateOneInput;
-  parentFolder?: Maybe<FolderCreateOneInput>;
+  parentFolder?: Maybe<FolderCreateOneWithoutFoldersInput>;
+  notes?: Maybe<NoteCreateManyWithoutParentFolderInput>;
+  folders?: Maybe<FolderCreateManyWithoutParentFolderInput>;
 }
 
-export interface GroupCreateManyWithoutMembersInput {
+export interface NoteCreateManyWithoutParentFolderInput {
   create?: Maybe<
-    GroupCreateWithoutMembersInput[] | GroupCreateWithoutMembersInput
+    NoteCreateWithoutParentFolderInput[] | NoteCreateWithoutParentFolderInput
   >;
-  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
-}
-
-export interface GroupCreateWithoutMembersInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  image?: Maybe<String>;
-  folders?: Maybe<FolderCreateManyWithoutGroupInput>;
-  notes?: Maybe<NoteCreateManyWithoutGroupInput>;
-}
-
-export interface NoteCreateManyWithoutGroupInput {
-  create?: Maybe<NoteCreateWithoutGroupInput[] | NoteCreateWithoutGroupInput>;
   connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
 }
 
-export interface NoteCreateWithoutGroupInput {
+export interface NoteCreateWithoutParentFolderInput {
   id?: Maybe<ID_Input>;
   type: NoteType;
   title: String;
   author: UserCreateOneWithoutNotesInput;
   content: String;
-  parentFolder?: Maybe<FolderCreateOneInput>;
+  group: GroupCreateOneWithoutNotesInput;
 }
 
 export interface UserCreateOneWithoutNotesInput {
@@ -631,26 +670,93 @@ export interface UserCreateWithoutNotesInput {
   role: String;
   image?: Maybe<String>;
   groups?: Maybe<GroupCreateManyWithoutMembersInput>;
+  adminOf?: Maybe<GroupCreateManyWithoutAdminsInput>;
 }
 
-export interface GroupCreateOneWithoutFoldersInput {
-  create?: Maybe<GroupCreateWithoutFoldersInput>;
-  connect?: Maybe<GroupWhereUniqueInput>;
+export interface GroupCreateManyWithoutAdminsInput {
+  create?: Maybe<
+    GroupCreateWithoutAdminsInput[] | GroupCreateWithoutAdminsInput
+  >;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
 }
 
-export interface GroupCreateWithoutFoldersInput {
+export interface GroupCreateWithoutAdminsInput {
   id?: Maybe<ID_Input>;
   name: String;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
+  folders?: Maybe<FolderCreateManyWithoutGroupInput>;
   notes?: Maybe<NoteCreateManyWithoutGroupInput>;
+}
+
+export interface UserCreateManyWithoutGroupsInput {
+  create?: Maybe<UserCreateWithoutGroupsInput[] | UserCreateWithoutGroupsInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutGroupsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  password: String;
+  email: String;
+  role: String;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteCreateManyWithoutAuthorInput>;
+  adminOf?: Maybe<GroupCreateManyWithoutAdminsInput>;
+}
+
+export interface NoteCreateManyWithoutGroupInput {
+  create?: Maybe<NoteCreateWithoutGroupInput[] | NoteCreateWithoutGroupInput>;
+  connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+}
+
+export interface NoteCreateWithoutGroupInput {
+  id?: Maybe<ID_Input>;
+  type: NoteType;
+  title: String;
+  author: UserCreateOneWithoutNotesInput;
+  content: String;
+  parentFolder?: Maybe<FolderCreateOneWithoutNotesInput>;
+}
+
+export interface GroupCreateOneWithoutNotesInput {
+  create?: Maybe<GroupCreateWithoutNotesInput>;
+  connect?: Maybe<GroupWhereUniqueInput>;
+}
+
+export interface GroupCreateWithoutNotesInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
+  members?: Maybe<UserCreateManyWithoutGroupsInput>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderCreateManyWithoutGroupInput>;
+}
+
+export interface FolderCreateManyWithoutParentFolderInput {
+  create?: Maybe<
+    | FolderCreateWithoutParentFolderInput[]
+    | FolderCreateWithoutParentFolderInput
+  >;
+  connect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+}
+
+export interface FolderCreateWithoutParentFolderInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  author: UserCreateOneInput;
+  group: GroupCreateOneWithoutFoldersInput;
+  notes?: Maybe<NoteCreateManyWithoutParentFolderInput>;
+  folders?: Maybe<FolderCreateManyWithoutParentFolderInput>;
 }
 
 export interface FolderUpdateInput {
   title?: Maybe<String>;
   author?: Maybe<UserUpdateOneRequiredInput>;
-  parentFolder?: Maybe<FolderUpdateOneInput>;
+  parentFolder?: Maybe<FolderUpdateOneWithoutFoldersInput>;
   group?: Maybe<GroupUpdateOneRequiredWithoutFoldersInput>;
+  notes?: Maybe<NoteUpdateManyWithoutParentFolderInput>;
+  folders?: Maybe<FolderUpdateManyWithoutParentFolderInput>;
 }
 
 export interface UserUpdateOneRequiredInput {
@@ -668,6 +774,7 @@ export interface UserUpdateDataInput {
   image?: Maybe<String>;
   notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
   groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
+  adminOf?: Maybe<GroupUpdateManyWithoutAdminsInput>;
 }
 
 export interface NoteUpdateManyWithoutAuthorInput {
@@ -699,24 +806,42 @@ export interface NoteUpdateWithoutAuthorDataInput {
   type?: Maybe<NoteType>;
   title?: Maybe<String>;
   content?: Maybe<String>;
-  parentFolder?: Maybe<FolderUpdateOneInput>;
+  parentFolder?: Maybe<FolderUpdateOneWithoutNotesInput>;
   group?: Maybe<GroupUpdateOneRequiredWithoutNotesInput>;
 }
 
-export interface FolderUpdateOneInput {
-  create?: Maybe<FolderCreateInput>;
-  update?: Maybe<FolderUpdateDataInput>;
-  upsert?: Maybe<FolderUpsertNestedInput>;
+export interface FolderUpdateOneWithoutNotesInput {
+  create?: Maybe<FolderCreateWithoutNotesInput>;
+  update?: Maybe<FolderUpdateWithoutNotesDataInput>;
+  upsert?: Maybe<FolderUpsertWithoutNotesInput>;
   delete?: Maybe<Boolean>;
   disconnect?: Maybe<Boolean>;
   connect?: Maybe<FolderWhereUniqueInput>;
 }
 
-export interface FolderUpdateDataInput {
+export interface FolderUpdateWithoutNotesDataInput {
   title?: Maybe<String>;
   author?: Maybe<UserUpdateOneRequiredInput>;
-  parentFolder?: Maybe<FolderUpdateOneInput>;
+  parentFolder?: Maybe<FolderUpdateOneWithoutFoldersInput>;
   group?: Maybe<GroupUpdateOneRequiredWithoutFoldersInput>;
+  folders?: Maybe<FolderUpdateManyWithoutParentFolderInput>;
+}
+
+export interface FolderUpdateOneWithoutFoldersInput {
+  create?: Maybe<FolderCreateWithoutFoldersInput>;
+  update?: Maybe<FolderUpdateWithoutFoldersDataInput>;
+  upsert?: Maybe<FolderUpsertWithoutFoldersInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<FolderWhereUniqueInput>;
+}
+
+export interface FolderUpdateWithoutFoldersDataInput {
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredInput>;
+  parentFolder?: Maybe<FolderUpdateOneWithoutFoldersInput>;
+  group?: Maybe<GroupUpdateOneRequiredWithoutFoldersInput>;
+  notes?: Maybe<NoteUpdateManyWithoutParentFolderInput>;
 }
 
 export interface GroupUpdateOneRequiredWithoutFoldersInput {
@@ -728,8 +853,204 @@ export interface GroupUpdateOneRequiredWithoutFoldersInput {
 
 export interface GroupUpdateWithoutFoldersDataInput {
   name?: Maybe<String>;
+  admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
+  notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
+}
+
+export interface UserUpdateManyWithoutAdminOfInput {
+  create?: Maybe<
+    UserCreateWithoutAdminOfInput[] | UserCreateWithoutAdminOfInput
+  >;
+  delete?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  set?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  disconnect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  update?: Maybe<
+    | UserUpdateWithWhereUniqueWithoutAdminOfInput[]
+    | UserUpdateWithWhereUniqueWithoutAdminOfInput
+  >;
+  upsert?: Maybe<
+    | UserUpsertWithWhereUniqueWithoutAdminOfInput[]
+    | UserUpsertWithWhereUniqueWithoutAdminOfInput
+  >;
+  deleteMany?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  updateMany?: Maybe<
+    UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutAdminOfInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutAdminOfDataInput;
+}
+
+export interface UserUpdateWithoutAdminOfDataInput {
+  name?: Maybe<String>;
+  password?: Maybe<String>;
+  email?: Maybe<String>;
+  role?: Maybe<String>;
+  image?: Maybe<String>;
+  notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
+  groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
+}
+
+export interface GroupUpdateManyWithoutMembersInput {
+  create?: Maybe<
+    GroupCreateWithoutMembersInput[] | GroupCreateWithoutMembersInput
+  >;
+  delete?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  set?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  disconnect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  update?: Maybe<
+    | GroupUpdateWithWhereUniqueWithoutMembersInput[]
+    | GroupUpdateWithWhereUniqueWithoutMembersInput
+  >;
+  upsert?: Maybe<
+    | GroupUpsertWithWhereUniqueWithoutMembersInput[]
+    | GroupUpsertWithWhereUniqueWithoutMembersInput
+  >;
+  deleteMany?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  updateMany?: Maybe<
+    GroupUpdateManyWithWhereNestedInput[] | GroupUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface GroupUpdateWithWhereUniqueWithoutMembersInput {
+  where: GroupWhereUniqueInput;
+  data: GroupUpdateWithoutMembersDataInput;
+}
+
+export interface GroupUpdateWithoutMembersDataInput {
+  name?: Maybe<String>;
+  admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
+  notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
+}
+
+export interface FolderUpdateManyWithoutGroupInput {
+  create?: Maybe<
+    FolderCreateWithoutGroupInput[] | FolderCreateWithoutGroupInput
+  >;
+  delete?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  connect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  set?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  disconnect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  update?: Maybe<
+    | FolderUpdateWithWhereUniqueWithoutGroupInput[]
+    | FolderUpdateWithWhereUniqueWithoutGroupInput
+  >;
+  upsert?: Maybe<
+    | FolderUpsertWithWhereUniqueWithoutGroupInput[]
+    | FolderUpsertWithWhereUniqueWithoutGroupInput
+  >;
+  deleteMany?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  updateMany?: Maybe<
+    | FolderUpdateManyWithWhereNestedInput[]
+    | FolderUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface FolderUpdateWithWhereUniqueWithoutGroupInput {
+  where: FolderWhereUniqueInput;
+  data: FolderUpdateWithoutGroupDataInput;
+}
+
+export interface FolderUpdateWithoutGroupDataInput {
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredInput>;
+  parentFolder?: Maybe<FolderUpdateOneWithoutFoldersInput>;
+  notes?: Maybe<NoteUpdateManyWithoutParentFolderInput>;
+  folders?: Maybe<FolderUpdateManyWithoutParentFolderInput>;
+}
+
+export interface NoteUpdateManyWithoutParentFolderInput {
+  create?: Maybe<
+    NoteCreateWithoutParentFolderInput[] | NoteCreateWithoutParentFolderInput
+  >;
+  delete?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  connect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  set?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  disconnect?: Maybe<NoteWhereUniqueInput[] | NoteWhereUniqueInput>;
+  update?: Maybe<
+    | NoteUpdateWithWhereUniqueWithoutParentFolderInput[]
+    | NoteUpdateWithWhereUniqueWithoutParentFolderInput
+  >;
+  upsert?: Maybe<
+    | NoteUpsertWithWhereUniqueWithoutParentFolderInput[]
+    | NoteUpsertWithWhereUniqueWithoutParentFolderInput
+  >;
+  deleteMany?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
+  updateMany?: Maybe<
+    NoteUpdateManyWithWhereNestedInput[] | NoteUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface NoteUpdateWithWhereUniqueWithoutParentFolderInput {
+  where: NoteWhereUniqueInput;
+  data: NoteUpdateWithoutParentFolderDataInput;
+}
+
+export interface NoteUpdateWithoutParentFolderDataInput {
+  type?: Maybe<NoteType>;
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
+  content?: Maybe<String>;
+  group?: Maybe<GroupUpdateOneRequiredWithoutNotesInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutNotesInput {
+  create?: Maybe<UserCreateWithoutNotesInput>;
+  update?: Maybe<UserUpdateWithoutNotesDataInput>;
+  upsert?: Maybe<UserUpsertWithoutNotesInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutNotesDataInput {
+  name?: Maybe<String>;
+  password?: Maybe<String>;
+  email?: Maybe<String>;
+  role?: Maybe<String>;
+  image?: Maybe<String>;
+  groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
+  adminOf?: Maybe<GroupUpdateManyWithoutAdminsInput>;
+}
+
+export interface GroupUpdateManyWithoutAdminsInput {
+  create?: Maybe<
+    GroupCreateWithoutAdminsInput[] | GroupCreateWithoutAdminsInput
+  >;
+  delete?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  set?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  disconnect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
+  update?: Maybe<
+    | GroupUpdateWithWhereUniqueWithoutAdminsInput[]
+    | GroupUpdateWithWhereUniqueWithoutAdminsInput
+  >;
+  upsert?: Maybe<
+    | GroupUpsertWithWhereUniqueWithoutAdminsInput[]
+    | GroupUpsertWithWhereUniqueWithoutAdminsInput
+  >;
+  deleteMany?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  updateMany?: Maybe<
+    GroupUpdateManyWithWhereNestedInput[] | GroupUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface GroupUpdateWithWhereUniqueWithoutAdminsInput {
+  where: GroupWhereUniqueInput;
+  data: GroupUpdateWithoutAdminsDataInput;
+}
+
+export interface GroupUpdateWithoutAdminsDataInput {
+  name?: Maybe<String>;
+  members?: Maybe<UserUpdateManyWithoutGroupsInput>;
+  image?: Maybe<String>;
+  folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
   notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
 }
 
@@ -765,6 +1086,7 @@ export interface UserUpdateWithoutGroupsDataInput {
   role?: Maybe<String>;
   image?: Maybe<String>;
   notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
+  adminOf?: Maybe<GroupUpdateManyWithoutAdminsInput>;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutGroupsInput {
@@ -906,209 +1228,7 @@ export interface NoteUpdateWithoutGroupDataInput {
   title?: Maybe<String>;
   author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
   content?: Maybe<String>;
-  parentFolder?: Maybe<FolderUpdateOneInput>;
-}
-
-export interface UserUpdateOneRequiredWithoutNotesInput {
-  create?: Maybe<UserCreateWithoutNotesInput>;
-  update?: Maybe<UserUpdateWithoutNotesDataInput>;
-  upsert?: Maybe<UserUpsertWithoutNotesInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface UserUpdateWithoutNotesDataInput {
-  name?: Maybe<String>;
-  password?: Maybe<String>;
-  email?: Maybe<String>;
-  role?: Maybe<String>;
-  image?: Maybe<String>;
-  groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
-}
-
-export interface GroupUpdateManyWithoutMembersInput {
-  create?: Maybe<
-    GroupCreateWithoutMembersInput[] | GroupCreateWithoutMembersInput
-  >;
-  delete?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
-  connect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
-  set?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
-  disconnect?: Maybe<GroupWhereUniqueInput[] | GroupWhereUniqueInput>;
-  update?: Maybe<
-    | GroupUpdateWithWhereUniqueWithoutMembersInput[]
-    | GroupUpdateWithWhereUniqueWithoutMembersInput
-  >;
-  upsert?: Maybe<
-    | GroupUpsertWithWhereUniqueWithoutMembersInput[]
-    | GroupUpsertWithWhereUniqueWithoutMembersInput
-  >;
-  deleteMany?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
-  updateMany?: Maybe<
-    GroupUpdateManyWithWhereNestedInput[] | GroupUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface GroupUpdateWithWhereUniqueWithoutMembersInput {
-  where: GroupWhereUniqueInput;
-  data: GroupUpdateWithoutMembersDataInput;
-}
-
-export interface GroupUpdateWithoutMembersDataInput {
-  name?: Maybe<String>;
-  image?: Maybe<String>;
-  folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
-  notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
-}
-
-export interface FolderUpdateManyWithoutGroupInput {
-  create?: Maybe<
-    FolderCreateWithoutGroupInput[] | FolderCreateWithoutGroupInput
-  >;
-  delete?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
-  connect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
-  set?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
-  disconnect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
-  update?: Maybe<
-    | FolderUpdateWithWhereUniqueWithoutGroupInput[]
-    | FolderUpdateWithWhereUniqueWithoutGroupInput
-  >;
-  upsert?: Maybe<
-    | FolderUpsertWithWhereUniqueWithoutGroupInput[]
-    | FolderUpsertWithWhereUniqueWithoutGroupInput
-  >;
-  deleteMany?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
-  updateMany?: Maybe<
-    | FolderUpdateManyWithWhereNestedInput[]
-    | FolderUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface FolderUpdateWithWhereUniqueWithoutGroupInput {
-  where: FolderWhereUniqueInput;
-  data: FolderUpdateWithoutGroupDataInput;
-}
-
-export interface FolderUpdateWithoutGroupDataInput {
-  title?: Maybe<String>;
-  author?: Maybe<UserUpdateOneRequiredInput>;
-  parentFolder?: Maybe<FolderUpdateOneInput>;
-}
-
-export interface FolderUpsertWithWhereUniqueWithoutGroupInput {
-  where: FolderWhereUniqueInput;
-  update: FolderUpdateWithoutGroupDataInput;
-  create: FolderCreateWithoutGroupInput;
-}
-
-export interface FolderScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  title?: Maybe<String>;
-  title_not?: Maybe<String>;
-  title_in?: Maybe<String[] | String>;
-  title_not_in?: Maybe<String[] | String>;
-  title_lt?: Maybe<String>;
-  title_lte?: Maybe<String>;
-  title_gt?: Maybe<String>;
-  title_gte?: Maybe<String>;
-  title_contains?: Maybe<String>;
-  title_not_contains?: Maybe<String>;
-  title_starts_with?: Maybe<String>;
-  title_not_starts_with?: Maybe<String>;
-  title_ends_with?: Maybe<String>;
-  title_not_ends_with?: Maybe<String>;
-  AND?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
-  OR?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
-  NOT?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
-}
-
-export interface FolderUpdateManyWithWhereNestedInput {
-  where: FolderScalarWhereInput;
-  data: FolderUpdateManyDataInput;
-}
-
-export interface FolderUpdateManyDataInput {
-  title?: Maybe<String>;
-}
-
-export interface GroupUpsertWithWhereUniqueWithoutMembersInput {
-  where: GroupWhereUniqueInput;
-  update: GroupUpdateWithoutMembersDataInput;
-  create: GroupCreateWithoutMembersInput;
-}
-
-export interface GroupScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  image?: Maybe<String>;
-  image_not?: Maybe<String>;
-  image_in?: Maybe<String[] | String>;
-  image_not_in?: Maybe<String[] | String>;
-  image_lt?: Maybe<String>;
-  image_lte?: Maybe<String>;
-  image_gt?: Maybe<String>;
-  image_gte?: Maybe<String>;
-  image_contains?: Maybe<String>;
-  image_not_contains?: Maybe<String>;
-  image_starts_with?: Maybe<String>;
-  image_not_starts_with?: Maybe<String>;
-  image_ends_with?: Maybe<String>;
-  image_not_ends_with?: Maybe<String>;
-  AND?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
-  OR?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
-  NOT?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
-}
-
-export interface GroupUpdateManyWithWhereNestedInput {
-  where: GroupScalarWhereInput;
-  data: GroupUpdateManyDataInput;
-}
-
-export interface GroupUpdateManyDataInput {
-  name?: Maybe<String>;
-  image?: Maybe<String>;
-}
-
-export interface UserUpsertWithoutNotesInput {
-  update: UserUpdateWithoutNotesDataInput;
-  create: UserCreateWithoutNotesInput;
+  parentFolder?: Maybe<FolderUpdateOneWithoutNotesInput>;
 }
 
 export interface NoteUpsertWithWhereUniqueWithoutGroupInput {
@@ -1180,14 +1300,73 @@ export interface NoteUpdateManyDataInput {
   content?: Maybe<String>;
 }
 
-export interface GroupUpsertWithoutFoldersInput {
-  update: GroupUpdateWithoutFoldersDataInput;
-  create: GroupCreateWithoutFoldersInput;
+export interface GroupUpsertWithWhereUniqueWithoutAdminsInput {
+  where: GroupWhereUniqueInput;
+  update: GroupUpdateWithoutAdminsDataInput;
+  create: GroupCreateWithoutAdminsInput;
 }
 
-export interface FolderUpsertNestedInput {
-  update: FolderUpdateDataInput;
-  create: FolderCreateInput;
+export interface GroupScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  image?: Maybe<String>;
+  image_not?: Maybe<String>;
+  image_in?: Maybe<String[] | String>;
+  image_not_in?: Maybe<String[] | String>;
+  image_lt?: Maybe<String>;
+  image_lte?: Maybe<String>;
+  image_gt?: Maybe<String>;
+  image_gte?: Maybe<String>;
+  image_contains?: Maybe<String>;
+  image_not_contains?: Maybe<String>;
+  image_starts_with?: Maybe<String>;
+  image_not_starts_with?: Maybe<String>;
+  image_ends_with?: Maybe<String>;
+  image_not_ends_with?: Maybe<String>;
+  AND?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  OR?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+  NOT?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
+}
+
+export interface GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput;
+  data: GroupUpdateManyDataInput;
+}
+
+export interface GroupUpdateManyDataInput {
+  name?: Maybe<String>;
+  image?: Maybe<String>;
+}
+
+export interface UserUpsertWithoutNotesInput {
+  update: UserUpdateWithoutNotesDataInput;
+  create: UserCreateWithoutNotesInput;
 }
 
 export interface GroupUpdateOneRequiredWithoutNotesInput {
@@ -1199,6 +1378,7 @@ export interface GroupUpdateOneRequiredWithoutNotesInput {
 
 export interface GroupUpdateWithoutNotesDataInput {
   name?: Maybe<String>;
+  admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
   folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
@@ -1207,6 +1387,131 @@ export interface GroupUpdateWithoutNotesDataInput {
 export interface GroupUpsertWithoutNotesInput {
   update: GroupUpdateWithoutNotesDataInput;
   create: GroupCreateWithoutNotesInput;
+}
+
+export interface NoteUpsertWithWhereUniqueWithoutParentFolderInput {
+  where: NoteWhereUniqueInput;
+  update: NoteUpdateWithoutParentFolderDataInput;
+  create: NoteCreateWithoutParentFolderInput;
+}
+
+export interface FolderUpdateManyWithoutParentFolderInput {
+  create?: Maybe<
+    | FolderCreateWithoutParentFolderInput[]
+    | FolderCreateWithoutParentFolderInput
+  >;
+  delete?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  connect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  set?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  disconnect?: Maybe<FolderWhereUniqueInput[] | FolderWhereUniqueInput>;
+  update?: Maybe<
+    | FolderUpdateWithWhereUniqueWithoutParentFolderInput[]
+    | FolderUpdateWithWhereUniqueWithoutParentFolderInput
+  >;
+  upsert?: Maybe<
+    | FolderUpsertWithWhereUniqueWithoutParentFolderInput[]
+    | FolderUpsertWithWhereUniqueWithoutParentFolderInput
+  >;
+  deleteMany?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  updateMany?: Maybe<
+    | FolderUpdateManyWithWhereNestedInput[]
+    | FolderUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface FolderUpdateWithWhereUniqueWithoutParentFolderInput {
+  where: FolderWhereUniqueInput;
+  data: FolderUpdateWithoutParentFolderDataInput;
+}
+
+export interface FolderUpdateWithoutParentFolderDataInput {
+  title?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredInput>;
+  group?: Maybe<GroupUpdateOneRequiredWithoutFoldersInput>;
+  notes?: Maybe<NoteUpdateManyWithoutParentFolderInput>;
+  folders?: Maybe<FolderUpdateManyWithoutParentFolderInput>;
+}
+
+export interface FolderUpsertWithWhereUniqueWithoutParentFolderInput {
+  where: FolderWhereUniqueInput;
+  update: FolderUpdateWithoutParentFolderDataInput;
+  create: FolderCreateWithoutParentFolderInput;
+}
+
+export interface FolderScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  AND?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  OR?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+  NOT?: Maybe<FolderScalarWhereInput[] | FolderScalarWhereInput>;
+}
+
+export interface FolderUpdateManyWithWhereNestedInput {
+  where: FolderScalarWhereInput;
+  data: FolderUpdateManyDataInput;
+}
+
+export interface FolderUpdateManyDataInput {
+  title?: Maybe<String>;
+}
+
+export interface FolderUpsertWithWhereUniqueWithoutGroupInput {
+  where: FolderWhereUniqueInput;
+  update: FolderUpdateWithoutGroupDataInput;
+  create: FolderCreateWithoutGroupInput;
+}
+
+export interface GroupUpsertWithWhereUniqueWithoutMembersInput {
+  where: GroupWhereUniqueInput;
+  update: GroupUpdateWithoutMembersDataInput;
+  create: GroupCreateWithoutMembersInput;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutAdminOfInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutAdminOfDataInput;
+  create: UserCreateWithoutAdminOfInput;
+}
+
+export interface GroupUpsertWithoutFoldersInput {
+  update: GroupUpdateWithoutFoldersDataInput;
+  create: GroupCreateWithoutFoldersInput;
+}
+
+export interface FolderUpsertWithoutFoldersInput {
+  update: FolderUpdateWithoutFoldersDataInput;
+  create: FolderCreateWithoutFoldersInput;
+}
+
+export interface FolderUpsertWithoutNotesInput {
+  update: FolderUpdateWithoutNotesDataInput;
+  create: FolderCreateWithoutNotesInput;
 }
 
 export interface NoteUpsertWithWhereUniqueWithoutAuthorInput {
@@ -1227,6 +1532,7 @@ export interface FolderUpdateManyMutationInput {
 export interface GroupCreateInput {
   id?: Maybe<ID_Input>;
   name: String;
+  admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
   folders?: Maybe<FolderCreateManyWithoutGroupInput>;
@@ -1235,6 +1541,7 @@ export interface GroupCreateInput {
 
 export interface GroupUpdateInput {
   name?: Maybe<String>;
+  admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
   folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
@@ -1252,7 +1559,7 @@ export interface NoteCreateInput {
   title: String;
   author: UserCreateOneWithoutNotesInput;
   content: String;
-  parentFolder?: Maybe<FolderCreateOneInput>;
+  parentFolder?: Maybe<FolderCreateOneWithoutNotesInput>;
   group: GroupCreateOneWithoutNotesInput;
 }
 
@@ -1261,7 +1568,7 @@ export interface NoteUpdateInput {
   title?: Maybe<String>;
   author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
   content?: Maybe<String>;
-  parentFolder?: Maybe<FolderUpdateOneInput>;
+  parentFolder?: Maybe<FolderUpdateOneWithoutNotesInput>;
   group?: Maybe<GroupUpdateOneRequiredWithoutNotesInput>;
 }
 
@@ -1279,6 +1586,7 @@ export interface UserUpdateInput {
   image?: Maybe<String>;
   notes?: Maybe<NoteUpdateManyWithoutAuthorInput>;
   groups?: Maybe<GroupUpdateManyWithoutMembersInput>;
+  adminOf?: Maybe<GroupUpdateManyWithoutAdminsInput>;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -1340,6 +1648,24 @@ export interface FolderPromise extends Promise<Folder>, Fragmentable {
   author: <T = UserPromise>() => T;
   parentFolder: <T = FolderPromise>() => T;
   group: <T = GroupPromise>() => T;
+  notes: <T = FragmentableArray<Note>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  folders: <T = FragmentableArray<Folder>>(args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface FolderSubscription
@@ -1350,6 +1676,24 @@ export interface FolderSubscription
   author: <T = UserSubscription>() => T;
   parentFolder: <T = FolderSubscription>() => T;
   group: <T = GroupSubscription>() => T;
+  notes: <T = Promise<AsyncIterator<NoteSubscription>>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  folders: <T = Promise<AsyncIterator<FolderSubscription>>>(args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface FolderNullablePromise
@@ -1360,6 +1704,24 @@ export interface FolderNullablePromise
   author: <T = UserPromise>() => T;
   parentFolder: <T = FolderPromise>() => T;
   group: <T = GroupPromise>() => T;
+  notes: <T = FragmentableArray<Note>>(args?: {
+    where?: NoteWhereInput;
+    orderBy?: NoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  folders: <T = FragmentableArray<Folder>>(args?: {
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface User {
@@ -1388,6 +1750,15 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     last?: Int;
   }) => T;
   groups: <T = FragmentableArray<Group>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  adminOf: <T = FragmentableArray<Group>>(args?: {
     where?: GroupWhereInput;
     orderBy?: GroupOrderByInput;
     skip?: Int;
@@ -1425,6 +1796,15 @@ export interface UserSubscription
     first?: Int;
     last?: Int;
   }) => T;
+  adminOf: <T = Promise<AsyncIterator<GroupSubscription>>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface UserNullablePromise
@@ -1446,6 +1826,15 @@ export interface UserNullablePromise
     last?: Int;
   }) => T;
   groups: <T = FragmentableArray<Group>>(args?: {
+    where?: GroupWhereInput;
+    orderBy?: GroupOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  adminOf: <T = FragmentableArray<Group>>(args?: {
     where?: GroupWhereInput;
     orderBy?: GroupOrderByInput;
     skip?: Int;
@@ -1506,6 +1895,15 @@ export interface Group {
 export interface GroupPromise extends Promise<Group>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  admins: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   members: <T = FragmentableArray<User>>(args?: {
     where?: UserWhereInput;
     orderBy?: UserOrderByInput;
@@ -1541,6 +1939,15 @@ export interface GroupSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  admins: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   members: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
     where?: UserWhereInput;
     orderBy?: UserOrderByInput;
@@ -1576,6 +1983,15 @@ export interface GroupNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  admins: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
   members: <T = FragmentableArray<User>>(args?: {
     where?: UserWhereInput;
     orderBy?: UserOrderByInput;

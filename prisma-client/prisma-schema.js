@@ -29,6 +29,8 @@ type Folder {
   author: User!
   parentFolder: Folder
   group: Group!
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
+  folders(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Folder!]
 }
 
 type FolderConnection {
@@ -41,8 +43,10 @@ input FolderCreateInput {
   id: ID
   title: String!
   author: UserCreateOneInput!
-  parentFolder: FolderCreateOneInput
+  parentFolder: FolderCreateOneWithoutFoldersInput
   group: GroupCreateOneWithoutFoldersInput!
+  notes: NoteCreateManyWithoutParentFolderInput
+  folders: FolderCreateManyWithoutParentFolderInput
 }
 
 input FolderCreateManyWithoutGroupInput {
@@ -50,16 +54,55 @@ input FolderCreateManyWithoutGroupInput {
   connect: [FolderWhereUniqueInput!]
 }
 
-input FolderCreateOneInput {
-  create: FolderCreateInput
+input FolderCreateManyWithoutParentFolderInput {
+  create: [FolderCreateWithoutParentFolderInput!]
+  connect: [FolderWhereUniqueInput!]
+}
+
+input FolderCreateOneWithoutFoldersInput {
+  create: FolderCreateWithoutFoldersInput
   connect: FolderWhereUniqueInput
+}
+
+input FolderCreateOneWithoutNotesInput {
+  create: FolderCreateWithoutNotesInput
+  connect: FolderWhereUniqueInput
+}
+
+input FolderCreateWithoutFoldersInput {
+  id: ID
+  title: String!
+  author: UserCreateOneInput!
+  parentFolder: FolderCreateOneWithoutFoldersInput
+  group: GroupCreateOneWithoutFoldersInput!
+  notes: NoteCreateManyWithoutParentFolderInput
 }
 
 input FolderCreateWithoutGroupInput {
   id: ID
   title: String!
   author: UserCreateOneInput!
-  parentFolder: FolderCreateOneInput
+  parentFolder: FolderCreateOneWithoutFoldersInput
+  notes: NoteCreateManyWithoutParentFolderInput
+  folders: FolderCreateManyWithoutParentFolderInput
+}
+
+input FolderCreateWithoutNotesInput {
+  id: ID
+  title: String!
+  author: UserCreateOneInput!
+  parentFolder: FolderCreateOneWithoutFoldersInput
+  group: GroupCreateOneWithoutFoldersInput!
+  folders: FolderCreateManyWithoutParentFolderInput
+}
+
+input FolderCreateWithoutParentFolderInput {
+  id: ID
+  title: String!
+  author: UserCreateOneInput!
+  group: GroupCreateOneWithoutFoldersInput!
+  notes: NoteCreateManyWithoutParentFolderInput
+  folders: FolderCreateManyWithoutParentFolderInput
 }
 
 type FolderEdge {
@@ -129,18 +172,13 @@ input FolderSubscriptionWhereInput {
   AND: [FolderSubscriptionWhereInput!]
 }
 
-input FolderUpdateDataInput {
-  title: String
-  author: UserUpdateOneRequiredInput
-  parentFolder: FolderUpdateOneInput
-  group: GroupUpdateOneRequiredWithoutFoldersInput
-}
-
 input FolderUpdateInput {
   title: String
   author: UserUpdateOneRequiredInput
-  parentFolder: FolderUpdateOneInput
+  parentFolder: FolderUpdateOneWithoutFoldersInput
   group: GroupUpdateOneRequiredWithoutFoldersInput
+  notes: NoteUpdateManyWithoutParentFolderInput
+  folders: FolderUpdateManyWithoutParentFolderInput
 }
 
 input FolderUpdateManyDataInput {
@@ -163,24 +201,71 @@ input FolderUpdateManyWithoutGroupInput {
   updateMany: [FolderUpdateManyWithWhereNestedInput!]
 }
 
+input FolderUpdateManyWithoutParentFolderInput {
+  create: [FolderCreateWithoutParentFolderInput!]
+  delete: [FolderWhereUniqueInput!]
+  connect: [FolderWhereUniqueInput!]
+  set: [FolderWhereUniqueInput!]
+  disconnect: [FolderWhereUniqueInput!]
+  update: [FolderUpdateWithWhereUniqueWithoutParentFolderInput!]
+  upsert: [FolderUpsertWithWhereUniqueWithoutParentFolderInput!]
+  deleteMany: [FolderScalarWhereInput!]
+  updateMany: [FolderUpdateManyWithWhereNestedInput!]
+}
+
 input FolderUpdateManyWithWhereNestedInput {
   where: FolderScalarWhereInput!
   data: FolderUpdateManyDataInput!
 }
 
-input FolderUpdateOneInput {
-  create: FolderCreateInput
-  update: FolderUpdateDataInput
-  upsert: FolderUpsertNestedInput
+input FolderUpdateOneWithoutFoldersInput {
+  create: FolderCreateWithoutFoldersInput
+  update: FolderUpdateWithoutFoldersDataInput
+  upsert: FolderUpsertWithoutFoldersInput
   delete: Boolean
   disconnect: Boolean
   connect: FolderWhereUniqueInput
 }
 
+input FolderUpdateOneWithoutNotesInput {
+  create: FolderCreateWithoutNotesInput
+  update: FolderUpdateWithoutNotesDataInput
+  upsert: FolderUpsertWithoutNotesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FolderWhereUniqueInput
+}
+
+input FolderUpdateWithoutFoldersDataInput {
+  title: String
+  author: UserUpdateOneRequiredInput
+  parentFolder: FolderUpdateOneWithoutFoldersInput
+  group: GroupUpdateOneRequiredWithoutFoldersInput
+  notes: NoteUpdateManyWithoutParentFolderInput
+}
+
 input FolderUpdateWithoutGroupDataInput {
   title: String
   author: UserUpdateOneRequiredInput
-  parentFolder: FolderUpdateOneInput
+  parentFolder: FolderUpdateOneWithoutFoldersInput
+  notes: NoteUpdateManyWithoutParentFolderInput
+  folders: FolderUpdateManyWithoutParentFolderInput
+}
+
+input FolderUpdateWithoutNotesDataInput {
+  title: String
+  author: UserUpdateOneRequiredInput
+  parentFolder: FolderUpdateOneWithoutFoldersInput
+  group: GroupUpdateOneRequiredWithoutFoldersInput
+  folders: FolderUpdateManyWithoutParentFolderInput
+}
+
+input FolderUpdateWithoutParentFolderDataInput {
+  title: String
+  author: UserUpdateOneRequiredInput
+  group: GroupUpdateOneRequiredWithoutFoldersInput
+  notes: NoteUpdateManyWithoutParentFolderInput
+  folders: FolderUpdateManyWithoutParentFolderInput
 }
 
 input FolderUpdateWithWhereUniqueWithoutGroupInput {
@@ -188,15 +273,31 @@ input FolderUpdateWithWhereUniqueWithoutGroupInput {
   data: FolderUpdateWithoutGroupDataInput!
 }
 
-input FolderUpsertNestedInput {
-  update: FolderUpdateDataInput!
-  create: FolderCreateInput!
+input FolderUpdateWithWhereUniqueWithoutParentFolderInput {
+  where: FolderWhereUniqueInput!
+  data: FolderUpdateWithoutParentFolderDataInput!
+}
+
+input FolderUpsertWithoutFoldersInput {
+  update: FolderUpdateWithoutFoldersDataInput!
+  create: FolderCreateWithoutFoldersInput!
+}
+
+input FolderUpsertWithoutNotesInput {
+  update: FolderUpdateWithoutNotesDataInput!
+  create: FolderCreateWithoutNotesInput!
 }
 
 input FolderUpsertWithWhereUniqueWithoutGroupInput {
   where: FolderWhereUniqueInput!
   update: FolderUpdateWithoutGroupDataInput!
   create: FolderCreateWithoutGroupInput!
+}
+
+input FolderUpsertWithWhereUniqueWithoutParentFolderInput {
+  where: FolderWhereUniqueInput!
+  update: FolderUpdateWithoutParentFolderDataInput!
+  create: FolderCreateWithoutParentFolderInput!
 }
 
 input FolderWhereInput {
@@ -231,6 +332,8 @@ input FolderWhereInput {
   author: UserWhereInput
   parentFolder: FolderWhereInput
   group: GroupWhereInput
+  notes_some: NoteWhereInput
+  folders_some: FolderWhereInput
   AND: [FolderWhereInput!]
 }
 
@@ -241,6 +344,7 @@ input FolderWhereUniqueInput {
 type Group {
   id: ID!
   name: String!
+  admins(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   image: String
   folders(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Folder!]
@@ -256,10 +360,16 @@ type GroupConnection {
 input GroupCreateInput {
   id: ID
   name: String!
+  admins: UserCreateManyWithoutAdminOfInput
   members: UserCreateManyWithoutGroupsInput
   image: String
   folders: FolderCreateManyWithoutGroupInput
   notes: NoteCreateManyWithoutGroupInput
+}
+
+input GroupCreateManyWithoutAdminsInput {
+  create: [GroupCreateWithoutAdminsInput!]
+  connect: [GroupWhereUniqueInput!]
 }
 
 input GroupCreateManyWithoutMembersInput {
@@ -277,9 +387,19 @@ input GroupCreateOneWithoutNotesInput {
   connect: GroupWhereUniqueInput
 }
 
+input GroupCreateWithoutAdminsInput {
+  id: ID
+  name: String!
+  members: UserCreateManyWithoutGroupsInput
+  image: String
+  folders: FolderCreateManyWithoutGroupInput
+  notes: NoteCreateManyWithoutGroupInput
+}
+
 input GroupCreateWithoutFoldersInput {
   id: ID
   name: String!
+  admins: UserCreateManyWithoutAdminOfInput
   members: UserCreateManyWithoutGroupsInput
   image: String
   notes: NoteCreateManyWithoutGroupInput
@@ -288,6 +408,7 @@ input GroupCreateWithoutFoldersInput {
 input GroupCreateWithoutMembersInput {
   id: ID
   name: String!
+  admins: UserCreateManyWithoutAdminOfInput
   image: String
   folders: FolderCreateManyWithoutGroupInput
   notes: NoteCreateManyWithoutGroupInput
@@ -296,6 +417,7 @@ input GroupCreateWithoutMembersInput {
 input GroupCreateWithoutNotesInput {
   id: ID
   name: String!
+  admins: UserCreateManyWithoutAdminOfInput
   members: UserCreateManyWithoutGroupsInput
   image: String
   folders: FolderCreateManyWithoutGroupInput
@@ -387,6 +509,7 @@ input GroupSubscriptionWhereInput {
 
 input GroupUpdateInput {
   name: String
+  admins: UserUpdateManyWithoutAdminOfInput
   members: UserUpdateManyWithoutGroupsInput
   image: String
   folders: FolderUpdateManyWithoutGroupInput
@@ -401,6 +524,18 @@ input GroupUpdateManyDataInput {
 input GroupUpdateManyMutationInput {
   name: String
   image: String
+}
+
+input GroupUpdateManyWithoutAdminsInput {
+  create: [GroupCreateWithoutAdminsInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  set: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutAdminsInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutAdminsInput!]
+  deleteMany: [GroupScalarWhereInput!]
+  updateMany: [GroupUpdateManyWithWhereNestedInput!]
 }
 
 input GroupUpdateManyWithoutMembersInput {
@@ -434,8 +569,17 @@ input GroupUpdateOneRequiredWithoutNotesInput {
   connect: GroupWhereUniqueInput
 }
 
+input GroupUpdateWithoutAdminsDataInput {
+  name: String
+  members: UserUpdateManyWithoutGroupsInput
+  image: String
+  folders: FolderUpdateManyWithoutGroupInput
+  notes: NoteUpdateManyWithoutGroupInput
+}
+
 input GroupUpdateWithoutFoldersDataInput {
   name: String
+  admins: UserUpdateManyWithoutAdminOfInput
   members: UserUpdateManyWithoutGroupsInput
   image: String
   notes: NoteUpdateManyWithoutGroupInput
@@ -443,6 +587,7 @@ input GroupUpdateWithoutFoldersDataInput {
 
 input GroupUpdateWithoutMembersDataInput {
   name: String
+  admins: UserUpdateManyWithoutAdminOfInput
   image: String
   folders: FolderUpdateManyWithoutGroupInput
   notes: NoteUpdateManyWithoutGroupInput
@@ -450,9 +595,15 @@ input GroupUpdateWithoutMembersDataInput {
 
 input GroupUpdateWithoutNotesDataInput {
   name: String
+  admins: UserUpdateManyWithoutAdminOfInput
   members: UserUpdateManyWithoutGroupsInput
   image: String
   folders: FolderUpdateManyWithoutGroupInput
+}
+
+input GroupUpdateWithWhereUniqueWithoutAdminsInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutAdminsDataInput!
 }
 
 input GroupUpdateWithWhereUniqueWithoutMembersInput {
@@ -468,6 +619,12 @@ input GroupUpsertWithoutFoldersInput {
 input GroupUpsertWithoutNotesInput {
   update: GroupUpdateWithoutNotesDataInput!
   create: GroupCreateWithoutNotesInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutAdminsInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutAdminsDataInput!
+  create: GroupCreateWithoutAdminsInput!
 }
 
 input GroupUpsertWithWhereUniqueWithoutMembersInput {
@@ -505,6 +662,7 @@ input GroupWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  admins_some: UserWhereInput
   members_some: UserWhereInput
   image: String
   image_not: String
@@ -590,7 +748,7 @@ input NoteCreateInput {
   title: String!
   author: UserCreateOneWithoutNotesInput!
   content: String!
-  parentFolder: FolderCreateOneInput
+  parentFolder: FolderCreateOneWithoutNotesInput
   group: GroupCreateOneWithoutNotesInput!
 }
 
@@ -604,12 +762,17 @@ input NoteCreateManyWithoutGroupInput {
   connect: [NoteWhereUniqueInput!]
 }
 
+input NoteCreateManyWithoutParentFolderInput {
+  create: [NoteCreateWithoutParentFolderInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
 input NoteCreateWithoutAuthorInput {
   id: ID
   type: NoteType!
   title: String!
   content: String!
-  parentFolder: FolderCreateOneInput
+  parentFolder: FolderCreateOneWithoutNotesInput
   group: GroupCreateOneWithoutNotesInput!
 }
 
@@ -619,7 +782,16 @@ input NoteCreateWithoutGroupInput {
   title: String!
   author: UserCreateOneWithoutNotesInput!
   content: String!
-  parentFolder: FolderCreateOneInput
+  parentFolder: FolderCreateOneWithoutNotesInput
+}
+
+input NoteCreateWithoutParentFolderInput {
+  id: ID
+  type: NoteType!
+  title: String!
+  author: UserCreateOneWithoutNotesInput!
+  content: String!
+  group: GroupCreateOneWithoutNotesInput!
 }
 
 type NoteEdge {
@@ -724,7 +896,7 @@ input NoteUpdateInput {
   title: String
   author: UserUpdateOneRequiredWithoutNotesInput
   content: String
-  parentFolder: FolderUpdateOneInput
+  parentFolder: FolderUpdateOneWithoutNotesInput
   group: GroupUpdateOneRequiredWithoutNotesInput
 }
 
@@ -764,6 +936,18 @@ input NoteUpdateManyWithoutGroupInput {
   updateMany: [NoteUpdateManyWithWhereNestedInput!]
 }
 
+input NoteUpdateManyWithoutParentFolderInput {
+  create: [NoteCreateWithoutParentFolderInput!]
+  delete: [NoteWhereUniqueInput!]
+  connect: [NoteWhereUniqueInput!]
+  set: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutParentFolderInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutParentFolderInput!]
+  deleteMany: [NoteScalarWhereInput!]
+  updateMany: [NoteUpdateManyWithWhereNestedInput!]
+}
+
 input NoteUpdateManyWithWhereNestedInput {
   where: NoteScalarWhereInput!
   data: NoteUpdateManyDataInput!
@@ -773,7 +957,7 @@ input NoteUpdateWithoutAuthorDataInput {
   type: NoteType
   title: String
   content: String
-  parentFolder: FolderUpdateOneInput
+  parentFolder: FolderUpdateOneWithoutNotesInput
   group: GroupUpdateOneRequiredWithoutNotesInput
 }
 
@@ -782,7 +966,15 @@ input NoteUpdateWithoutGroupDataInput {
   title: String
   author: UserUpdateOneRequiredWithoutNotesInput
   content: String
-  parentFolder: FolderUpdateOneInput
+  parentFolder: FolderUpdateOneWithoutNotesInput
+}
+
+input NoteUpdateWithoutParentFolderDataInput {
+  type: NoteType
+  title: String
+  author: UserUpdateOneRequiredWithoutNotesInput
+  content: String
+  group: GroupUpdateOneRequiredWithoutNotesInput
 }
 
 input NoteUpdateWithWhereUniqueWithoutAuthorInput {
@@ -795,6 +987,11 @@ input NoteUpdateWithWhereUniqueWithoutGroupInput {
   data: NoteUpdateWithoutGroupDataInput!
 }
 
+input NoteUpdateWithWhereUniqueWithoutParentFolderInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutParentFolderDataInput!
+}
+
 input NoteUpsertWithWhereUniqueWithoutAuthorInput {
   where: NoteWhereUniqueInput!
   update: NoteUpdateWithoutAuthorDataInput!
@@ -805,6 +1002,12 @@ input NoteUpsertWithWhereUniqueWithoutGroupInput {
   where: NoteWhereUniqueInput!
   update: NoteUpdateWithoutGroupDataInput!
   create: NoteCreateWithoutGroupInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutParentFolderInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutParentFolderDataInput!
+  create: NoteCreateWithoutParentFolderInput!
 }
 
 input NoteWhereInput {
@@ -903,6 +1106,7 @@ type User {
   image: String
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
+  adminOf(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
 }
 
 type UserConnection {
@@ -920,6 +1124,12 @@ input UserCreateInput {
   image: String
   notes: NoteCreateManyWithoutAuthorInput
   groups: GroupCreateManyWithoutMembersInput
+  adminOf: GroupCreateManyWithoutAdminsInput
+}
+
+input UserCreateManyWithoutAdminOfInput {
+  create: [UserCreateWithoutAdminOfInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutGroupsInput {
@@ -937,6 +1147,17 @@ input UserCreateOneWithoutNotesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutAdminOfInput {
+  id: ID
+  name: String!
+  password: String!
+  email: String!
+  role: String!
+  image: String
+  notes: NoteCreateManyWithoutAuthorInput
+  groups: GroupCreateManyWithoutMembersInput
+}
+
 input UserCreateWithoutGroupsInput {
   id: ID
   name: String!
@@ -945,6 +1166,7 @@ input UserCreateWithoutGroupsInput {
   role: String!
   image: String
   notes: NoteCreateManyWithoutAuthorInput
+  adminOf: GroupCreateManyWithoutAdminsInput
 }
 
 input UserCreateWithoutNotesInput {
@@ -955,6 +1177,7 @@ input UserCreateWithoutNotesInput {
   role: String!
   image: String
   groups: GroupCreateManyWithoutMembersInput
+  adminOf: GroupCreateManyWithoutAdminsInput
 }
 
 type UserEdge {
@@ -1100,6 +1323,7 @@ input UserUpdateDataInput {
   image: String
   notes: NoteUpdateManyWithoutAuthorInput
   groups: GroupUpdateManyWithoutMembersInput
+  adminOf: GroupUpdateManyWithoutAdminsInput
 }
 
 input UserUpdateInput {
@@ -1110,6 +1334,7 @@ input UserUpdateInput {
   image: String
   notes: NoteUpdateManyWithoutAuthorInput
   groups: GroupUpdateManyWithoutMembersInput
+  adminOf: GroupUpdateManyWithoutAdminsInput
 }
 
 input UserUpdateManyDataInput {
@@ -1126,6 +1351,18 @@ input UserUpdateManyMutationInput {
   email: String
   role: String
   image: String
+}
+
+input UserUpdateManyWithoutAdminOfInput {
+  create: [UserCreateWithoutAdminOfInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutAdminOfInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutAdminOfInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithoutGroupsInput {
@@ -1159,6 +1396,16 @@ input UserUpdateOneRequiredWithoutNotesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutAdminOfDataInput {
+  name: String
+  password: String
+  email: String
+  role: String
+  image: String
+  notes: NoteUpdateManyWithoutAuthorInput
+  groups: GroupUpdateManyWithoutMembersInput
+}
+
 input UserUpdateWithoutGroupsDataInput {
   name: String
   password: String
@@ -1166,6 +1413,7 @@ input UserUpdateWithoutGroupsDataInput {
   role: String
   image: String
   notes: NoteUpdateManyWithoutAuthorInput
+  adminOf: GroupUpdateManyWithoutAdminsInput
 }
 
 input UserUpdateWithoutNotesDataInput {
@@ -1175,6 +1423,12 @@ input UserUpdateWithoutNotesDataInput {
   role: String
   image: String
   groups: GroupUpdateManyWithoutMembersInput
+  adminOf: GroupUpdateManyWithoutAdminsInput
+}
+
+input UserUpdateWithWhereUniqueWithoutAdminOfInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutAdminOfDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutGroupsInput {
@@ -1190,6 +1444,12 @@ input UserUpsertNestedInput {
 input UserUpsertWithoutNotesInput {
   update: UserUpdateWithoutNotesDataInput!
   create: UserCreateWithoutNotesInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutAdminOfInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutAdminOfDataInput!
+  create: UserCreateWithoutAdminOfInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutGroupsInput {
@@ -1285,6 +1545,7 @@ input UserWhereInput {
   image_not_ends_with: String
   notes_some: NoteWhereInput
   groups_some: GroupWhereInput
+  adminOf_some: GroupWhereInput
   AND: [UserWhereInput!]
 }
 
