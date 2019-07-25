@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`File.vue Matches snapshot (type: external) 1`] = `
+<div class="file">
+  <div class="file__symbol"><img src="@/assets/icons/link.svg" alt="notatka zewnętrzna" class="file-type">
+    <!---->
+    <!---->
+  </div>
+
+</div>
+`;

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseUser.vue Matches snapshot (size: small) 1`] = `<img src="../assets/Filip.jpg" alt="" class="base-user base-user--small">`;
