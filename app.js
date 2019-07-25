@@ -10,6 +10,7 @@ const logger = require("morgan");
 const compression = require("compression");
 const jsonWebToken = require("jsonwebtoken");
 const { prisma } = require("./prisma-client");
+const history = require("connect-history-api-fallback");
 
 const { ApolloServer, gql } = require("apollo-server-express");
 const { readFileSync } = require("fs");
@@ -32,7 +33,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.render("index", { title: "Hey", message: "Hello from router!" });
+  res.sendFile(path.join(__dirname, "front", "dist", "index.html"));
+});
+
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "front", "public", "about.html"));
 });
 
 app.post("/register", (req, res) => {
@@ -108,13 +113,20 @@ const server = new ApolloServer({
       return jsonWebToken.verify(cookie, JWTSecretKey);
     } catch (error) {
       res.send({ error: true, data: error }, 403);
-      return {}
+      return {};
     }
   }
 });
 server.applyMiddleware({ app });
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "front", "dist")));
+app.use(
+  history({
+    disableDotRule: true,
+    verbose: true
+  })
+);
+app.use(express.static(path.join(__dirname, "front", "dist")));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

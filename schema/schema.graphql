@@ -50,7 +50,7 @@ type Folder {
   author: User!
   parentFolder: Folder
   group: Group!
-  notes: [Notes!]
+  notes: [Note!]
   folders: [Folder!]
 }
 
