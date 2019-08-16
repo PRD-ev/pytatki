@@ -18,8 +18,24 @@ const { resolvers } = require("./resolvers");
 
 const JWTSecretKey = "super-secret-key";
 const bcrypt = require("bcrypt");
+const http = require("http");
 
 const app = express();
+const httpServer = http.createServer(app);
+
+const io = require("socket.io").listen(httpServer, {
+  serveClient: false
+});
+function getDoc() {
+  return "test";
+}
+io.on("connection", function(socket) {
+  io.emit("init", getDoc());
+
+  socket.on("disconnect", function() {
+    io.emit("user disconnected");
+  });
+});
 
 app.use(compression());
 
@@ -33,7 +49,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "front", "dist", "index.html"));
+  // res.sendFile(path.join(__dirname, "front", "dist", "index.html"));
+  res.render("index", { title: "Hey", message: "Hello from router!" });
 });
 
 app.get("/about", (req, res) => {
@@ -93,7 +110,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-const server = new ApolloServer({
+const apolloServer = new ApolloServer({
   typeDefs: gql`
     ${readFileSync(__dirname.concat("/schema/schema.graphql"), "utf8")}
   `,
@@ -117,7 +134,7 @@ const server = new ApolloServer({
     }
   }
 });
-server.applyMiddleware({ app });
+apolloServer.applyMiddleware({ app });
 
 app.use(express.static(path.join(__dirname, "front", "dist")));
 app.use(
@@ -143,9 +160,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+httpServer.listen({ port: 4000 }, () =>
+  console.log(
+    `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
+  )
 );
-
-module.exports = app;

@@ -6,9 +6,9 @@
         :class="readOnly?'':'v-hidden'"
         @click.native="edit"
       >
-        <img class="pen" src="@/assets/icons/pen.svg" alt="edit">
+        <img class="pen" src="@/assets/icons/pen.svg" alt="edit" />
       </floating-button>
-      <div class="editor">
+      <div class="editor" v-if="editor && !loading">
         <editor-menu-bubble
           v-if="!readOnly"
           :editor="editor"
@@ -25,7 +25,7 @@
               :class="{ 'is-active': isActive.bold() }"
               @click="commands.bold"
             >
-              <img src="@/assets/icons/bold.svg" alt="bold">
+              <img src="@/assets/icons/bold.svg" alt="bold" />
             </button>
 
             <button
@@ -33,7 +33,7 @@
               :class="{ 'is-active': isActive.italic() }"
               @click="commands.italic"
             >
-              <img src="@/assets/icons/italic.svg" alt="italic">
+              <img src="@/assets/icons/italic.svg" alt="italic" />
             </button>
 
             <button
@@ -41,7 +41,7 @@
               :class="{ 'is-active': isActive.strike() }"
               @click="commands.strike"
             >
-              <img src="@/assets/icons/strikethrough.svg" alt="strikethrough">
+              <img src="@/assets/icons/strikethrough.svg" alt="strikethrough" />
             </button>
 
             <button
@@ -49,7 +49,7 @@
               :class="{ 'is-active': isActive.underline() }"
               @click="commands.underline"
             >
-              <img src="@/assets/icons/underline.svg" alt="underline">
+              <img src="@/assets/icons/underline.svg" alt="underline" />
             </button>
           </div>
         </editor-menu-bubble>
@@ -85,7 +85,7 @@
               :class="{ 'is-active': isActive.code() }"
               @click="commands.code"
             >
-              <img src="@/assets/icons/code-view.svg" alt="code-view">
+              <img src="@/assets/icons/code-view.svg" alt="code-view" />
             </button>
 
             <button
@@ -93,7 +93,7 @@
               :class="{ 'is-active': isActive.bullet_list() }"
               @click="commands.bullet_list"
             >
-              <img src="@/assets/icons/list-unordered.svg" alt="list-unordered">
+              <img src="@/assets/icons/list-unordered.svg" alt="list-unordered" />
             </button>
 
             <button
@@ -101,7 +101,7 @@
               :class="{ 'is-active': isActive.ordered_list() }"
               @click="commands.ordered_list"
             >
-              <img src="@/assets/icons/list-ordered.svg" alt="list-ordered">
+              <img src="@/assets/icons/list-ordered.svg" alt="list-ordered" />
             </button>
 
             <button
@@ -109,7 +109,7 @@
               :class="{ 'is-active': isActive.blockquote() }"
               @click="commands.blockquote"
             >
-              <img src="@/assets/icons/double-quotes-r.svg" alt="quote">
+              <img src="@/assets/icons/double-quotes-r.svg" alt="quote" />
             </button>
 
             <button
@@ -117,50 +117,49 @@
               :class="{ 'is-active': isActive.paragraph({ textAlign: 'left' }) }"
               @click="commands.paragraph({ textAlign: 'left' })"
             >
-              <img src="@/assets/icons/align-left.svg" alt="align left">
+              <img src="@/assets/icons/align-left.svg" alt="align left" />
             </button>
             <button
               class="menubar__button"
               :class="{ 'is-active': isActive.paragraph({ textAlign: 'center' }) }"
               @click="commands.paragraph({ textAlign: 'center' })"
             >
-              <img src="@/assets/icons/align-center.svg" alt="align center">
+              <img src="@/assets/icons/align-center.svg" alt="align center" />
             </button>
             <button
               class="menubar__button"
               :class="{ 'is-active': isActive.paragraph({ textAlign: 'right' }) }"
               @click="commands.paragraph({ textAlign: 'right' })"
             >
-              <img src="@/assets/icons/align-right.svg" alt="align right">
+              <img src="@/assets/icons/align-right.svg" alt="align right" />
             </button>
 
             <button class="menubar__button" @click="commands.undo">
-              <img src="@/assets/icons/arrow-go-back-line.svg" alt="undo">
+              <img src="@/assets/icons/arrow-go-back-line.svg" alt="undo" />
             </button>
 
             <button class="menubar__button" @click="commands.redo">
-              <img src="@/assets/icons/arrow-go-forward-line.svg" alt="redo">
+              <img src="@/assets/icons/arrow-go-forward-line.svg" alt="redo" />
             </button>
 
             <button class="menubar__button save-button" @click="save">
-              <img src="@/assets/icons/check-fill.svg" alt="save">
+              <img src="@/assets/icons/check-fill.svg" alt="save" />
             </button>
           </div>
         </editor-menu-bar>
 
-        <editor-content class="editor__content" :editor="editor"/>
+        <editor-content class="editor__content" :editor="editor" />
       </div>
+      <div v-else>Ładowanie dokumentu</div>
     </base-container>
-    <note-sidebar :sidebarAlwaysOn="sidebarAlwaysOn"/>
+    <note-sidebar :sidebarAlwaysOn="sidebarAlwaysOn" />
   </div>
 </template>
 
 
 <script>
 import Vue from 'vue';
-import {
-  Editor, EditorContent, EditorMenuBar, EditorMenuBubble,
-} from 'tiptap';
+import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap';
 import {
   Blockquote,
   HardBreak,
@@ -175,12 +174,14 @@ import {
   Strike,
   Underline,
   History,
+  Collaboration,
 } from 'tiptap-extensions';
 import BaseContainer from '@/components/BaseContainer.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import NoteSidebar from '@/components/NoteSidebar.vue';
 // eslint-disable-next-line object-curly-newline
 import Paragraph from '@/tiptap-extensions/paragraph';
+import io from 'socket.io-client';
 
 export default Vue.extend({
   name: 'note',
@@ -197,7 +198,26 @@ export default Vue.extend({
       readOnly: true,
       sidebarAlwaysOn: window.innerWidth > 1193,
       keepInBounds: true,
-      editor: new Editor({
+      editor: null,
+      socket: null,
+      loading: true,
+    };
+  },
+  watch: {
+    readOnly() {
+      this.editor.setOptions({
+        editable: !this.readOnly,
+      });
+    },
+  },
+  methods: {
+    onInit(data) {
+      this.loading = false;
+      if (this.editor) {
+        this.editor.destroy();
+      }
+
+      this.editor = new Editor({
         editable: false,
         extensions: [
           new Blockquote(),
@@ -214,51 +234,21 @@ export default Vue.extend({
           new Underline(),
           new History(),
           new Paragraph(),
-          //           new Collaboration({
-          //   // the initial version we start with
-          //   // version is an integer which is incremented with every change
-          //   version,
-          //   // debounce changes so we can save some requests
-          //   debounce: 250,
-          //   // onSendable is called whenever there are changed we have to send to our server
-          //   onSendable: ({ sendable }) => {
-          //     this.socket.emit('update', sendable)
-          //   },
-          // }),
+          new Collaboration({
+            // the initial version we start with
+            // version is an integer which is incremented with every change
+            version: 1,
+            // debounce changes so we can save some requests
+            debounce: 250,
+            // onSendable is called whenever there are changed we have to send to our server
+            onSendable: ({ sendable }) => {
+              this.socket.emit('update', sendable);
+            },
+          }),
         ],
-        content: `
-          <h2>
-            Hi there,
-          </h2>
-          <p>
-            this is a very <em>basic</em> example of tiptap.
-          </p>
-          <code>body { display: none; }</code>
-          <ul>
-            <li>
-              A regular list
-            </li>
-            <li>
-              With regular items
-            </li>
-          </ul>
-          <blockquote>
-            It's amazing 👏
-            <br />
-            – mom
-          </blockquote>
-        `,
-      }),
-    };
-  },
-  watch: {
-    readOnly() {
-      this.editor.setOptions({
-        editable: !this.readOnly,
+        content: `<p>${data}</p>`,
       });
     },
-  },
-  methods: {
     save() {
       this.readOnly = true;
     },
@@ -266,16 +256,13 @@ export default Vue.extend({
       this.readOnly = false;
     },
   },
-  //  mounted() {
-  //   // server implementation: https://glitch.com/edit/#!/tiptap-sockets
-  //   this.socket = io('wss://tiptap-sockets.glitch.me')
-  //     // get the current document and its version
-  //     .on('init', data => this.onInit(data))
-  //     // send all updates to the collaboration extension
-  //     .on('update', data => this.editor.extensions.options.collaboration.update(data))
-  //     // get count of connected users
-  //     .on('getCount', count => this.setCount(count))
-  // },
+  mounted() {
+    this.socket = io('ws://localhost:4000')
+      // get the current document and its version
+      .on('init', (data) => this.onInit(data))
+      // send all updates to the collaboration extension
+      .on('update', (data) => this.editor.extensions.options.collaboration.update(data));
+  },
   beforeDestroy() {
     this.editor.destroy();
     // this.socket.destroy();
