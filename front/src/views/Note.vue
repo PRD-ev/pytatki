@@ -176,12 +176,12 @@ import {
   History,
   Collaboration,
 } from 'tiptap-extensions';
+import io from 'socket.io-client';
 import BaseContainer from '@/components/BaseContainer.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import NoteSidebar from '@/components/NoteSidebar.vue';
 // eslint-disable-next-line object-curly-newline
 import Paragraph from '@/tiptap-extensions/paragraph';
-import io from 'socket.io-client';
 
 export default Vue.extend({
   name: 'note',
@@ -211,7 +211,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    onInit(data) {
+    onInit({ doc, version }) {
       this.loading = false;
       if (this.editor) {
         this.editor.destroy();
@@ -237,7 +237,7 @@ export default Vue.extend({
           new Collaboration({
             // the initial version we start with
             // version is an integer which is incremented with every change
-            version: 1,
+            version,
             // debounce changes so we can save some requests
             debounce: 250,
             // onSendable is called whenever there are changed we have to send to our server
@@ -246,7 +246,7 @@ export default Vue.extend({
             },
           }),
         ],
-        content: `<p>${data}</p>`,
+        content: doc,
       });
     },
     save() {
@@ -262,6 +262,7 @@ export default Vue.extend({
       .on('init', (data) => this.onInit(data))
       // send all updates to the collaboration extension
       .on('update', (data) => this.editor.extensions.options.collaboration.update(data));
+    this.socket.emit('getDoc', 2);
   },
   beforeDestroy() {
     this.editor.destroy();

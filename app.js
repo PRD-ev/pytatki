@@ -11,6 +11,7 @@ const compression = require("compression");
 const jsonWebToken = require("jsonwebtoken");
 const { prisma } = require("./prisma-client");
 const history = require("connect-history-api-fallback");
+const fs = require("fs");
 
 const { ApolloServer, gql } = require("apollo-server-express");
 const { readFileSync } = require("fs");
@@ -26,12 +27,137 @@ const httpServer = http.createServer(app);
 const io = require("socket.io").listen(httpServer, {
   serveClient: false
 });
-function getDoc() {
-  return "test";
-}
-io.on("connection", function(socket) {
-  io.emit("init", getDoc());
 
+//options
+const { Step } = require("prosemirror-transform");
+const schema = require("./prosemirror-schema.js");
+const maxStoredSteps = 100;
+const defaultData = {
+  version: 0,
+  doc: {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        content: [{ type: "text", text: "" }]
+      }
+    ]
+  }
+};
+
+io.on("connection", function(socket) {
+  let previousId;
+  let docPath;
+  let lockedPath;
+  let stepsPath;
+  const safeJoin = currentId => {
+    socket.leave(previousId);
+    socket.join(currentId);
+    previousId = currentId;
+    docPath = `./notes/${currentId}/db.json`;
+    lockedPath = `./notes/${currentId}/db_locked.json`;
+    stepsPath = `./notes/${currentId}/db_steps.json`;
+  };
+  function storeDoc(data) {
+    fs.writeFileSync(docPath, JSON.stringify(data, null, 2));
+  }
+
+  function storeSteps({ steps, version }) {
+    const oldData = JSON.parse(fs.readFileSync(stepsPath, "utf8"));
+    const limitedOldData = oldData.slice(
+      Math.max(oldData.length - maxStoredSteps)
+    );
+
+    const newData = [
+      ...limitedOldData,
+      ...steps.map((step, index) => {
+        return {
+          step: JSON.parse(JSON.stringify(step)),
+          version: version + index + 1,
+          clientID: step.clientID
+        };
+      })
+    ];
+
+    fs.writeFileSync(stepsPath, JSON.stringify(newData));
+  }
+
+  function storeLocked(locked) {
+    fs.writeFileSync(lockedPath, locked.toString());
+  }
+
+  function getDoc() {
+    try {
+      return JSON.parse(fs.readFileSync(docPath, "utf8"));
+    } catch (e) {
+      return defaultData;
+    }
+  }
+
+  function getLocked() {
+    return JSON.parse(fs.readFileSync(lockedPath, "utf8"));
+  }
+
+  function getSteps(version) {
+    try {
+      const steps = JSON.parse(fs.readFileSync(stepsPath, "utf8"));
+      return steps.filter(step => step.version > version);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  socket.on("getDoc", docId => {
+    safeJoin(docId);
+    io.emit("init", getDoc());
+  });
+  socket.on("update", function({ version, clientID, steps }) {
+    const locked = getLocked();
+    // we need to check if there is another update processed
+    // so we store a "locked" state
+
+    if (locked) {
+      // we will do nothing and wait for another client update
+      return;
+    }
+
+    storeLocked(true);
+    const storedData = getDoc();
+    // version mismatch: the stored version is newer
+    // so we send all steps of this version back to the user
+    if (storedData.version !== version) {
+      socket.emit("update", {
+        version,
+        steps: getSteps(version)
+      });
+      storeLocked(false);
+      return;
+    }
+    let doc = schema.nodeFromJSON(storedData.doc);
+
+    let newSteps = steps.map(step => {
+      const newStep = Step.fromJSON(schema, step);
+      newStep.clientID = clientID;
+
+      // apply step to document
+      let result = newStep.apply(doc);
+      doc = result.doc;
+
+      return newStep;
+    });
+    // calculating a new version number is easy
+    const newVersion = version + newSteps.length;
+    // store data
+    storeSteps({ version, steps: newSteps });
+    storeDoc({ version: newVersion, doc });
+    // send update to everyone (me and others)
+    io.sockets.emit("update", {
+      version: newVersion,
+      steps: getSteps(version)
+    });
+
+    storeLocked(false);
+  });
   socket.on("disconnect", function() {
     io.emit("user disconnected");
   });
