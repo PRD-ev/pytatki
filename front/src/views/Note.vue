@@ -159,7 +159,9 @@
 
 <script>
 import Vue from 'vue';
-import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap';
+import {
+  Editor, EditorContent, EditorMenuBar, EditorMenuBubble,
+} from 'tiptap';
 import {
   Blockquote,
   HardBreak,
@@ -259,9 +261,9 @@ export default Vue.extend({
   mounted() {
     this.socket = io('ws://localhost:4000')
       // get the current document and its version
-      .on('init', (data) => this.onInit(data))
+      .on('init', data => this.onInit(data))
       // send all updates to the collaboration extension
-      .on('update', (data) => this.editor.extensions.options.collaboration.update(data));
+      .on('update', data => this.editor.extensions.options.collaboration.update(data));
     this.socket.emit('getDoc', 2);
   },
   beforeDestroy() {

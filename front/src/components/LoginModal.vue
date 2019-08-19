@@ -4,19 +4,19 @@
       <template v-slot:modal-content>
         <h3 class="login-header">Zaloguj się</h3>
         <input-with-label>Login</input-with-label>
-        <br>
+        <br />
         <input-with-label>Hasło</input-with-label>
-        <base-button size="small">Zaloguj</base-button>
+        <base-button @click.native="login" size="small">Zaloguj</base-button>
         <button @click="socialLogin" class="social-button">
           <img
             alt="Sign in with Google"
             src="../assets/google/2x/btn_google_signin_light_normal_web@2x.png"
-          >
+          />
         </button>
       </template>
       <template v-slot:trigger>
         <p class="login-trigger">
-          <img class="login-image" src="../assets/icons/logout-box-fill.svg">
+          <img class="login-image" src="../assets/icons/logout-box-fill.svg" />
           Zaloguj się
         </p>
       </template>
@@ -66,6 +66,16 @@ export default {
           // eslint-disable-next-line no-alert
           alert(`Oops. ${err.message}`);
         });
+    },
+    login() {
+      fetch('http://localhost:4000/login', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({email:'test@test.pl',password:'test'}),
+      });
     },
   },
 };

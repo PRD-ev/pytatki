@@ -1,5 +1,5 @@
 {
-  "version": 27,
+  "version": 30,
   "doc": {
     "type": "doc",
     "content": [
@@ -13,12 +13,9 @@
                 "type": "bold"
               }
             ],
-            "text": "Działam <3"
+            "text": "Działam "
           }
         ]
-      },
-      {
-        "type": "paragraph"
       }
     ]
   }

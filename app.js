@@ -23,7 +23,6 @@ const http = require("http");
 
 const app = express();
 const httpServer = http.createServer(app);
-
 const io = require("socket.io").listen(httpServer, {
   serveClient: false
 });
@@ -210,6 +209,7 @@ app.post("/register", (req, res) => {
 app.post("/login", async (req, res) => {
   const MILLISECONDS_IN_HOUR = 3600000;
   try {
+    console.log(req.body)
     const user = await prisma.user({
       email: req.body.email
     });

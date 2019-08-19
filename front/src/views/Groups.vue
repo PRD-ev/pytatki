@@ -1,21 +1,19 @@
 <template>
   <base-container>
-  <current-location/>
+    <current-location />
     <div class="grupy">
-      <group :key="group.name" v-for="group in groups" :name="group.name" :image="group.image"/>
+      <group :key="group.name" v-for="group in groups" :name="group.name" :image="group.image" />
     </div>
     <base-modal>
       <template v-slot:modal-content>
-        <input-with-label>
-          Nazwa grupy
-        </input-with-label>
-        <label for="group-thumbnail">
-          Zdjęcie grupy
-        </label>
-        <input type="file" name="" id="group-thumbnail">
+        <input-with-label>Nazwa grupy</input-with-label>
+        <label for="group-thumbnail">Zdjęcie grupy</label>
+        <input type="file" name id="group-thumbnail" />
       </template>
       <template v-slot:trigger>
-        <floating-button><img src="@/assets/icons/plus.svg" alt="plus"></floating-button>
+        <floating-button>
+          <img src="@/assets/icons/plus.svg" alt="plus" />
+        </floating-button>
       </template>
     </base-modal>
   </base-container>
@@ -44,28 +42,27 @@ export default Vue.extend({
     return {
       groups: [
         {
-          name: 'Grupa Krzysia',
+          name: 'Elita Przybylskiego3',
           image:
-            'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
+            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=1',
         },
-        { name: 'Johny Krzaczek', image: 'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300' },
-        { name: 'Elita Przybylskiego', image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300' },
-        {
-          name: 'Grupa Krzysia2',
-          image:
-            'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
-        },
-        { name: 'Johny Krzaczek2', image: 'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300' },
-        { name: 'Elita Przybylskiego2', image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300' },
-        {
-          name: 'Grupa Krzysia3',
-          image:
-            'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
-        },
-        { name: 'Johny Krzaczek3', image: 'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300' },
-        { name: 'Elita Przybylskiego3', image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300' },
       ],
     };
+  },
+  mounted() {
+    fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        operationName: null,
+        variables: {},
+        query:
+          '{\n  user(id: "5d570de3fca1360007497cbe") {\n    groups {\n      name\n    }\n  }\n}\n',
+      }),
+    }).then((res) => console.log(res));
   },
 });
 </script>
@@ -75,7 +72,7 @@ export default Vue.extend({
   cursor: pointer;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    @media screen and (max-width: 769px) {
+  @media screen and (max-width: 769px) {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
