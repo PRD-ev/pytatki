@@ -2,7 +2,7 @@
   <base-container @click.native.capture="hideContextMenu" @contextmenu.native="hideContextMenu">
     <current-location
       @change-location="changeLocation"
-      :location="[$store.state.currentGroup.name, ...currentDirectory]"
+      :location="currentDirectory"
     />
     <context-menu
       class="pliki"
@@ -24,26 +24,26 @@
       <template v-slot:modal-content>
         <div class="add-note-container">
           <div class="note-type-container">
-            <file type="folder" size="tiny" class="negative-margin"/>
+            <file type="folder" size="tiny" class="negative-margin" />
             <p class="add-note-desc">Folder</p>
           </div>
           <div class="note-type-container">
-            <file size="tiny" class="negative-margin" type="download"/>
+            <file size="tiny" class="negative-margin" type="download" />
             <p class="add-note-desc">Plik do pobrania</p>
           </div>
           <div class="note-type-container">
-            <file size="tiny" class="negative-margin" type="pytatki"/>
+            <file size="tiny" class="negative-margin" type="pytatki" />
             <p class="add-note-desc">Notatka</p>
           </div>
           <div class="note-type-container">
-            <file size="tiny" class="negative-margin" type="external"/>
+            <file size="tiny" class="negative-margin" type="external" />
             <p class="add-note-desc">Notatka zewnętrzna</p>
           </div>
         </div>
       </template>
       <template v-slot:trigger>
         <floating-button>
-          <img src="@/assets/icons/plus.svg" alt="plus">
+          <img src="@/assets/icons/plus.svg" alt="plus" />
         </floating-button>
       </template>
     </base-modal>
@@ -73,60 +73,13 @@ export default Vue.extend({
     return {
       notes: [
         {
-          name: 'Johny Krzaczek3',
-          image:
-            'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300',
-          type: 'folder',
-        },
-        {
-          name: 'Elita Przybylskiego3',
-          image:
-            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300',
-          type: 'folder',
-        },
-        {
-          name: 'Grupa Krzysia',
-          image:
-            'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
-          type: 'download',
-        },
-        {
-          name: 'Johny Krzaczek',
-          image:
-            'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300',
-          type: 'download',
-        },
-        {
-          name: 'Elita Przybylskiego',
-          image:
-            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300',
-          type: 'external',
-        },
-        {
-          name: 'Grupa Krzysia2',
-          image:
-            'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
-          type: 'pytatki',
-        },
-        {
-          name: 'Johny Krzaczek2',
-          image:
-            'https://images.unsplash.com/photo-1472555794301-77353b152fb7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=300',
-          type: 'pytatki',
-        },
-        {
-          name: 'Elita Przybylskiego2',
-          image:
-            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=300',
-          type: 'pytatki',
-        },
-        {
           name: 'Grupa Krzysia3',
           image:
             'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
           type: 'external',
         },
       ],
+      folders: [],
       selectedNote: { name: '' },
       clickPosition: { x: 0, y: 0 },
       renaming: false,
@@ -158,6 +111,45 @@ export default Vue.extend({
       const indexOfNewLocation = this.currentDirectory.indexOf(newLocation);
       this.currentDirectory = this.currentDirectory.slice(0, indexOfNewLocation + 1);
     },
+  },
+  mounted() {
+    fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        operationName: null,
+        variables: {},
+        query: `{
+            group(id: "${this.$route.params.id}"){
+              name,
+              notes{
+                id,
+                title,
+                type,
+                parentFolder{
+                  title,
+                }
+              },
+              folders{
+                id,
+                title,
+                parentFolder{
+                  title,
+                }
+              }
+            }
+          }`,
+      }),
+    })
+      .then(res => res.json())
+      .then(({ data }) => {
+        this.folders = data.group.folders;
+        this.notes = data.group.notes;
+        this.currentDirectory = [data.group.name];
+      });
   },
 });
 </script>

@@ -164,6 +164,23 @@ io.on("connection", function(socket) {
 
 app.use(compression());
 
+// For development usage only
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", req.get("Origin") || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+  res.header("Access-Control-Expose-Headers", "Content-Length");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Accept, Authorization, Content-Type, X-Requested-With, Range"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  } else {
+    return next();
+  }
+});
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -174,8 +191,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  // res.sendFile(path.join(__dirname, "front", "dist", "index.html"));
-  res.render("index", { title: "Hey", message: "Hello from router!" });
+  res.sendFile(path.join(__dirname, "front", "dist", "index.html"));
 });
 
 app.get("/about", (req, res) => {
@@ -198,7 +214,13 @@ app.post("/register", (req, res) => {
           maxAge: MILLISECONDS_IN_HOUR,
           httpOnly: true
         });
-        res.redirect("/");
+        res.send({
+          email: user.email,
+          id: user.id,
+          image: user.image,
+          name: user.name,
+          role: user.role
+        });
       } catch (error) {
         res.send({ error: true, data: error });
       }
@@ -209,7 +231,6 @@ app.post("/register", (req, res) => {
 app.post("/login", async (req, res) => {
   const MILLISECONDS_IN_HOUR = 3600000;
   try {
-    console.log(req.body)
     const user = await prisma.user({
       email: req.body.email
     });
@@ -226,7 +247,13 @@ app.post("/login", async (req, res) => {
           maxAge: MILLISECONDS_IN_HOUR,
           httpOnly: true
         });
-        res.redirect("/");
+        res.send({
+          email: user.email,
+          id: user.id,
+          image: user.image,
+          name: user.name,
+          role: user.role
+        });
       } else {
         res.send({ error: true, data: "Invalid email or password" });
       }
@@ -235,6 +262,7 @@ app.post("/login", async (req, res) => {
     res.send({ error: true, data: error });
   }
 });
+
 
 const apolloServer = new ApolloServer({
   typeDefs: gql`
@@ -245,7 +273,7 @@ const apolloServer = new ApolloServer({
     const MILLISECONDS_IN_HOUR = 3600000;
     const cookie = req.cookies.jwt;
     if (cookie === undefined) {
-      res.send({ error: true, data: "You must be logged in" }, 403);
+      res.status(403).send({ error: true, data: "You must be logged in" });
     } else {
       res.cookie("jwt", cookie, {
         maxAge: MILLISECONDS_IN_HOUR,
@@ -255,7 +283,7 @@ const apolloServer = new ApolloServer({
     try {
       return jsonWebToken.verify(cookie, JWTSecretKey);
     } catch (error) {
-      res.send({ error: true, data: error }, 403);
+      res.status(403).send({ error: true, data: error });
       return {};
     }
   }

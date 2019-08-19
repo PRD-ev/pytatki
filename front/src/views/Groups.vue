@@ -2,7 +2,13 @@
   <base-container>
     <current-location />
     <div class="grupy">
-      <group :key="group.name" v-for="group in groups" :name="group.name" :image="group.image" />
+      <group
+        :key="group.id"
+        v-for="group in groups"
+        :name="group.name"
+        :image="group.image"
+        :id="group.id"
+      />
     </div>
     <base-modal>
       <template v-slot:modal-content>
@@ -40,13 +46,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      groups: [
-        {
-          name: 'Elita Przybylskiego3',
-          image:
-            'https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=1',
-        },
-      ],
+      groups: [],
     };
   },
   mounted() {
@@ -59,10 +59,19 @@ export default Vue.extend({
       body: JSON.stringify({
         operationName: null,
         variables: {},
-        query:
-          '{\n  user(id: "5d570de3fca1360007497cbe") {\n    groups {\n      name\n    }\n  }\n}\n',
+        query: `{
+            user(id: "5d570de3fca1360007497cbe"){
+              groups{
+                name,
+                id,
+                image
+              }
+            }
+          }`,
       }),
-    }).then((res) => console.log(res));
+    })
+      .then(res => res.json())
+      .then((res) => { this.groups = res.data.user.groups; });
   },
 });
 </script>

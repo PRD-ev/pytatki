@@ -1,7 +1,9 @@
 <template>
   <div class="group">
-    <div :style="`background-image: url('${image}');`" class="group__circle"></div>
-    {{name}}
+    <router-link :to="`/group/${id}`">
+      <div :style="`background-image: url('${image}');`" class="group__circle"></div>
+      {{name}}
+    </router-link>
   </div>
 </template>
 
@@ -13,6 +15,7 @@ export default Vue.extend({
   props: {
     name: String,
     image: String,
+    id: String,
   },
 });
 </script>

@@ -19,7 +19,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "groups" */ './views/Groups.vue'),
     },
     {
-      path: '/group',
+      path: '/group/:id',
       name: 'grupa',
       component: () => import(/* webpackChunkName: "singleGroup" */ './views/SingleGroup.vue'),
     },

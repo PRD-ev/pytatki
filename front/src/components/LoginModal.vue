@@ -73,9 +73,13 @@ export default {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        mode: 'cors',
         method: 'POST',
-        body: JSON.stringify({email:'test@test.pl',password:'test'}),
-      });
+        body: JSON.stringify({ email: 'test@test.pl', password: 'test' }),
+      }).then(res => res.json())
+        .then((res) => {
+          this.$store.dispatch('setUserAction', res);
+        });
     },
   },
 };
