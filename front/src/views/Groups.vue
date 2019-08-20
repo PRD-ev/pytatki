@@ -12,9 +12,13 @@
     </div>
     <base-modal>
       <template v-slot:modal-content>
-        <input-with-label>Nazwa grupy</input-with-label>
+        <input-with-label
+          :value="newGroupName"
+          @input.native="newGroupName = $event.target.value"
+        >Nazwa grupy</input-with-label>
         <label for="group-thumbnail">Zdjęcie grupy</label>
-        <input type="file" name id="group-thumbnail" />
+        <input type="file" id="group-thumbnail" ref="groupImage" />
+        <input type="submit" value="Utwórz grupę" @click="createNewGroup" />
       </template>
       <template v-slot:trigger>
         <floating-button>
@@ -47,19 +51,57 @@ export default Vue.extend({
   data() {
     return {
       groups: [],
+      newGroupName: '',
     };
   },
+  methods: {
+    createNewGroup() {
+      fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operationName: null,
+          variables: {},
+          query: `mutation{
+                    createGroup(name:"${this.newGroupName}"){
+                      id,
+                      image
+                    }
+                  }`,
+        }),
+      })
+        .then(res => res.json())
+        .then(res => {
+          try {
+            this.groups = [
+              ...this.groups,
+              {
+                name: this.newGroupName,
+                id: res.data.createGroup.id,
+                image: res.data.createGroup.image,
+              },
+            ];
+          } catch (error) {
+            console.error(error);
+          }
+        });
+    },
+  },
   mounted() {
-    fetch('http://localhost:4000/graphql', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        operationName: null,
-        variables: {},
-        query: `{
+    if (this.$store.state.user.id !== undefined) {
+      fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operationName: null,
+          variables: {},
+          query: `{
             user(id: "${this.$store.state.user.id}"){
               groups{
                 name,
@@ -68,10 +110,19 @@ export default Vue.extend({
               }
             }
           }`,
-      }),
-    })
-      .then(res => res.json())
-      .then((res) => { this.groups = res.data.user.groups; });
+        }),
+      })
+        .then(res => res.json())
+        .then(res => {
+          try {
+            this.groups = res.data.user.groups;
+          } catch (error) {
+            this.groups = [];
+          } finally {
+            this.newGroupName = '';
+          }
+        });
+    }
   },
 });
 </script>

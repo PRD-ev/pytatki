@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="container__inner">
-      <slot></slot>
+      <div v-if="$store.state.user.id!==undefined">
+        <slot></slot>
+      </div>
+      <div v-else>Zaloguj się aby mieć dostęp do zawartości</div>
     </div>
   </div>
 </template>

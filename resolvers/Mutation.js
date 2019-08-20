@@ -1,9 +1,10 @@
 const { prisma } = require("../prisma-client");
 
 const Mutation = {
-  createGroup: async (parent, args) => {
+  createGroup: async (parent, args, context) => {
     const group = {
-      name: args.name
+      name: args.name,
+      members: { connect: { id: context.id } }
     };
     return prisma.createGroup(group);
   },
@@ -39,7 +40,7 @@ const Mutation = {
 
   createNote: async (
     parent,
-    { title, type, groupId, authorId, parentFolderId },
+    { title, type, groupId, parentFolderId },
     context
   ) => {
     const userGroups = await prisma
@@ -54,7 +55,7 @@ const Mutation = {
     if (userGroupsFormatted.includes(noteGroup) || context.role === "ADMIN") {
       const note = {
         title,
-        author: { connect: { id: authorId } },
+        author: { connect: { id: context.id } },
         type,
         group: { connect: { id: groupId } }
       };
@@ -103,7 +104,7 @@ const Mutation = {
     throw new Error("You don't have permission for that action");
   },
 
-  createFolder: async (parent, { title, type, groupId, authorId }, context) => {
+  createFolder: async (parent, { title, type, groupId }, context) => {
     const userGroups = await prisma
       .user({ id: context.id })
       .groups()
@@ -116,7 +117,7 @@ const Mutation = {
     if (userGroupsFormatted.includes(folderGroup) || context.role === "ADMIN") {
       const folder = {
         title,
-        author: { connect: { id: authorId } },
+        author: { connect: { id: context.id } },
         type,
         group: { connect: { id: groupId } }
       };

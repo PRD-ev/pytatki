@@ -1,16 +1,13 @@
 <template>
   <base-container @click.native.capture="hideContextMenu" @contextmenu.native="hideContextMenu">
-    <current-location
-      @change-location="changeLocation"
-      :location="currentDirectory"
-    />
+    <current-location @change-location="changeLocation" :location="currentDirectory" />
     <context-menu
       class="pliki"
       @rename-note-init="renameNoteInit"
       :note="selectedFile"
       :clickPosition="clickPosition"
     >
-    <file
+      <file
         @rename-note="renameNote"
         @open-context-menu="showContextMenu"
         :key="folder.id"
@@ -82,19 +79,12 @@ export default Vue.extend({
   },
   data() {
     return {
-      notes: [
-        {
-          title: 'Grupa Krzysia3',
-          image:
-            'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
-          type: 'external',
-        },
-      ],
+      notes: [],
       folders: [],
       selectedFile: { title: '' },
       clickPosition: { x: 0, y: 0 },
       renaming: false,
-      currentDirectory: ['Sieci', 'Dział II', 'Projekt'],
+      currentDirectory: [],
     };
   },
   methods: {
@@ -121,6 +111,81 @@ export default Vue.extend({
     changeLocation(newLocation) {
       const indexOfNewLocation = this.currentDirectory.indexOf(newLocation);
       this.currentDirectory = this.currentDirectory.slice(0, indexOfNewLocation + 1);
+    },
+    createNewNote() {
+      fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operationName: null,
+          variables: {},
+          query: `mutation{
+                    createNote(title:"${this.newNoteName}",type:"${this.newNoteType}",groupId:"${
+            this.$route.params.id
+          }"${
+            this.parentFolderId !== undefined
+              ? ', parentFolderId:"' + this.parentFolderId + '"'
+              : ''
+          }){
+                      id,
+                      image
+                    }
+                  }`,
+        }),
+      })
+        .then(res => res.json())
+        .then(res => {
+          try {
+            this.notes = [
+              ...this.notes,
+              {
+                name: this.newNoteName,
+                type: this.newNoteType,
+                id: res.data.createGroup.id,
+                image: res.data.createGroup.image,
+              },
+            ];
+          } catch (error) {
+            console.error(error)
+          }
+        });
+    },
+    createNewFolder() {
+      fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          operationName: null,
+          variables: {},
+          query: `mutation{
+                    createFolder(name:"${this.newGroupName}"){
+                      id,
+                      image
+                    }
+                  }`,
+        }),
+      })
+        .then(res => res.json())
+        .then(res => {
+          try {
+            this.groups = [
+              ...this.groups,
+              {
+                name: this.newGroupName,
+                id: res.data.createGroup.id,
+                image: res.data.createGroup.image,
+              },
+            ];
+          } catch (error) {
+            this.groups = [];
+          }
+        });
     },
   },
   mounted() {
