@@ -16,6 +16,7 @@ Vue.mixin({
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // dev only
         body: JSON.stringify({
           operationName: null,
           variables: {},

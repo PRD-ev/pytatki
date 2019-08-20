@@ -144,10 +144,10 @@ export default Vue.extend({
               createFolder(title:"${this.newFileTitle}",
                             groupId:"${this.$route.params.id}"
                             ${
-                              this.parentFolderId !== undefined
-                                ? `, parentFolderId:"${this.parentFolderId}"`
-                                : ''
-                            })
+  this.parentFolderId !== undefined
+    ? `, parentFolderId:"${this.parentFolderId}"`
+    : ''
+})
                     {
                       id,
                       author{
@@ -155,7 +155,7 @@ export default Vue.extend({
                       }
                     }
               }`,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.folders = [
               ...this.folders,
@@ -176,8 +176,8 @@ export default Vue.extend({
                           type:EXTERNAL,
                           link: "${this.newFileExternalLink}",
                           groupId:"${this.$route.params.id}"${
-            this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
-          })
+  this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
+})
                     {
                       id,
                       link,
@@ -186,7 +186,7 @@ export default Vue.extend({
                       }
                     }
                   }`,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.notes = [
               ...this.notes,
@@ -210,8 +210,8 @@ export default Vue.extend({
               createNote(title:"${this.newFileTitle}",
                           type:${this.newFileType},
                           groupId:"${this.$route.params.id}"${
-            this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
-          })
+  this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
+})
                     {
                       id,
                       author{
@@ -219,7 +219,7 @@ export default Vue.extend({
                       }
                     }
                   }`,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.notes = [
               ...this.notes,
