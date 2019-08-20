@@ -1,7 +1,7 @@
 <template>
   <label class="base-label" for>
     <slot></slot>
-    <base-input :length="length"></base-input>
+    <base-input :length="length" :value="value"></base-input>
   </label>
 </template>
 
@@ -16,6 +16,7 @@ export default Vue.extend({
   },
   props: {
     length: String,
+    value: String,
   },
 });
 </script>
