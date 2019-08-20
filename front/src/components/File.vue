@@ -3,10 +3,10 @@
     <div class="drop-shadow">
       <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
     </div>
-    <span v-if="!renaming">{{name}}</span>
+    <span v-if="!renaming">{{title}}</span>
     <base-input v-else v-model="newName" />
   </div>
-  <div v-else class="file" @contextmenu.prevent="openContextMenu">
+  <router-link :to="`/note/${id}`" v-else class="file" @contextmenu.prevent="openContextMenu">
     <div class="drop-shadow">
       <div class="file__symbol" :class="size?`symbol--${size}`:''">
         <img
@@ -29,9 +29,9 @@
         />
       </div>
     </div>
-    <span v-if="!renaming">{{name}}</span>
+    <span v-if="!renaming">{{title}}</span>
     <base-input v-else v-model="newName" />
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default Vue.extend({
     BaseInput,
   },
   props: {
-    name: String,
+    title: String,
     type: {
       type: String,
       required: true,
@@ -55,10 +55,11 @@ export default Vue.extend({
       validator: size => size === 'tiny',
     },
     renaming: Boolean,
+    id: String,
   },
   data() {
     return {
-      newName: this.name,
+      newTitle: this.title,
     };
   },
   updated() {
@@ -70,12 +71,12 @@ export default Vue.extend({
   methods: {
     openContextMenu(event) {
       event.stopPropagation();
-      this.$emit('open-context-menu', this.name, this.type, event);
+      this.$emit('open-context-menu', this.title, this.type, event);
     },
     renameNote(event) {
       const key = event.which || event.keyCode;
       if (event.target.nodeName !== 'INPUT' || key === 13) {
-        this.$emit('rename-note', this.name, this.newName);
+        this.$emit('rename-note', this.title, this.newName);
         window.removeEventListener('click', this.renameNote, { capture: true });
         window.removeEventListener('keypress', this.renameNote);
       }

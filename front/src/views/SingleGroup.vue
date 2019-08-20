@@ -7,17 +7,28 @@
     <context-menu
       class="pliki"
       @rename-note-init="renameNoteInit"
-      :note="selectedNote"
+      :note="selectedFile"
       :clickPosition="clickPosition"
     >
+    <file
+        @rename-note="renameNote"
+        @open-context-menu="showContextMenu"
+        :key="folder.id"
+        v-for="folder in folders"
+        type="folder"
+        :title="folder.title"
+        :renaming="folder.title === selectedFile.title && renaming"
+        :id="folder.id"
+      />
       <file
         @rename-note="renameNote"
         @open-context-menu="showContextMenu"
-        :key="note.name"
+        :key="note.id"
         v-for="note in notes"
         :type="note.type"
-        :name="note.name"
-        :renaming="note.name === selectedNote.name && renaming"
+        :title="note.title"
+        :renaming="note.title === selectedFile.title && renaming"
+        :id="note.id"
       />
     </context-menu>
     <base-modal>
@@ -73,24 +84,24 @@ export default Vue.extend({
     return {
       notes: [
         {
-          name: 'Grupa Krzysia3',
+          title: 'Grupa Krzysia3',
           image:
             'https://images.unsplash.com/photo-1445620466293-d6316372ab59?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&fit=crop&w=400&q=300',
           type: 'external',
         },
       ],
       folders: [],
-      selectedNote: { name: '' },
+      selectedFile: { title: '' },
       clickPosition: { x: 0, y: 0 },
       renaming: false,
       currentDirectory: ['Sieci', 'Dział II', 'Projekt'],
     };
   },
   methods: {
-    showContextMenu(name, type, event) {
+    showContextMenu(title, type, event) {
       this.renaming = false;
-      this.selectedNote.name = name;
-      this.selectedNote.type = type;
+      this.selectedFile.title = title;
+      this.selectedFile.type = type;
       this.clickPosition.x = event.clientX;
       this.clickPosition.y = event.clientY;
     },
@@ -103,9 +114,9 @@ export default Vue.extend({
     },
     renameNote(oldName, newName) {
       this.renaming = false;
-      const renamedNote = this.notes.find(note => note.name === oldName);
-      renamedNote.name = newName;
-      this.selectedNote.name = '';
+      const renamedNote = this.notes.find(note => note.title === oldName);
+      renamedNote.title = newName;
+      this.selectedFile.title = '';
     },
     changeLocation(newLocation) {
       const indexOfNewLocation = this.currentDirectory.indexOf(newLocation);

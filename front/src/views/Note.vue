@@ -264,7 +264,7 @@ export default Vue.extend({
       .on('init', data => this.onInit(data))
       // send all updates to the collaboration extension
       .on('update', data => this.editor.extensions.options.collaboration.update(data));
-    this.socket.emit('getDoc', 2);
+    this.socket.emit('getDoc', this.$route.params.id);
   },
   beforeDestroy() {
     this.editor.destroy();

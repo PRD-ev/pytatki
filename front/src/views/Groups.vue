@@ -60,7 +60,7 @@ export default Vue.extend({
         operationName: null,
         variables: {},
         query: `{
-            user(id: "5d570de3fca1360007497cbe"){
+            user(id: "${this.$store.state.user.id}"){
               groups{
                 name,
                 id,

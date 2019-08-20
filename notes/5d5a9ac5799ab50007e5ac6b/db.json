@@ -1,5 +1,5 @@
 {
-  "version": 32,
+  "version": 144,
   "doc": {
     "type": "doc",
     "content": [
@@ -13,12 +13,9 @@
                 "type": "bold"
               }
             ],
-            "text": "Działam awd"
+            "text": "Działam jako osobna notata <3, która działa jak  ta lala "
           }
         ]
-      },
-      {
-        "type": "paragraph"
       }
     ]
   }

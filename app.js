@@ -49,13 +49,29 @@ io.on("connection", function(socket) {
   let docPath;
   let lockedPath;
   let stepsPath;
-  const safeJoin = currentId => {
+  const safeJoin = async currentId => {
     socket.leave(previousId);
-    socket.join(currentId);
-    previousId = currentId;
-    docPath = `./notes/${currentId}/db.json`;
-    lockedPath = `./notes/${currentId}/db_locked.json`;
-    stepsPath = `./notes/${currentId}/db_steps.json`;
+    try {
+      const jwtToken = socket.request.headers.cookie
+        .match(/jwt=.*?; /m)[0]
+        .slice(4, -2);
+      const userId = jsonWebToken.verify(jwtToken, JWTSecretKey).id || false;
+      const members = await prisma
+        .note({ id: currentId })
+        .group()
+        .members();
+      for (const member of members) {
+        if (member.id === userId) {
+          socket.join(currentId);
+          previousId = currentId;
+          docPath = `./notes/${currentId}/db.json`;
+          lockedPath = `./notes/${currentId}/db_locked.json`;
+          stepsPath = `./notes/${currentId}/db_steps.json`;
+        }
+      }
+    } catch (error) {
+      console.error({ error: true, data: error });
+    }
   };
   function storeDoc(data) {
     fs.writeFileSync(docPath, JSON.stringify(data, null, 2));
@@ -107,8 +123,9 @@ io.on("connection", function(socket) {
   }
 
   socket.on("getDoc", docId => {
-    safeJoin(docId);
-    io.emit("init", getDoc());
+    safeJoin(docId).then(() => {
+      io.emit("init", getDoc());
+    });
   });
   socket.on("update", function({ version, clientID, steps }) {
     const locked = getLocked();
@@ -262,7 +279,6 @@ app.post("/login", async (req, res) => {
     res.send({ error: true, data: error });
   }
 });
-
 
 const apolloServer = new ApolloServer({
   typeDefs: gql`

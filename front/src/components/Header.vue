@@ -18,17 +18,9 @@
           <img class="menu-item__image" src="../assets/icons/group-fill.svg">
           Grupy
         </router-link>
-        <router-link @click.native="closeMenu" to="/group">
-          <img class="menu-item__image" src="../assets/icons/heart-fill.svg">
-          Grupa
-        </router-link>
         <router-link @click.native="closeMenu" to="/settings">
           <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">
           Ustawienia
-        </router-link>
-        <router-link @click.native="closeMenu" to="/note">
-          <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg">
-          Notatka
         </router-link>
       </nav>
       <div class="header-bottom">
