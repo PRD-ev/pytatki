@@ -11,10 +11,10 @@ type Mutation {
   createGroup(name: String!): Group!
   updateGroup(id: ID!, name: String, image: String): Group
   deleteGroup(id: ID!): Group
-  createNote(title: String! type:NoteType! groupId: ID! parentFolderId: ID!): Note!
+  createNote(title: String! type:NoteType! groupId: ID! parentFolderId: ID, link: String): Note!
   updateNote(id: ID!, title: String, image: String): Note
   deleteNote(id: ID!): Note
-  createFolder(title: String! groupId: ID! parentFolderId: ID!): Folder!
+  createFolder(title: String! groupId: ID! parentFolderId: ID): Folder!
   updateFolder(id: ID!, name: String, image: String): Folder
   deleteFolder(id: ID!): Folder
   removeUserFromGroup(groupId: ID!, userId: ID!): Group
@@ -42,6 +42,7 @@ type Note {
   parentFolder: Folder
   group: Group!
   content: String!
+  link: String
 }
 
 type Folder {

@@ -12,7 +12,7 @@
         @open-context-menu="showContextMenu"
         :key="folder.id"
         v-for="folder in folders"
-        type="folder"
+        type="FOLDER"
         :title="folder.title"
         :renaming="folder.title === selectedFile.title && renaming"
         :id="folder.id"
@@ -28,25 +28,41 @@
         :id="note.id"
       />
     </context-menu>
-    <base-modal>
+    <base-modal @close-modal="newFileType=null">
       <template v-slot:modal-content>
-        <div class="add-note-container">
-          <div class="note-type-container">
-            <file type="folder" size="tiny" class="negative-margin" />
+        <div class="add-note-container" v-if="newFileType===null">
+          <div class="note-type-container" @click="newFileType='FOLDER'">
+            <file type="FOLDER" size="tiny" class="negative-margin" />
             <p class="add-note-desc">Folder</p>
           </div>
-          <div class="note-type-container">
-            <file size="tiny" class="negative-margin" type="download" />
+          <div class="note-type-container" @click="newFileType='DOWNLOAD'">
+            <file size="tiny" class="negative-margin" type="DOWNLOAD" />
             <p class="add-note-desc">Plik do pobrania</p>
           </div>
-          <div class="note-type-container">
-            <file size="tiny" class="negative-margin" type="pytatki" />
+          <div class="note-type-container" @click="newFileType='PYTATKI'">
+            <file size="tiny" class="negative-margin" type="PYTATKI" />
             <p class="add-note-desc">Notatka</p>
           </div>
-          <div class="note-type-container">
-            <file size="tiny" class="negative-margin" type="external" />
+          <div class="note-type-container" @click="newFileType='EXTERNAL'">
+            <file size="tiny" class="negative-margin" type="EXTERNAL" />
             <p class="add-note-desc">Notatka zewnętrzna</p>
           </div>
+        </div>
+        <div v-else>
+          <input-with-label
+            :value="newFileTitle"
+            @input.native="newFileTitle = $event.target.value"
+          >Nazwa</input-with-label>
+          <div v-if="newFileType === 'DOWNLOAD'">
+            <label for="file">Plik</label>
+            <input id="file" type="file" />
+          </div>
+          <input-with-label
+            v-if="newFileType === 'EXTERNAL'"
+            :value="newFileExternalLink"
+            @input.native="newFileExternalLink = $event.target.value"
+          >Odnośnik</input-with-label>
+          <input type="submit" value="Utwórz" @click="createNewFile" />
         </div>
       </template>
       <template v-slot:trigger>
@@ -66,6 +82,7 @@ import BaseContainer from '@/components/BaseContainer.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
+import InputWithLabel from '@/components/InputWithLabel.vue';
 
 export default Vue.extend({
   name: 'singleGroup',
@@ -76,6 +93,7 @@ export default Vue.extend({
     FloatingButton,
     BaseModal,
     ContextMenu,
+    InputWithLabel,
   },
   data() {
     return {
@@ -85,6 +103,9 @@ export default Vue.extend({
       clickPosition: { x: 0, y: 0 },
       renaming: false,
       currentDirectory: [],
+      newFileType: null,
+      newFileTitle: '',
+      newFileExternalLink: '',
     };
   },
   methods: {
@@ -102,109 +123,112 @@ export default Vue.extend({
     renameNoteInit() {
       this.renaming = true;
     },
-    renameNote(oldName, newName) {
+    renameNote(oldTitle, newTitle) {
       this.renaming = false;
-      const renamedNote = this.notes.find(note => note.title === oldName);
-      renamedNote.title = newName;
+      const renamedNote = this.notes.find(note => note.title === oldTitle);
+      renamedNote.title = newTitle;
       this.selectedFile.title = '';
     },
     changeLocation(newLocation) {
       const indexOfNewLocation = this.currentDirectory.indexOf(newLocation);
       this.currentDirectory = this.currentDirectory.slice(0, indexOfNewLocation + 1);
     },
-    createNewNote() {
-      fetch('http://localhost:4000/graphql', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          operationName: null,
-          variables: {},
-          query: `mutation{
-                    createNote(title:"${this.newNoteName}",type:"${this.newNoteType}",groupId:"${
-            this.$route.params.id
-          }"${
-            this.parentFolderId !== undefined
-              ? ', parentFolderId:"' + this.parentFolderId + '"'
-              : ''
-          }){
+    createNewFile() {
+      if (this.newFileType === 'FOLDER') {
+        this.gql(
+          `mutation{
+              createFolder(title:"${this.newFileTitle}",
+                            groupId:"${this.$route.params.id}"
+                            ${
+                              this.parentFolderId !== undefined
+                                ? `, parentFolderId:"${this.parentFolderId}"`
+                                : ''
+                            })
+                    {
                       id,
-                      image
                     }
-                  }`,
-        }),
-      })
-        .then(res => res.json())
-        .then(res => {
+              }`,
+        ).then(res => {
           try {
-            this.notes = [
-              ...this.notes,
+            this.folders = [
+              ...this.folders,
               {
-                name: this.newNoteName,
-                type: this.newNoteType,
-                id: res.data.createGroup.id,
-                image: res.data.createGroup.image,
+                title: this.newFileTitle,
+                id: res.data.createFolder.id,
               },
             ];
           } catch (error) {
             console.error(error)
           }
         });
-    },
-    createNewFolder() {
-      fetch('http://localhost:4000/graphql', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          operationName: null,
-          variables: {},
-          query: `mutation{
-                    createFolder(name:"${this.newGroupName}"){
+      } else if (this.newFileType === 'EXTERNAL') {
+        this.gql(
+          `mutation{
+              createNote(title:"${this.newFileTitle}",
+                          type:EXTERNAL,
+                          link: "${this.newFileExternalLink}",
+                          groupId:"${this.$route.params.id}"${
+            this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
+          })
+                    {
                       id,
-                      image
+                      link
                     }
                   }`,
-        }),
-      })
-        .then(res => res.json())
-        .then(res => {
+        ).then(res => {
           try {
-            this.groups = [
-              ...this.groups,
+            this.notes = [
+              ...this.notes,
               {
-                name: this.newGroupName,
-                id: res.data.createGroup.id,
-                image: res.data.createGroup.image,
+                title: this.newFileTitle,
+                type: this.newFileType,
+                id: res.data.createNote.id,
+                link: res.data.createNote.link,
               },
             ];
           } catch (error) {
-            this.groups = [];
+            console.error(error);
           }
         });
+      } else {
+        this.gql(
+          `mutation{
+              createNote(title:"${this.newFileTitle}",
+                          type:${this.newFileType},
+                          groupId:"${this.$route.params.id}"${
+            this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
+          })
+                    {
+                      id,
+                    }
+                  }`,
+        ).then(res => {
+          try {
+            this.notes = [
+              ...this.notes,
+              {
+                title: this.newFileTitle,
+                type: this.newFileType,
+                id: res.data.createNote.id,
+              },
+            ];
+          } catch (error) {
+            console.error(error);
+          }
+        });
+      }
     },
   },
   mounted() {
-    fetch('http://localhost:4000/graphql', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        operationName: null,
-        variables: {},
-        query: `{
+    this.gql(
+      `{
             group(id: "${this.$route.params.id}"){
               name,
               notes{
                 id,
                 title,
                 type,
+                link,
                 parentFolder{
                   title,
                 }
@@ -218,14 +242,11 @@ export default Vue.extend({
               }
             }
           }`,
-      }),
-    })
-      .then(res => res.json())
-      .then(({ data }) => {
-        this.folders = data.group.folders;
-        this.notes = data.group.notes;
-        this.currentDirectory = [data.group.name];
-      });
+    ).then(({ data }) => {
+      this.folders = data.group.folders;
+      this.notes = data.group.notes;
+      this.currentDirectory = [data.group.name];
+    });
   },
 });
 </script>
@@ -237,8 +258,6 @@ export default Vue.extend({
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 .add-note-container {
-  display: flex;
-  flex-direction: column;
   .negative-margin {
     margin: -5px;
   }

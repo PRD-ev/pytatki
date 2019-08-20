@@ -56,52 +56,33 @@ export default Vue.extend({
   },
   methods: {
     createNewGroup() {
-      fetch('http://localhost:4000/graphql', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          operationName: null,
-          variables: {},
-          query: `mutation{
+      this.gql(
+        `mutation{
                     createGroup(name:"${this.newGroupName}"){
                       id,
                       image
                     }
                   }`,
-        }),
-      })
-        .then(res => res.json())
-        .then(res => {
-          try {
-            this.groups = [
-              ...this.groups,
-              {
-                name: this.newGroupName,
-                id: res.data.createGroup.id,
-                image: res.data.createGroup.image,
-              },
-            ];
-          } catch (error) {
-            console.error(error);
-          }
-        });
+      ).then((res) => {
+        try {
+          this.groups = [
+            ...this.groups,
+            {
+              name: this.newGroupName,
+              id: res.data.createGroup.id,
+              image: res.data.createGroup.image,
+            },
+          ];
+        } catch (error) {
+          console.error(error);
+        }
+      });
     },
   },
   mounted() {
     if (this.$store.state.user.id !== undefined) {
-      fetch('http://localhost:4000/graphql', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          operationName: null,
-          variables: {},
-          query: `{
+      this.gql(
+        `{
             user(id: "${this.$store.state.user.id}"){
               groups{
                 name,
@@ -110,18 +91,15 @@ export default Vue.extend({
               }
             }
           }`,
-        }),
-      })
-        .then(res => res.json())
-        .then(res => {
-          try {
-            this.groups = res.data.user.groups;
-          } catch (error) {
-            this.groups = [];
-          } finally {
-            this.newGroupName = '';
-          }
-        });
+      ).then((res) => {
+        try {
+          this.groups = res.data.user.groups;
+        } catch (error) {
+          this.groups = [];
+        } finally {
+          this.newGroupName = '';
+        }
+      });
     }
   },
 });

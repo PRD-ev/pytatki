@@ -1,37 +1,66 @@
 <template>
-  <div v-if="type==='folder'" class="folder" @contextmenu.prevent="openContextMenu">
-    <div class="drop-shadow">
-      <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
+  <div>
+    <div v-if="type==='FOLDER'" class="folder" @contextmenu.prevent="openContextMenu">
+      <div class="drop-shadow">
+        <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
+      </div>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newName" />
     </div>
-    <span v-if="!renaming">{{title}}</span>
-    <base-input v-else v-model="newName" />
-  </div>
-  <router-link :to="`/note/${id}`" v-else class="file" @contextmenu.prevent="openContextMenu">
-    <div class="drop-shadow">
+    <router-link
+      :to="`/note/${id}`"
+      v-else-if="id!==undefined"
+      class="file"
+      @contextmenu.prevent="openContextMenu"
+    >
+      <div class="drop-shadow">
+        <div class="file__symbol" :class="size?`symbol--${size}`:''">
+          <img
+            v-if="type==='EXTERNAL'"
+            class="file-type"
+            src="@/assets/icons/link.svg"
+            alt="notatka zewnętrzna"
+          />
+          <img
+            v-if="type==='DOWNLOAD'"
+            class="file-type"
+            src="@/assets/icons/download-fill.svg"
+            alt="pobierz"
+          />
+          <img
+            v-if="type==='PYTATKI'"
+            class="file-type"
+            src="@/assets/icons/quill-pen-fill.svg"
+            alt="notatka"
+          />
+        </div>
+      </div>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newName" />
+    </router-link>
+    <div class="drop-shadow" v-else>
       <div class="file__symbol" :class="size?`symbol--${size}`:''">
         <img
-          v-if="type==='external'"
+          v-if="type==='EXTERNAL'"
           class="file-type"
           src="@/assets/icons/link.svg"
           alt="notatka zewnętrzna"
         />
         <img
-          v-if="type==='download'"
+          v-if="type==='DOWNLOAD'"
           class="file-type"
           src="@/assets/icons/download-fill.svg"
           alt="pobierz"
         />
         <img
-          v-if="type==='pytatki'"
+          v-if="type==='PYTATKI'"
           class="file-type"
           src="@/assets/icons/quill-pen-fill.svg"
           alt="notatka"
         />
       </div>
     </div>
-    <span v-if="!renaming">{{title}}</span>
-    <base-input v-else v-model="newName" />
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -48,7 +77,7 @@ export default Vue.extend({
     type: {
       type: String,
       required: true,
-      validator: type => ['download', 'pytatki', 'external', 'folder'].indexOf(type) !== -1,
+      validator: type => ['DOWNLOAD', 'PYTATKI', 'EXTERNAL', 'FOLDER'].indexOf(type) !== -1,
     },
     size: {
       type: String,

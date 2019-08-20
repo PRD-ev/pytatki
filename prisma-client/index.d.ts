@@ -228,7 +228,9 @@ export type NoteOrderByInput =
   | "title_ASC"
   | "title_DESC"
   | "content_ASC"
-  | "content_DESC";
+  | "content_DESC"
+  | "link_ASC"
+  | "link_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -314,6 +316,20 @@ export interface NoteWhereInput {
   content_not_ends_with?: Maybe<String>;
   parentFolder?: Maybe<FolderWhereInput>;
   group?: Maybe<GroupWhereInput>;
+  link?: Maybe<String>;
+  link_not?: Maybe<String>;
+  link_in?: Maybe<String[] | String>;
+  link_not_in?: Maybe<String[] | String>;
+  link_lt?: Maybe<String>;
+  link_lte?: Maybe<String>;
+  link_gt?: Maybe<String>;
+  link_gte?: Maybe<String>;
+  link_contains?: Maybe<String>;
+  link_not_contains?: Maybe<String>;
+  link_starts_with?: Maybe<String>;
+  link_not_starts_with?: Maybe<String>;
+  link_ends_with?: Maybe<String>;
+  link_not_ends_with?: Maybe<String>;
   AND?: Maybe<NoteWhereInput[] | NoteWhereInput>;
 }
 
@@ -544,9 +560,10 @@ export interface NoteCreateWithoutAuthorInput {
   id?: Maybe<ID_Input>;
   type: NoteType;
   title: String;
-  content: String;
+  content?: Maybe<String>;
   parentFolder?: Maybe<FolderCreateOneWithoutNotesInput>;
   group: GroupCreateOneWithoutNotesInput;
+  link?: Maybe<String>;
 }
 
 export interface FolderCreateOneWithoutNotesInput {
@@ -653,8 +670,9 @@ export interface NoteCreateWithoutParentFolderInput {
   type: NoteType;
   title: String;
   author: UserCreateOneWithoutNotesInput;
-  content: String;
+  content?: Maybe<String>;
   group: GroupCreateOneWithoutNotesInput;
+  link?: Maybe<String>;
 }
 
 export interface UserCreateOneWithoutNotesInput {
@@ -715,8 +733,9 @@ export interface NoteCreateWithoutGroupInput {
   type: NoteType;
   title: String;
   author: UserCreateOneWithoutNotesInput;
-  content: String;
+  content?: Maybe<String>;
   parentFolder?: Maybe<FolderCreateOneWithoutNotesInput>;
+  link?: Maybe<String>;
 }
 
 export interface GroupCreateOneWithoutNotesInput {
@@ -808,6 +827,7 @@ export interface NoteUpdateWithoutAuthorDataInput {
   content?: Maybe<String>;
   parentFolder?: Maybe<FolderUpdateOneWithoutNotesInput>;
   group?: Maybe<GroupUpdateOneRequiredWithoutNotesInput>;
+  link?: Maybe<String>;
 }
 
 export interface FolderUpdateOneWithoutNotesInput {
@@ -1000,6 +1020,7 @@ export interface NoteUpdateWithoutParentFolderDataInput {
   author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
   content?: Maybe<String>;
   group?: Maybe<GroupUpdateOneRequiredWithoutNotesInput>;
+  link?: Maybe<String>;
 }
 
 export interface UserUpdateOneRequiredWithoutNotesInput {
@@ -1229,6 +1250,7 @@ export interface NoteUpdateWithoutGroupDataInput {
   author?: Maybe<UserUpdateOneRequiredWithoutNotesInput>;
   content?: Maybe<String>;
   parentFolder?: Maybe<FolderUpdateOneWithoutNotesInput>;
+  link?: Maybe<String>;
 }
 
 export interface NoteUpsertWithWhereUniqueWithoutGroupInput {
@@ -1284,6 +1306,20 @@ export interface NoteScalarWhereInput {
   content_not_starts_with?: Maybe<String>;
   content_ends_with?: Maybe<String>;
   content_not_ends_with?: Maybe<String>;
+  link?: Maybe<String>;
+  link_not?: Maybe<String>;
+  link_in?: Maybe<String[] | String>;
+  link_not_in?: Maybe<String[] | String>;
+  link_lt?: Maybe<String>;
+  link_lte?: Maybe<String>;
+  link_gt?: Maybe<String>;
+  link_gte?: Maybe<String>;
+  link_contains?: Maybe<String>;
+  link_not_contains?: Maybe<String>;
+  link_starts_with?: Maybe<String>;
+  link_not_starts_with?: Maybe<String>;
+  link_ends_with?: Maybe<String>;
+  link_not_ends_with?: Maybe<String>;
   AND?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
   OR?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
   NOT?: Maybe<NoteScalarWhereInput[] | NoteScalarWhereInput>;
@@ -1298,6 +1334,7 @@ export interface NoteUpdateManyDataInput {
   type?: Maybe<NoteType>;
   title?: Maybe<String>;
   content?: Maybe<String>;
+  link?: Maybe<String>;
 }
 
 export interface GroupUpsertWithWhereUniqueWithoutAdminsInput {
@@ -1558,9 +1595,10 @@ export interface NoteCreateInput {
   type: NoteType;
   title: String;
   author: UserCreateOneWithoutNotesInput;
-  content: String;
+  content?: Maybe<String>;
   parentFolder?: Maybe<FolderCreateOneWithoutNotesInput>;
   group: GroupCreateOneWithoutNotesInput;
+  link?: Maybe<String>;
 }
 
 export interface NoteUpdateInput {
@@ -1570,12 +1608,14 @@ export interface NoteUpdateInput {
   content?: Maybe<String>;
   parentFolder?: Maybe<FolderUpdateOneWithoutNotesInput>;
   group?: Maybe<GroupUpdateOneRequiredWithoutNotesInput>;
+  link?: Maybe<String>;
 }
 
 export interface NoteUpdateManyMutationInput {
   type?: Maybe<NoteType>;
   title?: Maybe<String>;
   content?: Maybe<String>;
+  link?: Maybe<String>;
 }
 
 export interface UserUpdateInput {
@@ -1850,6 +1890,7 @@ export interface Note {
   type: NoteType;
   title: String;
   content: String;
+  link?: String;
 }
 
 export interface NotePromise extends Promise<Note>, Fragmentable {
@@ -1860,6 +1901,7 @@ export interface NotePromise extends Promise<Note>, Fragmentable {
   content: () => Promise<String>;
   parentFolder: <T = FolderPromise>() => T;
   group: <T = GroupPromise>() => T;
+  link: () => Promise<String>;
 }
 
 export interface NoteSubscription
@@ -1872,6 +1914,7 @@ export interface NoteSubscription
   content: () => Promise<AsyncIterator<String>>;
   parentFolder: <T = FolderSubscription>() => T;
   group: <T = GroupSubscription>() => T;
+  link: () => Promise<AsyncIterator<String>>;
 }
 
 export interface NoteNullablePromise
@@ -1884,6 +1927,7 @@ export interface NoteNullablePromise
   content: () => Promise<String>;
   parentFolder: <T = FolderPromise>() => T;
   group: <T = GroupPromise>() => T;
+  link: () => Promise<String>;
 }
 
 export interface Group {
@@ -2398,6 +2442,7 @@ export interface NotePreviousValues {
   type: NoteType;
   title: String;
   content: String;
+  link?: String;
 }
 
 export interface NotePreviousValuesPromise
@@ -2407,6 +2452,7 @@ export interface NotePreviousValuesPromise
   type: () => Promise<NoteType>;
   title: () => Promise<String>;
   content: () => Promise<String>;
+  link: () => Promise<String>;
 }
 
 export interface NotePreviousValuesSubscription
@@ -2416,6 +2462,7 @@ export interface NotePreviousValuesSubscription
   type: () => Promise<AsyncIterator<NoteType>>;
   title: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
+  link: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {

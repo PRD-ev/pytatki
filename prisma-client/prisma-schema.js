@@ -734,6 +734,7 @@ type Note {
   content: String!
   parentFolder: Folder
   group: Group!
+  link: String
 }
 
 type NoteConnection {
@@ -747,9 +748,10 @@ input NoteCreateInput {
   type: NoteType!
   title: String!
   author: UserCreateOneWithoutNotesInput!
-  content: String!
+  content: String
   parentFolder: FolderCreateOneWithoutNotesInput
   group: GroupCreateOneWithoutNotesInput!
+  link: String
 }
 
 input NoteCreateManyWithoutAuthorInput {
@@ -771,9 +773,10 @@ input NoteCreateWithoutAuthorInput {
   id: ID
   type: NoteType!
   title: String!
-  content: String!
+  content: String
   parentFolder: FolderCreateOneWithoutNotesInput
   group: GroupCreateOneWithoutNotesInput!
+  link: String
 }
 
 input NoteCreateWithoutGroupInput {
@@ -781,8 +784,9 @@ input NoteCreateWithoutGroupInput {
   type: NoteType!
   title: String!
   author: UserCreateOneWithoutNotesInput!
-  content: String!
+  content: String
   parentFolder: FolderCreateOneWithoutNotesInput
+  link: String
 }
 
 input NoteCreateWithoutParentFolderInput {
@@ -790,8 +794,9 @@ input NoteCreateWithoutParentFolderInput {
   type: NoteType!
   title: String!
   author: UserCreateOneWithoutNotesInput!
-  content: String!
+  content: String
   group: GroupCreateOneWithoutNotesInput!
+  link: String
 }
 
 type NoteEdge {
@@ -808,6 +813,8 @@ enum NoteOrderByInput {
   title_DESC
   content_ASC
   content_DESC
+  link_ASC
+  link_DESC
 }
 
 type NotePreviousValues {
@@ -815,6 +822,7 @@ type NotePreviousValues {
   type: NoteType!
   title: String!
   content: String!
+  link: String
 }
 
 input NoteScalarWhereInput {
@@ -864,6 +872,20 @@ input NoteScalarWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  link: String
+  link_not: String
+  link_in: [String!]
+  link_not_in: [String!]
+  link_lt: String
+  link_lte: String
+  link_gt: String
+  link_gte: String
+  link_contains: String
+  link_not_contains: String
+  link_starts_with: String
+  link_not_starts_with: String
+  link_ends_with: String
+  link_not_ends_with: String
   AND: [NoteScalarWhereInput!]
   OR: [NoteScalarWhereInput!]
   NOT: [NoteScalarWhereInput!]
@@ -898,18 +920,21 @@ input NoteUpdateInput {
   content: String
   parentFolder: FolderUpdateOneWithoutNotesInput
   group: GroupUpdateOneRequiredWithoutNotesInput
+  link: String
 }
 
 input NoteUpdateManyDataInput {
   type: NoteType
   title: String
   content: String
+  link: String
 }
 
 input NoteUpdateManyMutationInput {
   type: NoteType
   title: String
   content: String
+  link: String
 }
 
 input NoteUpdateManyWithoutAuthorInput {
@@ -959,6 +984,7 @@ input NoteUpdateWithoutAuthorDataInput {
   content: String
   parentFolder: FolderUpdateOneWithoutNotesInput
   group: GroupUpdateOneRequiredWithoutNotesInput
+  link: String
 }
 
 input NoteUpdateWithoutGroupDataInput {
@@ -967,6 +993,7 @@ input NoteUpdateWithoutGroupDataInput {
   author: UserUpdateOneRequiredWithoutNotesInput
   content: String
   parentFolder: FolderUpdateOneWithoutNotesInput
+  link: String
 }
 
 input NoteUpdateWithoutParentFolderDataInput {
@@ -975,6 +1002,7 @@ input NoteUpdateWithoutParentFolderDataInput {
   author: UserUpdateOneRequiredWithoutNotesInput
   content: String
   group: GroupUpdateOneRequiredWithoutNotesInput
+  link: String
 }
 
 input NoteUpdateWithWhereUniqueWithoutAuthorInput {
@@ -1060,6 +1088,20 @@ input NoteWhereInput {
   content_not_ends_with: String
   parentFolder: FolderWhereInput
   group: GroupWhereInput
+  link: String
+  link_not: String
+  link_in: [String!]
+  link_not_in: [String!]
+  link_lt: String
+  link_lte: String
+  link_gt: String
+  link_gte: String
+  link_contains: String
+  link_not_contains: String
+  link_starts_with: String
+  link_not_starts_with: String
+  link_ends_with: String
+  link_not_ends_with: String
   AND: [NoteWhereInput!]
 }
 

@@ -32,6 +32,7 @@ export default Vue.extend({
     },
     closeModal() {
       this.modalOn = false;
+      this.$emit('close-modal');
     },
   },
 });

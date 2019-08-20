@@ -15,9 +15,10 @@ type Note {
   type: NoteType!
   title: String!
   author: User!
-  content: String!
+  content: String! @default(value: "")
   parentFolder: Folder 
   group: Group!
+  link: String
 }
 
 type Folder {

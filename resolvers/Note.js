@@ -14,7 +14,7 @@ const Note = {
     return prisma.note({ id: parent.id }).author();
   },
   parentFolder: (parent, args) => {
-    return prisma.note({ id: parent.id }).folder();
+    return prisma.note({ id: parent.id }).parentFolder();
   }
 };
 

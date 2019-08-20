@@ -40,24 +40,21 @@ const Mutation = {
 
   createNote: async (
     parent,
-    { title, type, groupId, parentFolderId },
+    { title, type, groupId, parentFolderId, link },
     context
   ) => {
     const userGroups = await prisma
       .user({ id: context.id })
       .groups()
       .id();
-    const noteGroup = await prisma
-      .note({ id: groupId })
-      .group()
-      .id();
     const userGroupsFormatted = userGroups.map(el => el.id);
-    if (userGroupsFormatted.includes(noteGroup) || context.role === "ADMIN") {
+    if (userGroupsFormatted.includes(groupId) || context.role === "ADMIN") {
       const note = {
         title,
         author: { connect: { id: context.id } },
         type,
-        group: { connect: { id: groupId } }
+        group: { connect: { id: groupId } },
+        link: link ? link : '',
       };
       if (parentFolderId) {
         note.parentFolder = { connect: { id: parentFolderId } };
@@ -109,12 +106,8 @@ const Mutation = {
       .user({ id: context.id })
       .groups()
       .id();
-    const folderGroup = await prisma
-      .folder({ id: groupId })
-      .group()
-      .id();
     const userGroupsFormatted = userGroups.map(el => el.id);
-    if (userGroupsFormatted.includes(folderGroup) || context.role === "ADMIN") {
+    if (userGroupsFormatted.includes(groupId) || context.role === "ADMIN") {
       const folder = {
         title,
         author: { connect: { id: context.id } },
