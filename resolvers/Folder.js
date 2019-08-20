@@ -5,7 +5,7 @@ const Folder = {
     return prisma.folder({ id: parent.id }).author();
   },
   parentFolder: (parent, args) => {
-    return prisma.folder({ id: parent.id }).folder();
+    return prisma.folder({ id: parent.id }).parentFolder();
   }
 };
 

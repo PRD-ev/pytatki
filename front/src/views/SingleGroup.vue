@@ -14,6 +14,7 @@
         v-for="folder in folders"
         type="FOLDER"
         :title="folder.title"
+        :author="folder.author.name"
         :renaming="folder.title === selectedFile.title && renaming"
         :id="folder.id"
       />
@@ -26,6 +27,7 @@
         :title="note.title"
         :renaming="note.title === selectedFile.title && renaming"
         :id="note.id"
+        :author="note.author.name"
       />
     </context-menu>
     <base-modal @close-modal="newFileType=null">
@@ -99,7 +101,7 @@ export default Vue.extend({
     return {
       notes: [],
       folders: [],
-      selectedFile: { title: '' },
+      selectedFile: { },
       clickPosition: { x: 0, y: 0 },
       renaming: false,
       currentDirectory: [],
@@ -109,10 +111,12 @@ export default Vue.extend({
     };
   },
   methods: {
-    showContextMenu(title, type, event) {
+    showContextMenu(id, title, type, author, event) {
       this.renaming = false;
+      this.selectedFile.id = id;
       this.selectedFile.title = title;
       this.selectedFile.type = type;
+      this.selectedFile.author = author;
       this.clickPosition.x = event.clientX;
       this.clickPosition.y = event.clientY;
     },
@@ -146,6 +150,9 @@ export default Vue.extend({
                             })
                     {
                       id,
+                      author{
+                        name
+                      }
                     }
               }`,
         ).then(res => {
@@ -155,10 +162,11 @@ export default Vue.extend({
               {
                 title: this.newFileTitle,
                 id: res.data.createFolder.id,
+                author: res.data.createFolder.author.name,
               },
             ];
           } catch (error) {
-            console.error(error)
+            console.error(error);
           }
         });
       } else if (this.newFileType === 'EXTERNAL') {
@@ -172,7 +180,10 @@ export default Vue.extend({
           })
                     {
                       id,
-                      link
+                      link,
+                      author{
+                        name
+                      }
                     }
                   }`,
         ).then(res => {
@@ -184,6 +195,9 @@ export default Vue.extend({
                 type: this.newFileType,
                 id: res.data.createNote.id,
                 link: res.data.createNote.link,
+                author: {
+                  name: res.data.createNote.author.name,
+                },
               },
             ];
           } catch (error) {
@@ -200,6 +214,9 @@ export default Vue.extend({
           })
                     {
                       id,
+                      author{
+                        name
+                      }
                     }
                   }`,
         ).then(res => {
@@ -210,6 +227,9 @@ export default Vue.extend({
                 title: this.newFileTitle,
                 type: this.newFileType,
                 id: res.data.createNote.id,
+                author: {
+                  name: res.data.createNote.author.name,
+                },
               },
             ];
           } catch (error) {
@@ -229,6 +249,9 @@ export default Vue.extend({
                 title,
                 type,
                 link,
+                author{
+                  name
+                }
                 parentFolder{
                   title,
                 }
@@ -236,6 +259,9 @@ export default Vue.extend({
               folders{
                 id,
                 title,
+                author{
+                  name
+                }
                 parentFolder{
                   title,
                 }

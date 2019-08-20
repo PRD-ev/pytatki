@@ -9,10 +9,10 @@
           <div class="modal-content">
             <file :type="note.type" class="file-icon"/>
             <div>
-              <p class="modal-content__title">{{note.name}}</p>
+              <p class="modal-content__title">{{note.title}}</p>
               <p style="margin-bottom: 0; white-space: nowrap;">
                 Autor:
-                <b style="margin: 0 5px">Filip Wachowiak</b>
+                <b style="margin: 0 5px">{{note.author}}</b>
                 <base-user style="transform: translateY(25%);" size="tiny"/>
               </p>
               <p style="margin: 10px 0 0 0; white-space: nowrap;">Data utworzenia: 13 mar 2019</p>

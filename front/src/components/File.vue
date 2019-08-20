@@ -7,37 +7,35 @@
       <span v-if="!renaming">{{title}}</span>
       <base-input v-else v-model="newName" />
     </div>
-    <router-link
-      :to="`/note/${id}`"
-      v-else-if="id!==undefined"
-      class="file"
-      @contextmenu.prevent="openContextMenu"
-    >
-      <div class="drop-shadow">
-        <div class="file__symbol" :class="size?`symbol--${size}`:''">
-          <img
-            v-if="type==='EXTERNAL'"
-            class="file-type"
-            src="@/assets/icons/link.svg"
-            alt="notatka zewnętrzna"
-          />
-          <img
-            v-if="type==='DOWNLOAD'"
-            class="file-type"
-            src="@/assets/icons/download-fill.svg"
-            alt="pobierz"
-          />
-          <img
-            v-if="type==='PYTATKI'"
-            class="file-type"
-            src="@/assets/icons/quill-pen-fill.svg"
-            alt="notatka"
-          />
+    <div @contextmenu.prevent="openContextMenu" v-else-if="id!==undefined">
+      <router-link :to="`/note/${id}`" class="file">
+        <div class="drop-shadow">
+          <div class="file__symbol" :class="size?`symbol--${size}`:''">
+            <img
+              v-if="type==='EXTERNAL'"
+              class="file-type"
+              src="@/assets/icons/link.svg"
+              alt="notatka zewnętrzna"
+            />
+            <img
+              v-if="type==='DOWNLOAD'"
+              class="file-type"
+              src="@/assets/icons/download-fill.svg"
+              alt="pobierz"
+            />
+            <img
+              v-if="type==='PYTATKI'"
+              class="file-type"
+              src="@/assets/icons/quill-pen-fill.svg"
+              alt="notatka"
+            />
+          </div>
         </div>
-      </div>
-      <span v-if="!renaming">{{title}}</span>
-      <base-input v-else v-model="newName" />
-    </router-link>
+        <span v-if="!renaming">{{title}}</span>
+        <base-input v-else v-model="newName" />
+      </router-link>
+    </div>
+
     <div class="drop-shadow" v-else>
       <div class="file__symbol" :class="size?`symbol--${size}`:''">
         <img
@@ -85,6 +83,7 @@ export default Vue.extend({
     },
     renaming: Boolean,
     id: String,
+    author: String,
   },
   data() {
     return {
@@ -100,7 +99,7 @@ export default Vue.extend({
   methods: {
     openContextMenu(event) {
       event.stopPropagation();
-      this.$emit('open-context-menu', this.title, this.type, event);
+      this.$emit('open-context-menu', this.id, this.title, this.type, this.author, event);
     },
     renameNote(event) {
       const key = event.which || event.keyCode;
