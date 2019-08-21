@@ -1,5 +1,5 @@
 {
-  "version": 144,
+  "version": 146,
   "doc": {
     "type": "doc",
     "content": [
@@ -13,7 +13,7 @@
                 "type": "bold"
               }
             ],
-            "text": "Działam jako osobna notata <3, która działa jak  ta lala "
+            "text": "Działam jako osobna notata <3, która działa jak  ta lala <#"
           }
         ]
       }

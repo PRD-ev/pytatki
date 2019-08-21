@@ -8,24 +8,25 @@
       :clickPosition="clickPosition"
     >
       <file
+        @open-folder="openFolder"
         @rename-note="renameNote"
         @open-context-menu="showContextMenu"
         :key="folder.id"
-        v-for="folder in folders"
+        v-for="folder in displayedFolders"
         type="FOLDER"
         :title="folder.title"
         :author="folder.author.name"
-        :renaming="folder.title === selectedFile.title && renaming"
+        :renaming="folder.id === selectedFile.id && renaming"
         :id="folder.id"
       />
       <file
         @rename-note="renameNote"
         @open-context-menu="showContextMenu"
         :key="note.id"
-        v-for="note in notes"
+        v-for="note in displayedNotes"
         :type="note.type"
         :title="note.title"
-        :renaming="note.title === selectedFile.title && renaming"
+        :renaming="note.id === selectedFile.id && renaming"
         :id="note.id"
         :author="note.author.name"
       />
@@ -101,7 +102,7 @@ export default Vue.extend({
     return {
       notes: [],
       folders: [],
-      selectedFile: { },
+      selectedFile: {},
       clickPosition: { x: 0, y: 0 },
       renaming: false,
       currentDirectory: [],
@@ -110,13 +111,36 @@ export default Vue.extend({
       newFileExternalLink: '',
     };
   },
+  computed: {
+    displayedFolders() {
+      return this.folders.filter((folder) => {
+        if (folder.parentFolder === null) {
+          if (this.currentDirectory.length === 1) {
+            return true;
+          }
+          return false;
+        }
+        if (folder.parentFolder.id === this.currentDirectory[this.currentDirectory.length - 1].id) return true;
+        return false;
+      });
+    },
+    displayedNotes() {
+      return this.notes.filter((note) => {
+        if (note.parentFolder === null) {
+          if (this.currentDirectory.length === 1) {
+            return true;
+          }
+          return false;
+        }
+        if (note.parentFolder.id === this.currentDirectory[this.currentDirectory.length - 1].id) return true;
+        return false;
+      });
+    },
+  },
   methods: {
-    showContextMenu(id, title, type, author, event) {
+    showContextMenu(file, event) {
       this.renaming = false;
-      this.selectedFile.id = id;
-      this.selectedFile.title = title;
-      this.selectedFile.type = type;
-      this.selectedFile.author = author;
+      this.selectedFile = file;
       this.clickPosition.x = event.clientX;
       this.clickPosition.y = event.clientY;
     },
@@ -124,13 +148,40 @@ export default Vue.extend({
       this.clickPosition.x = 0;
       this.clickPosition.y = 0;
     },
+    openFolder(folderId) {
+      const openedFolder = [...this.folders].find(folder => folder.id === folderId);
+      this.currentDirectory = [
+        ...this.currentDirectory,
+        { name: openedFolder.title, id: openedFolder.id },
+      ];
+    },
     renameNoteInit() {
       this.renaming = true;
     },
-    renameNote(oldTitle, newTitle) {
+    async renameNote(renamedNoteId, newTitle) {
       this.renaming = false;
-      const renamedNote = this.notes.find(note => note.title === oldTitle);
-      renamedNote.title = newTitle;
+      const renamedNote = [...this.notes].find(note => note.id === renamedNoteId);
+      const renamedFolder = [...this.folders].find(folder => folder.id === renamedNoteId);
+      let result;
+      if (renamedNote !== undefined) {
+        result = await this.gql(`
+        mutation{
+          updateNote(id:"${renamedNoteId}",title:"${newTitle}"){
+            title
+          }
+        }
+      `);
+        renamedNote.title = result.data.updateNote.title;
+      } else {
+        result = await this.gql(`
+        mutation{
+          updateFolder(id:"${renamedNoteId}",title:"${newTitle}"){
+            title
+          }
+        }
+      `);
+        renamedFolder.title = result.data.updateFolder.title;
+      }
       this.selectedFile.title = '';
     },
     changeLocation(newLocation) {
@@ -144,14 +195,17 @@ export default Vue.extend({
               createFolder(title:"${this.newFileTitle}",
                             groupId:"${this.$route.params.id}"
                             ${
-  this.parentFolderId !== undefined
-    ? `, parentFolderId:"${this.parentFolderId}"`
+  this.currentDirectory.length !== 1
+    ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
     : ''
 })
                     {
                       id,
                       author{
                         name
+                      },
+                      parentFolder{
+                        id
                       }
                     }
               }`,
@@ -163,6 +217,7 @@ export default Vue.extend({
                 title: this.newFileTitle,
                 id: res.data.createFolder.id,
                 author: res.data.createFolder.author.name,
+                parentFolder: res.data.createFolder.parentFolder,
               },
             ];
           } catch (error) {
@@ -176,13 +231,18 @@ export default Vue.extend({
                           type:EXTERNAL,
                           link: "${this.newFileExternalLink}",
                           groupId:"${this.$route.params.id}"${
-  this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
+  this.currentDirectory.length !== 1
+    ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
+    : ''
 })
                     {
                       id,
                       link,
                       author{
                         name
+                      },
+                      parentFolder{
+                        id
                       }
                     }
                   }`,
@@ -198,6 +258,7 @@ export default Vue.extend({
                 author: {
                   name: res.data.createNote.author.name,
                 },
+                parentFolder: res.data.createNote.parentFolder,
               },
             ];
           } catch (error) {
@@ -210,12 +271,17 @@ export default Vue.extend({
               createNote(title:"${this.newFileTitle}",
                           type:${this.newFileType},
                           groupId:"${this.$route.params.id}"${
-  this.parentFolderId !== undefined ? `, parentFolderId:"${this.parentFolderId}"` : ''
+  this.currentDirectory.length !== 1
+    ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
+    : ''
 })
                     {
                       id,
                       author{
                         name
+                      },
+                      parentFolder{
+                        id
                       }
                     }
                   }`,
@@ -230,6 +296,7 @@ export default Vue.extend({
                 author: {
                   name: res.data.createNote.author.name,
                 },
+                parentFolder: res.data.createNote.parentFolder,
               },
             ];
           } catch (error) {
@@ -237,6 +304,7 @@ export default Vue.extend({
           }
         });
       }
+      // this.$emit('close-modal');
     },
   },
   mounted() {
@@ -254,6 +322,7 @@ export default Vue.extend({
                 }
                 parentFolder{
                   title,
+                  id
                 }
               },
               folders{
@@ -264,6 +333,7 @@ export default Vue.extend({
                 }
                 parentFolder{
                   title,
+                  id
                 }
               }
             }
@@ -271,7 +341,7 @@ export default Vue.extend({
     ).then(({ data }) => {
       this.folders = data.group.folders;
       this.notes = data.group.notes;
-      this.currentDirectory = [data.group.name];
+      this.currentDirectory = [{ name: data.group.name }];
     });
   },
 });

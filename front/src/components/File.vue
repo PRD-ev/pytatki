@@ -1,14 +1,19 @@
 <template>
   <div>
-    <div v-if="type==='FOLDER'" class="folder" @contextmenu.prevent="openContextMenu">
+    <div
+      v-if="type==='FOLDER'"
+      class="folder"
+      @contextmenu.prevent="openContextMenu"
+      @click="$emit('open-folder', id)"
+    >
       <div class="drop-shadow">
         <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
       </div>
       <span v-if="!renaming">{{title}}</span>
-      <base-input v-else v-model="newName" />
+      <base-input v-else v-model="newTitle" />
     </div>
-    <div @contextmenu.prevent="openContextMenu" v-else-if="id!==undefined">
-      <router-link :to="`/note/${id}`" class="file">
+    <div @contextmenu.prevent="openContextMenu" v-else-if="id!==undefined" class="file">
+      <router-link :to="`/note/${id}`">
         <div class="drop-shadow">
           <div class="file__symbol" :class="size?`symbol--${size}`:''">
             <img
@@ -31,9 +36,9 @@
             />
           </div>
         </div>
-        <span v-if="!renaming">{{title}}</span>
-        <base-input v-else v-model="newName" />
       </router-link>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newTitle" />
     </div>
 
     <div class="drop-shadow" v-else>
@@ -99,12 +104,21 @@ export default Vue.extend({
   methods: {
     openContextMenu(event) {
       event.stopPropagation();
-      this.$emit('open-context-menu', this.id, this.title, this.type, this.author, event);
+      this.$emit(
+        'open-context-menu',
+        {
+          id: this.id,
+          title: this.title,
+          type: this.type,
+          author: this.author,
+        },
+        event,
+      );
     },
     renameNote(event) {
       const key = event.which || event.keyCode;
       if (event.target.nodeName !== 'INPUT' || key === 13) {
-        this.$emit('rename-note', this.title, this.newName);
+        this.$emit('rename-note', this.id, this.newTitle);
         window.removeEventListener('click', this.renameNote, { capture: true });
         window.removeEventListener('keypress', this.renameNote);
       }

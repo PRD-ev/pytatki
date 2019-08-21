@@ -15,7 +15,7 @@ type Mutation {
   updateNote(id: ID!, title: String, image: String): Note
   deleteNote(id: ID!): Note
   createFolder(title: String! groupId: ID! parentFolderId: ID): Folder!
-  updateFolder(id: ID!, name: String, image: String): Folder
+  updateFolder(id: ID!, title: String, image: String): Folder
   deleteFolder(id: ID!): Folder
   removeUserFromGroup(groupId: ID!, userId: ID!): Group
   addUserToGroup(groupId: ID!, userId: ID!): Group

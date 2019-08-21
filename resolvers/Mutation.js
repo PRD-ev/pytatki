@@ -119,7 +119,7 @@ const Mutation = {
     throw new Error("You don't have permission for that action");
   },
 
-  updateFolder: async (parent, { id, name, parentFolder }, context) => {
+  updateFolder: async (parent, { id, title, parentFolder }, context) => {
     const userGroups = await prisma
       .user({ id: context.id })
       .groups()
@@ -132,7 +132,7 @@ const Mutation = {
     if (userGroupsFormatted.includes(folderGroup) || context.role === "ADMIN") {
       const folder = await prisma.folder({ id: id });
       const newFolder = {
-        name: name ? name : folder.name,
+        title: title ? title : folder.title,
         parentFolder: parentFolder ? parentFolder : folder.parentFolder
       };
       return prisma.updateFolder({ data: newFolder, where: { id: id } });

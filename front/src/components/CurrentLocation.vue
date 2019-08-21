@@ -7,7 +7,7 @@
       :key="index"
       v-for="(directory, index) in location"
     >{{parentLocationWithSlashes[index]}}</span>
-    <span class="color-orange">{{location[location.length-1]}}</span>
+    <span class="color-orange">{{location[location.length-1].name}}</span>
   </h1>
 </template>
 
@@ -21,7 +21,7 @@ export default Vue.extend({
   },
   computed: {
     parentLocationWithSlashes() {
-      return this.location.slice(0, this.location.length - 1).map(location => `${location} / `);
+      return this.location.slice(0, this.location.length - 1).map(location => `${location.name} / `);
     },
   },
 });
