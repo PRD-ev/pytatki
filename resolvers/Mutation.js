@@ -101,7 +101,7 @@ const Mutation = {
     throw new Error("You don't have permission for that action");
   },
 
-  createFolder: async (parent, { title, type, groupId }, context) => {
+  createFolder: async (parent, { title, type, groupId, parentFolderId }, context) => {
     const userGroups = await prisma
       .user({ id: context.id })
       .groups()
@@ -114,6 +114,9 @@ const Mutation = {
         type,
         group: { connect: { id: groupId } }
       };
+      if (parentFolderId) {
+        folder.parentFolder = { connect: { id: parentFolderId } };
+      }
       return prisma.createFolder(folder);
     }
     throw new Error("You don't have permission for that action");

@@ -1,12 +1,7 @@
 <template>
   <div>
-    <div
-      v-if="type==='FOLDER'"
-      class="folder"
-      @contextmenu.prevent="openContextMenu"
-      @click="$emit('open-folder', id)"
-    >
-      <div class="drop-shadow">
+    <div v-if="type==='FOLDER'" class="folder" @contextmenu.prevent="openContextMenu">
+      <div class="drop-shadow" @click="$emit('open-folder', id)">
         <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
       </div>
       <span v-if="!renaming">{{title}}</span>

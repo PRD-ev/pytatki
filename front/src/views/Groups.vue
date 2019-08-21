@@ -63,7 +63,7 @@ export default Vue.extend({
                       image
                     }
                   }`,
-      ).then((res) => {
+      ).then(res => {
         try {
           this.groups = [
             ...this.groups,
@@ -91,11 +91,17 @@ export default Vue.extend({
               }
             }
           }`,
-      ).then((res) => {
+      ).then(res => {
         try {
+          if (res.error) {
+            if (res.data === 'You must be logged in') {
+              this.$store.dispatch('setUserAction', {});
+            }
+            console.error(error);
+          }
           this.groups = res.data.user.groups;
         } catch (error) {
-          this.groups = [];
+          console.error(error);
         } finally {
           this.newGroupName = '';
         }
