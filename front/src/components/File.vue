@@ -1,54 +1,19 @@
 <template>
   <div>
-    <div v-if="type==='FOLDER'" class="folder" @contextmenu.prevent="openContextMenu">
-      <div class="drop-shadow" @click="$emit('open-folder', id)">
-        <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
-      </div>
-      <span v-if="!renaming">{{title}}</span>
-      <base-input v-else v-model="newTitle" />
-    </div>
-    <div @contextmenu.prevent="openContextMenu" v-else-if="id!==undefined" class="file">
-      <router-link :to="`/note/${id}`">
-        <div class="drop-shadow">
-          <div class="file__symbol" :class="size?`symbol--${size}`:''">
-            <img
-              v-if="type==='EXTERNAL'"
-              class="file-type"
-              src="@/assets/icons/link.svg"
-              alt="notatka zewnętrzna"
-            />
-            <img
-              v-if="type==='DOWNLOAD'"
-              class="file-type"
-              src="@/assets/icons/download-fill.svg"
-              alt="pobierz"
-            />
-            <img
-              v-if="type==='PYTATKI'"
-              class="file-type"
-              src="@/assets/icons/quill-pen-fill.svg"
-              alt="notatka"
-            />
-          </div>
-        </div>
-      </router-link>
-      <span v-if="!renaming">{{title}}</span>
-      <base-input v-else v-model="newTitle" />
-    </div>
-
-    <div class="drop-shadow" v-else>
+    <!-- File symbol only -->
+    <div class="drop-shadow file" v-if="id===undefined">
       <div class="file__symbol" :class="size?`symbol--${size}`:''">
-        <img
-          v-if="type==='EXTERNAL'"
-          class="file-type"
-          src="@/assets/icons/link.svg"
-          alt="notatka zewnętrzna"
-        />
         <img
           v-if="type==='DOWNLOAD'"
           class="file-type"
           src="@/assets/icons/download-fill.svg"
           alt="pobierz"
+        />
+        <img
+          v-if="type==='EXTERNAL'"
+          class="file-type"
+          src="@/assets/icons/link.svg"
+          alt="notatka zewnętrzna"
         />
         <img
           v-if="type==='PYTATKI'"
@@ -57,6 +22,52 @@
           alt="notatka"
         />
       </div>
+    </div>
+    <!-- Folder file type-->
+    <div v-else-if="type==='FOLDER'" class="folder" @contextmenu.prevent="openContextMenu">
+      <div class="drop-shadow" @click="$emit('open-folder', id)">
+        <div class="folder__symbol" :class="size?`symbol--${size}`:''"></div>
+      </div>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newTitle" />
+    </div>
+    <!-- Pytatki file type -->
+    <div @contextmenu.prevent="openContextMenu" v-else-if="type==='PYTATKI'" class="file">
+      <router-link :to="`/note/${id}`">
+        <div class="drop-shadow">
+          <div class="file__symbol" :class="size?`symbol--${size}`:''">
+            <img class="file-type" src="@/assets/icons/quill-pen-fill.svg" alt="notatka" />
+          </div>
+        </div>
+      </router-link>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newTitle" />
+    </div>
+    <!-- External file type -->
+    <div
+      @contextmenu.prevent="openContextMenu"
+      class="drop-shadow file"
+      v-else-if="type==='EXTERNAL'"
+    >
+      <a :href="link" target="_blank">
+        <div class="file__symbol" :class="size?`symbol--${size}`:''">
+          <img class="file-type" src="@/assets/icons/link.svg" alt="notatka zewnętrzna" />
+        </div>
+      </a>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newTitle" />
+    </div>
+    <!-- Download file type -->
+    <div
+      @contextmenu.prevent="openContextMenu"
+      class="drop-shadow file"
+      v-else-if="type==='DOWNLOAD'"
+    >
+      <div class="file__symbol" :class="size?`symbol--${size}`:''">
+        <img class="file-type" src="@/assets/icons/download-fill.svg" alt="pobierz" />
+      </div>
+      <span v-if="!renaming">{{title}}</span>
+      <base-input v-else v-model="newTitle" />
     </div>
   </div>
 </template>
@@ -84,6 +95,7 @@ export default Vue.extend({
     renaming: Boolean,
     id: String,
     author: String,
+    link: String,
   },
   data() {
     return {

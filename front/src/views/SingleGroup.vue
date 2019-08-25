@@ -4,6 +4,7 @@
     <context-menu
       class="pliki"
       @rename-note-init="renameNoteInit"
+      @delete-note="deleteNote"
       :note="selectedFile"
       :clickPosition="clickPosition"
     >
@@ -29,6 +30,7 @@
         :renaming="note.id === selectedFile.id && renaming"
         :id="note.id"
         :author="note.author.name"
+        :link="note.link"
       />
     </context-menu>
     <base-modal @close-modal="newFileType=null">
@@ -306,11 +308,46 @@ export default Vue.extend({
           }
         });
       }
-      // TODO: move add file modal to separate component in the future, and close it after adding 
+      // TODO: move add file modal to separate component in the future, and close it after adding
       setTimeout(() => {
         this.newFileTitle = '';
         this.newFileExternalLink = '';
       }, 300);
+    },
+    deleteNote(fileId, fileType) {
+      if (fileType === 'FOLDER') {
+              this.gql(
+          `
+      mutation{
+        deleteFolder(id:"${fileId}"){
+          id
+        }
+      }
+      `,
+        ).then(res => {
+          try {
+            this.folders = this.folders.filter((folder)=>folder.id!==res.data.deleteFolder.id);
+          } catch (error) {
+            console.error(error);
+          }
+        });
+      }else{
+        this.gql(
+          `
+      mutation{
+        deleteNote(id:"${fileId}"){
+          id
+        }
+      }
+      `,
+        ).then(res => {
+          try {
+            this.notes = this.notes.filter((note)=>note.id!==res.data.deleteNote.id);
+          } catch (error) {
+            console.error(error);
+          }
+        });
+      }
     },
   },
   mounted() {

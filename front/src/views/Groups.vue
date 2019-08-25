@@ -63,7 +63,7 @@ export default Vue.extend({
                       image
                     }
                   }`,
-      ).then(res => {
+      ).then((res) => {
         try {
           this.groups = [
             ...this.groups,
@@ -91,7 +91,7 @@ export default Vue.extend({
               }
             }
           }`,
-      ).then(res => {
+      ).then((res) => {
         try {
           if (res.error) {
             if (res.data === 'You must be logged in') {

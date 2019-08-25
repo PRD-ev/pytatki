@@ -1,19 +1,19 @@
 <template>
   <div>
-    <slot/>
+    <slot />
     <div class="context-menu" :style="`top: ${top}; left: ${left}; ${transformToFit}`">
-      <div class="context-menu__entry">Otwórz</div>
       <div class="context-menu__entry" @click="$emit('rename-note-init')">Zmień nazwę</div>
+
       <base-modal>
         <template v-slot:modal-content>
           <div class="modal-content">
-            <file :type="note.type" class="file-icon"/>
+            <file :type="note.type" class="file-icon" />
             <div>
               <p class="modal-content__title">{{note.title}}</p>
               <p style="margin-bottom: 0; white-space: nowrap;">
                 Autor:
                 <b style="margin: 0 5px">{{note.author}}</b>
-                <base-user style="transform: translateY(25%);" size="tiny"/>
+                <base-user style="transform: translateY(25%);" size="tiny" />
               </p>
               <p style="margin: 10px 0 0 0; white-space: nowrap;">Data utworzenia: 13 mar 2019</p>
             </div>
@@ -24,6 +24,8 @@
           <div class="context-menu__entry">Właściwości</div>
         </template>
       </base-modal>
+
+      <div class="context-menu__entry" @click="$emit('delete-note', note.id, note.type)">Usuń</div>
     </div>
   </div>
 </template>
