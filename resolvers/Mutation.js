@@ -66,7 +66,7 @@ const Mutation = {
         mkdir(`./notes/${noteId}`, { recursive: true }, async () => {
           writeFile(
             `./notes/${noteId}/db.json`,
-            `{"version": 0,"doc":{"type": "doc","content": [{"type": "text","text": "Czas zacząć notatkę ;)"}]}}`,
+            `{"version": 0,"doc":{ "type": "doc", "content": [{ "type": "paragraph", "content":[{ "type": "text", "text": "Czas zacząć tworzyć notatkę" }] }] }}`,
             err => {
               if (err) throw err;
             }

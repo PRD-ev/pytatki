@@ -18,6 +18,30 @@ const schema = {
         }
       ]
     },
+    list_item: {
+      group: "block",
+      content: "inline*",
+      parseDOM: [{ tag: "li" }]
+    },
+    bullet_list: {
+      group: "block",
+      content: "block+",
+      parseDOM: [{ tag: "ul" }]
+    },
+    ordered_list: {
+      group: "block",
+      content: "block+",
+      parseDOM: [{ tag: "ol" }]
+    },
+    blockquote: {
+      group: "block",
+      content: "inline*",
+      parseDOM: [
+        {
+          tag: "blockquote"
+        }
+      ]
+    },
     hard_break: {
       inline: true,
       group: "inline",
@@ -71,6 +95,20 @@ const schema = {
         },
         {
           style: "font-weight"
+        }
+      ]
+    },
+    strike: {
+      parseDOM: [
+        {
+          tag: "s"
+        }
+      ]
+    },
+    underline: {
+      parseDOM: [
+        {
+          tag: "u"
         }
       ]
     },

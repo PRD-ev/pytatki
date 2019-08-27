@@ -109,7 +109,7 @@ io.on("connection", function(socket) {
     }
   }
 
-  function getLocked() {
+  function getLocked(lockedPath) {
     return JSON.parse(fs.readFileSync(lockedPath, "utf8"));
   }
 
@@ -128,7 +128,7 @@ io.on("connection", function(socket) {
     });
   });
   socket.on("update", function({ version, clientID, steps }) {
-    const locked = getLocked();
+    const locked = getLocked(lockedPath);
     // we need to check if there is another update processed
     // so we store a "locked" state
 
@@ -149,30 +149,36 @@ io.on("connection", function(socket) {
       storeLocked(false);
       return;
     }
-    let doc = schema.nodeFromJSON(storedData.doc);
+    let doc;
+    try {
+      doc = schema.nodeFromJSON(storedData.doc);
 
-    let newSteps = steps.map(step => {
-      const newStep = Step.fromJSON(schema, step);
-      newStep.clientID = clientID;
+      let newSteps = steps.map(step => {
+        const newStep = Step.fromJSON(schema, step);
+        newStep.clientID = clientID;
 
-      // apply step to document
-      let result = newStep.apply(doc);
-      doc = result.doc;
+        // apply step to document
+        let result = newStep.apply(doc);
+        if (result.doc === null) throw "Doc is null";
+        doc = result.doc;
 
-      return newStep;
-    });
-    // calculating a new version number is easy
-    const newVersion = version + newSteps.length;
-    // store data
-    storeSteps({ version, steps: newSteps });
-    storeDoc({ version: newVersion, doc });
-    // send update to everyone (me and others)
-    io.sockets.emit("update", {
-      version: newVersion,
-      steps: getSteps(version)
-    });
-
-    storeLocked(false);
+        return newStep;
+      });
+      // calculating a new version number is easy
+      const newVersion = version + newSteps.length;
+      // store data
+      storeSteps({ version, steps: newSteps });
+      storeDoc({ version: newVersion, doc });
+      // send update to everyone (me and others)
+      io.sockets.emit("update", {
+        version: newVersion,
+        steps: getSteps(version)
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      storeLocked(false);
+    }
   });
   socket.on("disconnect", function() {
     io.emit("user disconnected");
