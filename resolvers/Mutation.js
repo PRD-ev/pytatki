@@ -1,4 +1,5 @@
 const { prisma } = require("../prisma-client");
+const { writeFile, mkdir } = require("fs");
 
 const Mutation = {
   createGroup: async (parent, args, context) => {
@@ -43,23 +44,44 @@ const Mutation = {
     { title, type, groupId, parentFolderId, link },
     context
   ) => {
-    const userGroups = await prisma
-      .user({ id: context.id })
-      .groups()
-      .id();
-    const userGroupsFormatted = userGroups.map(el => el.id);
-    if (userGroupsFormatted.includes(groupId) || context.role === "ADMIN") {
-      const note = {
-        title,
-        author: { connect: { id: context.id } },
-        type,
-        group: { connect: { id: groupId } },
-        link: link ? link : '',
-      };
-      if (parentFolderId) {
-        note.parentFolder = { connect: { id: parentFolderId } };
+    try {
+      const userGroups = await prisma
+        .user({ id: context.id })
+        .groups()
+        .id();
+      const userGroupsFormatted = userGroups.map(el => el.id);
+      if (userGroupsFormatted.includes(groupId) || context.role === "ADMIN") {
+        const note = {
+          title,
+          author: { connect: { id: context.id } },
+          type,
+          group: { connect: { id: groupId } },
+          link: link ? link : ""
+        };
+        if (parentFolderId) {
+          note.parentFolder = { connect: { id: parentFolderId } };
+        }
+        const createdNote = prisma.createNote(note);
+        const noteId = await createdNote.id();
+        mkdir(`./notes/${noteId}`, { recursive: true }, async () => {
+          writeFile(
+            `./notes/${noteId}/db.json`,
+            `{"version": 0,"doc":{"type": "doc","content": [{"type": "text","text": "Czas zacząć notatkę ;)"}]}}`,
+            err => {
+              if (err) throw err;
+            }
+          );
+          writeFile(`./notes/${noteId}/db_locked.json`, `false`, err => {
+            if (err) throw err;
+          });
+          writeFile(`./notes/${noteId}/db_steps.json`, `[]`, err => {
+            if (err) throw err;
+          });
+        });
+        return prisma.updateNote({ data: note, where: { id: noteId } });
       }
-      return prisma.createNote(note);
+    } catch (e) {
+      console.error(e);
     }
     throw new Error("You don't have permission for that action");
   },
@@ -101,7 +123,11 @@ const Mutation = {
     throw new Error("You don't have permission for that action");
   },
 
-  createFolder: async (parent, { title, type, groupId, parentFolderId }, context) => {
+  createFolder: async (
+    parent,
+    { title, type, groupId, parentFolderId },
+    context
+  ) => {
     const userGroups = await prisma
       .user({ id: context.id })
       .groups()
