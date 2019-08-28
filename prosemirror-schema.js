@@ -12,6 +12,7 @@ const schema = {
       content: "inline*",
       group: "block",
       draggable: false,
+      attrs: { textAlign: { default: "left", hasDefault: true } },
       parseDOM: [
         {
           tag: "p"

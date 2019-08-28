@@ -1,0 +1,14 @@
+{
+  "version": 154,
+  "doc": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "attrs": {
+          "textAlign": "left"
+        }
+      }
+    ]
+  }
+}
