@@ -38,6 +38,8 @@ import InputWithLabel from '@/components/InputWithLabel.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 
+import gql from 'graphql-tag';
+
 export default Vue.extend({
   name: 'groups',
   components: {
@@ -55,28 +57,37 @@ export default Vue.extend({
     };
   },
   methods: {
-    createNewGroup() {
-      this.gql(
-        `mutation{
-                    createGroup(name:"${this.newGroupName}"){
-                      id,
-                      image
-                    }
-                  }`,
-      ).then((res) => {
-        try {
-          this.groups = [
-            ...this.groups,
-            {
-              name: this.newGroupName,
-              id: res.data.createGroup.id,
-              image: res.data.createGroup.image,
-            },
-          ];
-        } catch (error) {
-          console.error(error);
+    async createNewGroup() {
+      const CREATE_GROUP = gql`
+        mutation createGroup($image: Upload!) {
+          createGroup(name: "${this.newGroupName}",image: $image) {
+            id,
+            image
+          }
         }
-      });
+      `;
+
+      this.$apollo
+        .mutate({
+          mutation: CREATE_GROUP,
+          variables: {
+            image: this.$refs.groupImage.files[0],
+          },
+        })
+        .then(res => {
+          try {
+            this.groups = [
+              ...this.groups,
+              {
+                name: this.newGroupName,
+                id: res.data.createGroup.id,
+                image: res.data.createGroup.image,
+              },
+            ];
+          } catch (error) {
+            console.error(error);
+          }
+        });
     },
   },
   mounted() {
@@ -91,7 +102,7 @@ export default Vue.extend({
               }
             }
           }`,
-      ).then((res) => {
+      ).then(res => {
         try {
           if (res.error) {
             if (res.data === 'You must be logged in') {

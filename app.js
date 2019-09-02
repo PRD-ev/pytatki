@@ -186,6 +186,7 @@ io.on("connection", function(socket) {
 });
 
 app.use(compression());
+app.use(express.static(path.join(__dirname, "images")));
 
 // For development usage only
 app.use(function(req, res, next) {

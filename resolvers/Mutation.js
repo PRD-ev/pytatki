@@ -1,5 +1,5 @@
 const { prisma } = require("../prisma-client");
-const { writeFile, mkdir } = require("fs");
+const { writeFile, mkdir, createWriteStream } = require("fs");
 
 const Mutation = {
   createGroup: async (parent, args, context) => {
@@ -7,6 +7,24 @@ const Mutation = {
       name: args.name,
       members: { connect: { id: context.id } }
     };
+    if (args.image) {
+      const {
+        filename,
+        mimetype,
+        encoding,
+        createReadStream
+      } = await args.image;
+      try {
+        mkdir(`./images/${context.id}`, { recursive: true }, async () => {
+          createReadStream().pipe(
+            createWriteStream(`./images/${context.id}/${filename}`)
+          );
+        });
+        group.image=`/${context.id}/${filename}`;
+      } catch (e) {
+        console.log(e);
+      }
+    }
     return prisma.createGroup(group);
   },
 

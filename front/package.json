@@ -10,13 +10,13 @@
     "test:unit": "vue-cli-service test:unit",
     "test:unit:watch": "vue-cli-service test:unit --watch"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
-  },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-upload-client": "^11.0.0",
     "core-js": "^2.6.5",
+    "graphql": "^14.5.4",
+    "graphql-tag": "^2.10.1",
     "normalize.css": "^8.0.1",
     "register-service-worker": "^1.6.2",
     "socket.io-client": "^2.2.0",
@@ -24,6 +24,7 @@
     "tiptap-commands": "^1.10.6",
     "tiptap-extensions": "^1.20.2",
     "vue": "^2.6.6",
+    "vue-apollo": "^3.0.0-rc.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"
@@ -97,5 +98,10 @@
       "<rootDir>/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
     ],
     "testURL": "http://localhost/"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }
