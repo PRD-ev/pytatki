@@ -20,7 +20,7 @@ const Mutation = {
             createWriteStream(`./images/${context.id}/${filename}`)
           );
         });
-        group.image=`/${context.id}/${filename}`;
+        group.image = `/${context.id}/${filename}`;
       } catch (e) {
         console.log(e);
       }
@@ -235,6 +235,46 @@ const Mutation = {
       return prisma.updateGroup({
         data: { members: { connect: { id: userId } } },
         where: { id: groupId }
+      });
+    }
+    throw new Error("You don't have permission for that action");
+  },
+  updateUser: async (
+    parent,
+    { id, name, image, email, password, role },
+    context
+  ) => {
+    if (context.id === id || context.role === "ADMIN") {
+      const user = await prisma.user({ id: id || context.id });
+      const newUser = {
+        name: name ? name : user.name,
+        password: password ? password : user.password,
+        email: email ? email : user.email
+      };
+      if (image) {
+        const {
+          filename,
+          mimetype,
+          encoding,
+          createReadStream
+        } = await image;
+        try {
+          mkdir(`./images/${context.id}`, { recursive: true }, async () => {
+            createReadStream().pipe(
+              createWriteStream(`./images/${context.id}/${filename}`)
+            );
+          });
+          newUser.image = `/${context.id}/${filename}`;
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      if (context.role === "ADMIN") {
+        newUser.role = role ? role : user.role;
+      }
+      return prisma.updateUser({
+        data: newUser,
+        where: { id: id || context.id }
       });
     }
     throw new Error("You don't have permission for that action");

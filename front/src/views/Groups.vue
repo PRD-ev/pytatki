@@ -31,6 +31,7 @@
 
 <script>
 import Vue from 'vue';
+import gql from 'graphql-tag';
 import Group from '@/components/Group.vue';
 import BaseContainer from '@/components/BaseContainer.vue';
 import BaseModal from '@/components/BaseModal.vue';
@@ -38,7 +39,6 @@ import InputWithLabel from '@/components/InputWithLabel.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
 
-import gql from 'graphql-tag';
 
 export default Vue.extend({
   name: 'groups',
@@ -74,7 +74,7 @@ export default Vue.extend({
             image: this.$refs.groupImage.files[0],
           },
         })
-        .then(res => {
+        .then((res) => {
           try {
             this.groups = [
               ...this.groups,
@@ -102,7 +102,7 @@ export default Vue.extend({
               }
             }
           }`,
-      ).then(res => {
+      ).then((res) => {
         try {
           if (res.error) {
             if (res.data === 'You must be logged in') {

@@ -19,7 +19,7 @@ type Mutation {
   deleteFolder(id: ID!): Folder
   removeUserFromGroup(groupId: ID!, userId: ID!): Group
   addUserToGroup(groupId: ID!, userId: ID!): Group
-  updateUser(userId: ID!, image: Upload, email: String, password: String, name: String, role: String): User
+  updateUser(id: ID, image: Upload, email: String, password: String, name: String, role: String): User
 }
 
 # Types

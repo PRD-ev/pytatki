@@ -249,7 +249,7 @@ export default Vue.extend({
                     }
                   }`,
         ).then((res) => {
-          console.log(res)
+          console.log(res);
           try {
             this.notes = [
               ...this.notes,

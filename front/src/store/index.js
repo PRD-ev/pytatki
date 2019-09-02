@@ -18,10 +18,16 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user;
     },
+    setUserImage(state, image) {
+      state.user.image = image;
+    },
   },
   actions: {
     setUserAction(context, user) {
       context.commit('setUser', user);
+    },
+    setUserImageAction(context, image) {
+      context.commit('setUserImage', image);
     },
   },
 });
