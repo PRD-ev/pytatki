@@ -2,20 +2,40 @@
   <div>
     <slot />
     <div class="context-menu" :style="`top: ${top}; left: ${left}; ${transformToFit}`">
-      <div class="context-menu__entry" @click="$emit('rename-note-init')">Zmień nazwę</div>
+      <div class="context-menu__entry" @click="$emit('rename-init')">Zmień nazwę</div>
 
-      <base-modal>
+      <base-modal v-if="elementType==='file'">
         <template v-slot:modal-content>
           <div class="modal-content">
-            <file :type="note.type" class="file-icon" />
+            <file :type="element.type" class="file-icon" />
             <div>
-              <p class="modal-content__title">{{note.title}}</p>
+              <p class="modal-content__title">{{element.title}}</p>
               <p style="margin-bottom: 0; white-space: nowrap;">
                 Autor:
-                <b style="margin: 0 5px">{{note.author}}</b>
+                <b style="margin: 0 5px">{{element.author}}</b>
                 <base-user style="transform: translateY(25%);" size="tiny" />
               </p>
-              <p style="margin: 10px 0 0 0; white-space: nowrap;">Data utworzenia: 13 mar 2019</p>
+              <p style="margin: 10px 0 0 0; white-space: nowrap;">Data utworzenia:</p>
+            </div>
+            <base-button class="open-file-button">Otwórz</base-button>
+          </div>
+        </template>
+        <template v-slot:trigger>
+          <div class="context-menu__entry">Właściwości</div>
+        </template>
+      </base-modal>
+      
+      <base-modal v-else-if="elementType==='group'">
+        <template v-slot:modal-content>
+          <div class="modal-content">
+            <img :src="element.image" alt="">
+            <div>
+              <p class="modal-content__title">{{element.name}}</p>
+              <p style="margin-bottom: 0; white-space: nowrap;">
+                Autor:
+                <b style="margin: 0 5px"></b>
+              </p>
+              <p style="margin: 10px 0 0 0; white-space: nowrap;">Data utworzenia:</p>
             </div>
             <base-button class="open-file-button">Otwórz</base-button>
           </div>
@@ -25,7 +45,7 @@
         </template>
       </base-modal>
 
-      <div class="context-menu__entry" @click="$emit('delete-note', note.id, note.type)">Usuń</div>
+      <div class="context-menu__entry" @click="$emit('delete', element.id, element.type)">Usuń</div>
     </div>
   </div>
 </template>
@@ -47,8 +67,9 @@ export default Vue.extend({
     File,
   },
   props: {
-    note: Object,
+    element: Object,
     clickPosition: Object,
+    elementType: { required: true, type: String },
   },
   data() {
     return {

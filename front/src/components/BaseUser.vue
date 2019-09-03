@@ -15,7 +15,7 @@ export default Vue.extend({
     image: {
       type: String,
       required: true,
-    }
+    },
   },
 });
 </script>

@@ -62,7 +62,6 @@ export default Vue.extend({
           }
         }
       `;
-
       this.$apollo
         .mutate({
           mutation: UPDATE_USER,
@@ -70,8 +69,8 @@ export default Vue.extend({
             image: target.files[0],
           },
         })
-        .then(res => {
-          this.$store.dispatch('setUserImageAction', res.data.updateUser.image)
+        .then((res) => {
+          this.$store.dispatch('setUserImageAction', res.data.updateUser.image);
         });
     },
   },

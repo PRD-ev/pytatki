@@ -1,14 +1,25 @@
 <template>
-  <base-container>
+  <base-container @click.native.capture="hideContextMenu" @contextmenu.native="hideContextMenu">
     <current-location />
     <div class="grupy">
-      <group
-        :key="group.id"
-        v-for="group in groups"
-        :name="group.name"
-        :image="group.image"
-        :id="group.id"
-      />
+      <context-menu
+        @rename-init="renaming=true"
+        @delete="deleteGroup"
+        :clickPosition="clickPosition"
+        :element="selectedGroup"
+        elementType="group"
+      >
+        <group
+          :key="group.id"
+          v-for="group in groups"
+          @open-context-menu="showContextMenu"
+          @rename-group="renameGroup"
+          :name="group.name"
+          :image="group.image"
+          :id="group.id"
+          :renaming="group.id === selectedGroup.id && renaming"
+        />
+      </context-menu>
     </div>
     <base-modal>
       <template v-slot:modal-content>
@@ -38,7 +49,7 @@ import BaseModal from '@/components/BaseModal.vue';
 import InputWithLabel from '@/components/InputWithLabel.vue';
 import CurrentLocation from '@/components/CurrentLocation.vue';
 import FloatingButton from '@/components/FloatingButton.vue';
-
+import ContextMenu from '@/components/ContextMenu.vue';
 
 export default Vue.extend({
   name: 'groups',
@@ -47,6 +58,7 @@ export default Vue.extend({
     BaseContainer,
     BaseModal,
     InputWithLabel,
+    ContextMenu,
     CurrentLocation,
     FloatingButton,
   },
@@ -54,12 +66,55 @@ export default Vue.extend({
     return {
       groups: [],
       newGroupName: '',
+      renaming: false,
+      selectedGroup: {},
+      clickPosition: { x: 0, y: 0 },
     };
   },
   methods: {
+    showContextMenu(group, event) {
+      this.renaming = false;
+      this.selectedGroup = group;
+      this.clickPosition.x = event.clientX;
+      this.clickPosition.y = event.clientY;
+    },
+    hideContextMenu() {
+      this.clickPosition.x = 0;
+      this.clickPosition.y = 0;
+    },
+    deleteGroup(groupId) {
+      this.gql(
+        `
+      mutation{
+        deleteGroup(id:"${groupId}"){
+          id
+        }
+      }
+      `,
+      ).then(res => {
+        try {
+          this.groups = this.groups.filter(group => group.id !== res.data.deleteGroup.id);
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    },
+    async renameGroup(renamedGroupId, newName) {
+      this.renaming = false;
+      const renamedGroup = [...this.groups].find(group => group.id === renamedGroupId);
+      let result;
+      result = await this.gql(`
+        mutation{
+          updateGroup(id:"${renamedGroupId}",name:"${newName}"){
+            name
+          }
+        }
+      `);
+      renamedGroup.name = result.data.updateGroup.name;
+    },
     async createNewGroup() {
       const CREATE_GROUP = gql`
-        mutation createGroup($image: Upload!) {
+        mutation createGroup($image: Upload) {
           createGroup(name: "${this.newGroupName}",image: $image) {
             id,
             image
@@ -74,7 +129,7 @@ export default Vue.extend({
             image: this.$refs.groupImage.files[0],
           },
         })
-        .then((res) => {
+        .then(res => {
           try {
             this.groups = [
               ...this.groups,
@@ -102,7 +157,7 @@ export default Vue.extend({
               }
             }
           }`,
-      ).then((res) => {
+      ).then(res => {
         try {
           if (res.error) {
             if (res.data === 'You must be logged in') {

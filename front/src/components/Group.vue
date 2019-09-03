@@ -1,21 +1,63 @@
 <template>
-  <div class="group">
-    <router-link :to="`/group/${id}`">
+  <div class="group" @contextmenu.prevent="openContextMenu">
+    <router-link :to="`/group/${id}`" v-if="!renaming">
       <div :style="`background-image: url('${image}');`" class="group__circle"></div>
       {{name}}
     </router-link>
+    <div v-else>
+      <div :style="`background-image: url('${image}');`" class="group__circle"></div>
+      <base-input v-model="newName" />
+    </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import BaseInput from '@/components/BaseInput.vue';
 
 export default Vue.extend({
   name: 'Group',
+  components: {
+    BaseInput,
+  },
   props: {
     name: String,
     image: String,
     id: String,
+    renaming: Boolean,
+  },
+  data() {
+    return {
+      newName: this.name,
+    };
+  },
+  updated() {
+    if (this.renaming === true) {
+      window.addEventListener('click', this.renameGroup, { capture: true });
+      window.addEventListener('keypress', this.renameGroup);
+    }
+  },
+  methods: {
+    openContextMenu(event) {
+      event.stopPropagation();
+      this.$emit(
+        'open-context-menu',
+        {
+          id: this.id,
+          name: this.name,
+          author: this.author,
+        },
+        event,
+      );
+    },
+    renameGroup(event) {
+      const key = event.which || event.keyCode;
+      if (event.target.nodeName !== 'INPUT' || key === 13) {
+        this.$emit('rename-group', this.id, this.newName);
+        window.removeEventListener('click', this.renameGroup, { capture: true });
+        window.removeEventListener('keypress', this.renameGroup);
+      }
+    },
   },
 });
 </script>
