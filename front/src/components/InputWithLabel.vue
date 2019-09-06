@@ -1,7 +1,7 @@
 <template>
   <label class="base-label" for>
     <slot></slot>
-    <base-input :length="length" :value="value"></base-input>
+    <base-input @input="(payload)=>$emit('input',payload)" :length="length" :value="value"></base-input>
   </label>
 </template>
 

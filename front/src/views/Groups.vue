@@ -1,26 +1,25 @@
 <template>
   <base-container @click.native.capture="hideContextMenu" @contextmenu.native="hideContextMenu">
     <current-location />
-    <div class="grupy">
-      <context-menu
-        @rename-init="renaming=true"
-        @delete="deleteGroup"
-        :clickPosition="clickPosition"
-        :element="selectedGroup"
-        elementType="group"
-      >
-        <group
-          :key="group.id"
-          v-for="group in groups"
-          @open-context-menu="showContextMenu"
-          @rename-group="renameGroup"
-          :name="group.name"
-          :image="group.image"
-          :id="group.id"
-          :renaming="group.id === selectedGroup.id && renaming"
-        />
-      </context-menu>
-    </div>
+    <context-menu
+      @rename-init="renaming=true"
+      @delete="deleteGroup"
+      :clickPosition="clickPosition"
+      :element="selectedGroup"
+      elementType="group"
+      class="grupy"
+    >
+      <group
+        :key="group.id"
+        v-for="group in groups"
+        @open-context-menu="showContextMenu"
+        @rename-group="renameGroup"
+        :name="group.name"
+        :image="group.image"
+        :id="group.id"
+        :renaming="group.id === selectedGroup.id && renaming"
+      />
+    </context-menu>
     <base-modal>
       <template v-slot:modal-content>
         <input-with-label
@@ -91,7 +90,7 @@ export default Vue.extend({
         }
       }
       `,
-      ).then(res => {
+      ).then((res) => {
         try {
           this.groups = this.groups.filter(group => group.id !== res.data.deleteGroup.id);
         } catch (error) {
@@ -129,7 +128,7 @@ export default Vue.extend({
             image: this.$refs.groupImage.files[0],
           },
         })
-        .then(res => {
+        .then((res) => {
           try {
             this.groups = [
               ...this.groups,
@@ -157,7 +156,7 @@ export default Vue.extend({
               }
             }
           }`,
-      ).then(res => {
+      ).then((res) => {
         try {
           if (res.error) {
             if (res.data === 'You must be logged in') {

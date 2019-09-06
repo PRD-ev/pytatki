@@ -116,28 +116,26 @@ export default Vue.extend({
   },
   computed: {
     displayedFolders() {
-      return this.folders.filter(folder => {
+      return this.folders.filter((folder) => {
         if (folder.parentFolder === null) {
           if (this.currentDirectory.length === 1) {
             return true;
           }
           return false;
         }
-        if (folder.parentFolder.id === this.currentDirectory[this.currentDirectory.length - 1].id)
-          return true;
+        if (folder.parentFolder.id === this.currentDirectory[this.currentDirectory.length - 1].id) return true;
         return false;
       });
     },
     displayedNotes() {
-      return this.notes.filter(note => {
+      return this.notes.filter((note) => {
         if (note.parentFolder === null) {
           if (this.currentDirectory.length === 1) {
             return true;
           }
           return false;
         }
-        if (note.parentFolder.id === this.currentDirectory[this.currentDirectory.length - 1].id)
-          return true;
+        if (note.parentFolder.id === this.currentDirectory[this.currentDirectory.length - 1].id) return true;
         return false;
       });
     },
@@ -197,10 +195,10 @@ export default Vue.extend({
               createFolder(title:"${this.newFileTitle}",
                             groupId:"${this.$route.params.id}"
                             ${
-                              this.currentDirectory.length !== 1
-                                ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
-                                : ''
-                            })
+  this.currentDirectory.length !== 1
+    ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
+    : ''
+})
                     {
                       id,
                       author{
@@ -211,7 +209,7 @@ export default Vue.extend({
                       }
                     }
               }`,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.folders = [
               ...this.folders,
@@ -233,10 +231,10 @@ export default Vue.extend({
                           type:EXTERNAL,
                           link: "${this.newFileExternalLink}",
                           groupId:"${this.$route.params.id}"${
-            this.currentDirectory.length !== 1
-              ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
-              : ''
-          })
+  this.currentDirectory.length !== 1
+    ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
+    : ''
+})
                     {
                       id,
                       link,
@@ -248,7 +246,7 @@ export default Vue.extend({
                       }
                     }
                   }`,
-        ).then(res => {
+        ).then((res) => {
           console.log(res);
           try {
             this.notes = [
@@ -274,10 +272,10 @@ export default Vue.extend({
               createNote(title:"${this.newFileTitle}",
                           type:${this.newFileType},
                           groupId:"${this.$route.params.id}"${
-            this.currentDirectory.length !== 1
-              ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
-              : ''
-          })
+  this.currentDirectory.length !== 1
+    ? `, parentFolderId:"${this.currentDirectory[this.currentDirectory.length - 1].id}"`
+    : ''
+})
                     {
                       id,
                       author{
@@ -288,7 +286,7 @@ export default Vue.extend({
                       }
                     }
                   }`,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.notes = [
               ...this.notes,
@@ -323,7 +321,7 @@ export default Vue.extend({
         }
       }
       `,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.folders = this.folders.filter(folder => folder.id !== res.data.deleteFolder.id);
           } catch (error) {
@@ -339,7 +337,7 @@ export default Vue.extend({
         }
       }
       `,
-        ).then(res => {
+        ).then((res) => {
           try {
             this.notes = this.notes.filter(note => note.id !== res.data.deleteNote.id);
           } catch (error) {

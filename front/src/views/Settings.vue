@@ -22,10 +22,17 @@
           </div>
         </div>
         <div class="two-inputs">
-          <input-with-label>Adres e-mail</input-with-label>
+          <input-with-label
+            @input="(data)=>newEmail=data"
+            :value="$store.state.user.email"
+          >Adres e-mail</input-with-label>
           <div class="flex-divider"></div>
-          <input-with-label>Nazwa użytkownika</input-with-label>
+          <input-with-label
+            @input="(data)=>newName=data"
+            :value="$store.state.user.name"
+          >Nazwa użytkownika</input-with-label>
         </div>
+        <base-button @click.native="updateUser" v-if="savable">Zapisz zmiany</base-button>
       </settings-group>
     </div>
   </base-container>
@@ -53,6 +60,20 @@ export default Vue.extend({
     InputWithLabel,
     BaseModal,
   },
+  data() {
+    return {
+      newName: '',
+      newEmail: '',
+    };
+  },
+  computed: {
+    savable() {
+      return (
+        this.$store.state.user.name !== this.newName
+        || this.$store.state.user.email !== this.newEmail
+      );
+    },
+  },
   methods: {
     async updateUserImage({ target }) {
       const UPDATE_USER = gql`
@@ -72,6 +93,25 @@ export default Vue.extend({
         .then((res) => {
           this.$store.dispatch('setUserImageAction', res.data.updateUser.image);
         });
+    },
+    updateUser() {
+      this.gql(
+        `mutation{
+              updateUser(id:"${this.$store.state.user.id}", email:"${this.newEmail}", name: "${this.newName}")
+                    {
+                      id,
+                    }
+              }`,
+      ).then((res) => {
+        try {
+          this.$store.dispatch('setUserAction', {
+            name: this.newName,
+            email: this.newEmail,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      });
     },
   },
 });

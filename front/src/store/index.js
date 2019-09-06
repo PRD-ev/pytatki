@@ -16,7 +16,7 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     setUser(state, user) {
-      state.user = user;
+      state.user = { ...state.user, ...user };
     },
     setUserImage(state, image) {
       state.user.image = image;

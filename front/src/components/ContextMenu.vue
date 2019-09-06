@@ -24,7 +24,7 @@
           <div class="context-menu__entry">Właściwości</div>
         </template>
       </base-modal>
-      
+
       <base-modal v-else-if="elementType==='group'">
         <template v-slot:modal-content>
           <div class="modal-content">
