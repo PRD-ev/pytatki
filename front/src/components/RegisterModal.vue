@@ -2,21 +2,27 @@
   <div>
     <base-modal>
       <template v-slot:modal-content>
-        <h3 class="login-header">Zaloguj się</h3>
-        <input-with-label type="email" :value="email" @input.native="email = $event.target.value">
-          Adres email
-        </input-with-label>
+        <h3 class="login-header">Zarejestruj się</h3>
+        <input-with-label
+          :value="name"
+          @input.native="name = $event.target.value"
+        >Nazwa użytkownika</input-with-label>
         <br />
-        <input-with-label type="password" :value="password" @input.native="password = $event.target.value">
-          Hasło
-        </input-with-label>
-        <base-button @click.native="login" size="small">Zaloguj</base-button>
+        <input-with-label
+          type="email"
+          :value="email"
+          @input.native="email = $event.target.value"
+        >Adres email</input-with-label>
+        <br />
+        <input-with-label
+          type="password"
+          :value="password"
+          @input.native="password = $event.target.value"
+        >Hasło</input-with-label>
+        <base-button @click.native="register" size="small">Zarejestruj</base-button>
       </template>
       <template v-slot:trigger>
-        <p class="login-trigger">
-          <img class="login-image" src="../assets/icons/logout-box-fill.svg" />
-          Zaloguj się
-        </p>
+        <base-button>Zarejestruj się</base-button>
       </template>
     </base-modal>
   </div>
@@ -28,7 +34,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import InputWithLabel from '@/components/InputWithLabel.vue';
 
 export default {
-  name: 'LoginModal',
+  name: 'RegisterModal',
   components: {
     BaseModal,
     BaseButton,
@@ -38,21 +44,26 @@ export default {
     return {
       email: '',
       password: '',
+      name: '',
     };
   },
   methods: {
-    login() {
-      fetch('http://localhost:4000/login', {
+    register() {
+      fetch('http://localhost:4000/register', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         mode: 'cors',
         method: 'POST',
-        body: JSON.stringify({ email: this.email, password: this.password }),
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+          name: this.name,
+        }),
       })
         .then(res => res.json())
-        .then((res) => {
+        .then(res => {
           this.$store.dispatch('setUserAction', res);
         });
     },
@@ -81,13 +92,6 @@ export default {
 }
 .social-button img {
   width: 100%;
-}
-.login-trigger {
-  margin-bottom: 50px;
-  cursor: pointer;
-  @media screen and (max-width: 768px) {
-    font-size: 25px;
-  }
 }
 .login-image {
   height: 23px;

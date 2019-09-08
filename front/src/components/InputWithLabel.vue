@@ -1,7 +1,7 @@
 <template>
   <label class="base-label" for>
     <slot></slot>
-    <base-input @input="(payload)=>$emit('input',payload)" :length="length" :value="value"></base-input>
+    <base-input @input="(payload)=>$emit('input',payload)" :length="length" :value="value" :type="type"></base-input>
   </label>
 </template>
 
@@ -17,6 +17,7 @@ export default Vue.extend({
   props: {
     length: String,
     value: String,
+    type: String,
   },
 });
 </script>

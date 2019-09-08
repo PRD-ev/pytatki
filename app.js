@@ -231,6 +231,7 @@ app.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           password: hash,
+          image: '/img/avatar.svg',
           role: "USER"
         });
         const token = jsonWebToken.sign(user, JWTSecretKey);
@@ -285,6 +286,11 @@ app.post("/login", async (req, res) => {
   } catch (error) {
     res.send({ error: true, data: error });
   }
+});
+
+app.post("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: new Date(0) });
+  res.send({ error: false, data: "Logged out" });
 });
 
 const apolloServer = new ApolloServer({

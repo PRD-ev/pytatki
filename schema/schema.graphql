@@ -20,6 +20,7 @@ type Mutation {
   removeUserFromGroup(groupId: ID!, userId: ID!): Group
   addUserToGroup(groupId: ID!, userId: ID!): Group
   updateUser(id: ID, image: Upload, email: String, password: String, name: String, role: String): User
+  deleteUser(id: ID): User
 }
 
 # Types

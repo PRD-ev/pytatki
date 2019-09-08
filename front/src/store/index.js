@@ -15,14 +15,20 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
-    setUser(state, user) {
+    updateUser(state, user) {
       state.user = { ...state.user, ...user };
+    },
+    setUser(state, user) {
+      state.user = user;
     },
     setUserImage(state, image) {
       state.user.image = image;
     },
   },
   actions: {
+    updateUserAction(context, user) {
+      context.commit('updateUser', user);
+    },
     setUserAction(context, user) {
       context.commit('setUser', user);
     },

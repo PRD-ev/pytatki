@@ -278,7 +278,17 @@ const Mutation = {
       });
     }
     throw new Error("You don't have permission for that action");
-  }
+  },
+  deleteUser: async (
+    parent,
+    { id },
+    context
+  ) => {
+    if (context.id === id || context.role === "ADMIN") {
+      return prisma.deleteUser({id});
+    }
+    throw new Error("You don't have permission for that action");
+  },
 };
 
 module.exports = {

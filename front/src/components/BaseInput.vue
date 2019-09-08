@@ -3,9 +3,9 @@
     @input="$emit('input', $event.target.value)"
     class="base-input"
     :value="value"
+    :type="type"
     :class="size?`base-input--${size}`:''"
-    type="text"
-  >
+  />
 </template>
 
 <script>
@@ -19,6 +19,7 @@ export default Vue.extend({
       validator: size => size === 'small',
     },
     value: String,
+    type: { default: 'text', type: String },
   },
 });
 </script>

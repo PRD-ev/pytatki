@@ -2,48 +2,52 @@
   <div>
     <div class="top-mobile-bar mobile-only">
       <div class="open-menu" @click="openMenu">
-        <img src="../assets/icons/hamburger.svg" alt="hamburger icon to open menu">
+        <img src="../assets/icons/hamburger.svg" alt="hamburger icon to open menu" />
       </div>
       <p class="current-location">{{$route.name}}</p>
     </div>
     <header v-show="this.menuIsOpen">
       <div class="close-menu mobile-only" @click="closeMenu">
-        <img src="../assets/icons/close.svg" alt="cross icon to close menu">
+        <img src="../assets/icons/close.svg" alt="cross icon to close menu" />
       </div>
       <router-link @click.native="closeMenu" to="/">
-        <logo class="desktop-only"/>
+        <logo class="desktop-only" />
       </router-link>
       <nav>
         <router-link @click.native="closeMenu" to="/groups">
-          <img class="menu-item__image" src="../assets/icons/group-fill.svg">
+          <img class="menu-item__image" src="../assets/icons/group-fill.svg" />
           Grupy
         </router-link>
         <router-link @click.native="closeMenu" to="/settings">
-          <img class="menu-item__image" src="../assets/icons/file-text-fill.svg">
+          <img class="menu-item__image" src="../assets/icons/file-text-fill.svg" />
           Ustawienia
         </router-link>
+        <a @click="logout">
+          <img class="menu-item__image" src="../assets/icons/logout-box-fill.svg" />
+          Wyloguj
+        </a>
       </nav>
       <div class="header-bottom">
         <router-link v-if="$store.state.user.id" @click.native="closeMenu" to="/user">
-          <mini-user/>
+          <mini-user />
         </router-link>
-        <login-modal v-else/>
+        <login-modal v-else />
         <div class="external-links">
           <a href="https://github.com/prd-ev/pytatki-front" target="_blank" rel="nofollow">
-            <img class="external-link__image" src="../assets/icons/github-fill.svg">
+            <img class="external-link__image" src="../assets/icons/github-fill.svg" />
           </a>
           <a
             href="https://www.facebook.com/Pytatki-583687131990579/"
             target="_blank"
             rel="nofollow"
           >
-            <img class="external-link__image" src="../assets/icons/facebook-box-fill.svg">
+            <img class="external-link__image" src="../assets/icons/facebook-box-fill.svg" />
           </a>
           <a href target="_blank" rel="nofollow">
-            <img class="external-link__image" src="../assets/icons/medium-fill.svg">
+            <img class="external-link__image" src="../assets/icons/medium-fill.svg" />
           </a>
           <a href target="_blank" rel="nofollow">
-            <img class="external-link__image" src="../assets/icons/bug-fill.svg">
+            <img class="external-link__image" src="../assets/icons/bug-fill.svg" />
           </a>
         </div>
       </div>
@@ -56,7 +60,6 @@ import Vue from 'vue';
 import Logo from '@/components/Logo.vue';
 import MiniUser from '@/components/MiniUser.vue';
 import LoginModal from '@/components/LoginModal.vue';
-
 
 const isMobile = window.innerWidth < 769;
 
@@ -80,6 +83,15 @@ export default Vue.extend({
     },
     openMenu() {
       this.menuIsOpen = true;
+    },
+    logout() {
+      fetch('http://localhost:4000/logout', { method: 'POST' })
+        .then(res => res.json())
+        .then(res => {
+          if (res.error === false) {
+            this.$store.dispatch('setUserAction', {});
+          }
+        });
     },
   },
 });
@@ -146,6 +158,7 @@ nav {
   }
 
   a {
+    cursor: pointer;
     margin: 10px 0;
     @media (max-width: 768px) {
       font-size: 25px;

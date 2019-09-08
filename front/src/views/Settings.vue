@@ -17,8 +17,7 @@
             </template>
           </base-modal>
           <div>
-            <base-button>Zmień hasło</base-button>
-            <base-button>Usuń konto</base-button>
+            <base-button @click.native="deleteUser">Usuń konto</base-button>
           </div>
         </div>
         <div class="two-inputs">
@@ -62,15 +61,15 @@ export default Vue.extend({
   },
   data() {
     return {
-      newName: '',
-      newEmail: '',
+      newName: this.$store.state.user.name,
+      newEmail: this.$store.state.user.email,
     };
   },
   computed: {
     savable() {
       return (
-        this.$store.state.user.name !== this.newName
-        || this.$store.state.user.email !== this.newEmail
+        this.$store.state.user.name !== this.newName ||
+        this.$store.state.user.email !== this.newEmail
       );
     },
   },
@@ -90,7 +89,7 @@ export default Vue.extend({
             image: target.files[0],
           },
         })
-        .then((res) => {
+        .then(res => {
           this.$store.dispatch('setUserImageAction', res.data.updateUser.image);
         });
     },
@@ -102,12 +101,29 @@ export default Vue.extend({
                       id,
                     }
               }`,
-      ).then((res) => {
+      ).then(res => {
         try {
-          this.$store.dispatch('setUserAction', {
+          this.$store.dispatch('updateUserAction', {
             name: this.newName,
             email: this.newEmail,
           });
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    },
+  deleteUser(){
+    this.gql(
+        `mutation{
+              deleteUser(id:"${this.$store.state.user.id}")
+                  {
+                    id,
+                  }
+              }`,
+      ).then(res => {
+        try {
+          if(res.data.deleteUser!==null)
+          this.$store.dispatch('setUserAction', {});
         } catch (error) {
           console.error(error);
         }
