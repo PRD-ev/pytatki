@@ -9,7 +9,7 @@ type Query {
 
 type Mutation {
   createGroup(name: String!, image: Upload): Group!
-  updateGroup(id: ID!, name: String, image: Upload): Group
+  updateGroup(id: ID!, name: String, image: Upload, joinable: Boolean): Group
   deleteGroup(id: ID!): Group
   createNote(title: String! type:NoteType! groupId: ID! parentFolderId: ID, link: String): Note!
   updateNote(id: ID!, title: String, image: String): Note
@@ -61,6 +61,7 @@ type Group {
   id: ID!
   name: String!
   image: String
+  joinable: Boolean!
   admins: [User!]!
   members: [User!]
   notes: [Note!]

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header/>
-    <router-view/>
+    <Header />
+    <router-view />
   </div>
 </template>
 
@@ -106,5 +106,17 @@ img {
     padding: 1px 15px;
     color: var(--dark-gray);
   }
+}
+input[type='submit'] {
+  font-size: 18px;
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin: 10px;
+  width: 100%;
+  color: var(--white);
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(90deg, var(--orange) 0%, var(--light-orange) 100%);
+  box-shadow: var(--box-shadow);
 }
 </style>

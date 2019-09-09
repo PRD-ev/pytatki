@@ -2,24 +2,26 @@
   <div>
     <base-modal>
       <template v-slot:modal-content>
-        <h3 class="login-header">Zarejestruj się</h3>
-        <input-with-label
-          :value="name"
-          @input.native="name = $event.target.value"
-        >Nazwa użytkownika</input-with-label>
-        <br />
-        <input-with-label
-          type="email"
-          :value="email"
-          @input.native="email = $event.target.value"
-        >Adres email</input-with-label>
-        <br />
-        <input-with-label
-          type="password"
-          :value="password"
-          @input.native="password = $event.target.value"
-        >Hasło</input-with-label>
-        <base-button @click.native="register" size="small">Zarejestruj</base-button>
+        <form @submit.prevent="register">
+          <h3 class="login-header">Zarejestruj się</h3>
+          <input-with-label
+            :value="name"
+            @input.native="name = $event.target.value"
+          >Nazwa użytkownika</input-with-label>
+          <br />
+          <input-with-label
+            type="email"
+            :value="email"
+            @input.native="email = $event.target.value"
+          >Adres email</input-with-label>
+          <br />
+          <input-with-label
+            type="password"
+            :value="password"
+            @input.native="password = $event.target.value"
+          >Hasło</input-with-label>
+          <input type="submit" @click.native="register" value="Zarejestruj"/>
+        </form>
       </template>
       <template v-slot:trigger>
         <base-button>Zarejestruj się</base-button>

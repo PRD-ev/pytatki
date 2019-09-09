@@ -87,7 +87,7 @@ export default Vue.extend({
     logout() {
       fetch('http://localhost:4000/logout', { method: 'POST' })
         .then(res => res.json())
-        .then(res => {
+        .then((res) => {
           if (res.error === false) {
             this.$store.dispatch('setUserAction', {});
           }

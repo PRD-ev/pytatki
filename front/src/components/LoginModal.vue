@@ -2,15 +2,21 @@
   <div>
     <base-modal>
       <template v-slot:modal-content>
-        <h3 class="login-header">Zaloguj się</h3>
-        <input-with-label type="email" :value="email" @input.native="email = $event.target.value">
-          Adres email
-        </input-with-label>
-        <br />
-        <input-with-label type="password" :value="password" @input.native="password = $event.target.value">
-          Hasło
-        </input-with-label>
-        <base-button @click.native="login" size="small">Zaloguj</base-button>
+        <form @submit.prevent="login">
+          <h3 class="login-header">Zaloguj się</h3>
+          <input-with-label
+            type="email"
+            :value="email"
+            @input.native="email = $event.target.value"
+          >Adres email</input-with-label>
+          <br />
+          <input-with-label
+            type="password"
+            :value="password"
+            @input.native="password = $event.target.value"
+          >Hasło</input-with-label>
+          <input type="submit" @click.native="login" value="Zaloguj"/>
+        </form>
       </template>
       <template v-slot:trigger>
         <p class="login-trigger">
@@ -52,7 +58,7 @@ export default {
         body: JSON.stringify({ email: this.email, password: this.password }),
       })
         .then(res => res.json())
-        .then((res) => {
+        .then(res => {
           this.$store.dispatch('setUserAction', res);
         });
     },

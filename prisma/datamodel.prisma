@@ -37,6 +37,7 @@ type Group {
   admins: [User!]! @relation(name: "Admins", link: INLINE)
   members: [User!] @relation(name: "Members", link: INLINE)
   image: String
+  joinable: Boolean
   folders: [Folder!] @relation(link: INLINE)
   notes: [Note!] @relation(link: INLINE)
 }

@@ -68,8 +68,8 @@ export default Vue.extend({
   computed: {
     savable() {
       return (
-        this.$store.state.user.name !== this.newName ||
-        this.$store.state.user.email !== this.newEmail
+        this.$store.state.user.name !== this.newName
+        || this.$store.state.user.email !== this.newEmail
       );
     },
   },
@@ -89,7 +89,7 @@ export default Vue.extend({
             image: target.files[0],
           },
         })
-        .then(res => {
+        .then((res) => {
           this.$store.dispatch('setUserImageAction', res.data.updateUser.image);
         });
     },
@@ -101,7 +101,7 @@ export default Vue.extend({
                       id,
                     }
               }`,
-      ).then(res => {
+      ).then((res) => {
         try {
           this.$store.dispatch('updateUserAction', {
             name: this.newName,
@@ -112,18 +112,17 @@ export default Vue.extend({
         }
       });
     },
-  deleteUser(){
-    this.gql(
+    deleteUser() {
+      this.gql(
         `mutation{
               deleteUser(id:"${this.$store.state.user.id}")
                   {
                     id,
                   }
               }`,
-      ).then(res => {
+      ).then((res) => {
         try {
-          if(res.data.deleteUser!==null)
-          this.$store.dispatch('setUserAction', {});
+          if (res.data.deleteUser !== null) this.$store.dispatch('setUserAction', {});
         } catch (error) {
           console.error(error);
         }

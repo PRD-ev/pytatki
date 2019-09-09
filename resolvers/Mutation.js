@@ -5,7 +5,8 @@ const Mutation = {
   createGroup: async (parent, args, context) => {
     const group = {
       name: args.name,
-      members: { connect: { id: context.id } }
+      members: { connect: { id: context.id } },
+      joinable: false
     };
     if (args.image) {
       const {
@@ -28,7 +29,7 @@ const Mutation = {
     return prisma.createGroup(group);
   },
 
-  updateGroup: async (parent, { id, name, image }, context) => {
+  updateGroup: async (parent, { id, name, image, joinable }, context) => {
     const userGroups = await prisma
       .user({ id: context.id })
       .groups()
@@ -38,7 +39,8 @@ const Mutation = {
       const group = await prisma.group({ id: id });
       const newGroup = {
         name: name ? name : group.name,
-        image: image ? image : group.image
+        image: image ? image : group.image,
+        joinable: joinable ? joinable : group.joinable
       };
       return prisma.updateGroup({ data: newGroup, where: { id: id } });
     }

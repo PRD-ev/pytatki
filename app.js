@@ -17,7 +17,7 @@ const { ApolloServer, gql } = require("apollo-server-express");
 const { readFileSync } = require("fs");
 const { resolvers } = require("./resolvers");
 
-const JWTSecretKey = "super-secret-key";
+const { JWTSecretKey } = require("./config");
 const bcrypt = require("bcrypt");
 const http = require("http");
 
@@ -231,7 +231,7 @@ app.post("/register", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           password: hash,
-          image: '/img/avatar.svg',
+          image: "/img/avatar.svg",
           role: "USER"
         });
         const token = jsonWebToken.sign(user, JWTSecretKey);
