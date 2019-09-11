@@ -36,7 +36,7 @@
     </context-menu>
     <base-modal @close-modal="newFileType=null">
       <template v-slot:modal-content>
-        <div v-if="newFileType===null">
+        <div v-if="newFileType===null && joinable">
           Link zaproszenia do grupy
           <div class="join-url">
             <img
@@ -47,6 +47,9 @@
             />
             <div ref="joinUrl">{{host}}/join/{{$route.params.id}}</div>
           </div>
+        </div>
+        <div v-else>
+          <base-button @click.native="makeJoinable">Włącz zapraszanie na 15 minut</base-button>
         </div>
         <div class="add-note-container" v-if="newFileType===null">
           <div class="note-type-container" @click="newFileType='FOLDER'">
@@ -101,6 +104,7 @@ import FloatingButton from '@/components/FloatingButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
 import InputWithLabel from '@/components/InputWithLabel.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 export default Vue.extend({
   name: 'singleGroup',
@@ -112,6 +116,7 @@ export default Vue.extend({
     BaseModal,
     ContextMenu,
     InputWithLabel,
+    BaseButton,
   },
   data() {
     return {
@@ -125,6 +130,7 @@ export default Vue.extend({
       newFileTitle: '',
       newFileExternalLink: '',
       host: window.location.host,
+      joinable: false,
     };
   },
   computed: {
@@ -374,12 +380,30 @@ export default Vue.extend({
 
       window.getSelection().removeAllRanges();
     },
+    makeJoinable() {
+      this.gql(
+        `
+      mutation{
+        updateGroup(id:"${this.$route.params.id}", joinable: true){
+          joinable
+        }
+      }
+      `,
+      ).then(res => {
+        try {
+          this.joinable = true;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    },
   },
   mounted() {
     this.gql(
       `{
             group(id: "${this.$route.params.id}"){
               name,
+              joinable,
               notes{
                 id,
                 title,
@@ -410,6 +434,7 @@ export default Vue.extend({
       this.folders = data.group.folders;
       this.notes = data.group.notes;
       this.currentDirectory = [{ name: data.group.name }];
+      this.joinable = window.Date.now() < Number(data.group.joinable);
     });
   },
 });

@@ -61,7 +61,7 @@ type Group {
   id: ID!
   name: String!
   image: String
-  joinable: Boolean!
+  joinable: String!
   admins: [User!]!
   members: [User!]
   notes: [Note!]

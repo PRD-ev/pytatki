@@ -6,7 +6,7 @@ const Mutation = {
     const group = {
       name: args.name,
       members: { connect: { id: context.id } },
-      joinable: false
+      joinable: "0",
     };
     if (args.image) {
       const {
@@ -37,10 +37,13 @@ const Mutation = {
     const userGroupsFormatted = userGroups.map(el => el.id);
     if (userGroupsFormatted.includes(id) || context.role === "ADMIN") {
       const group = await prisma.group({ id: id });
+      const millisecondsIn15Minutes = 900000;
       const newGroup = {
         name: name ? name : group.name,
         image: image ? image : group.image,
-        joinable: joinable ? joinable : group.joinable
+        joinable: joinable
+          ? String(Date.now() + millisecondsIn15Minutes)
+          : group.joinable
       };
       return prisma.updateGroup({ data: newGroup, where: { id: id } });
     }
@@ -254,12 +257,7 @@ const Mutation = {
         email: email ? email : user.email
       };
       if (image) {
-        const {
-          filename,
-          mimetype,
-          encoding,
-          createReadStream
-        } = await image;
+        const { filename, mimetype, encoding, createReadStream } = await image;
         try {
           mkdir(`./images/${context.id}`, { recursive: true }, async () => {
             createReadStream().pipe(
@@ -281,16 +279,12 @@ const Mutation = {
     }
     throw new Error("You don't have permission for that action");
   },
-  deleteUser: async (
-    parent,
-    { id },
-    context
-  ) => {
+  deleteUser: async (parent, { id }, context) => {
     if (context.id === id || context.role === "ADMIN") {
-      return prisma.deleteUser({id});
+      return prisma.deleteUser({ id });
     }
     throw new Error("You don't have permission for that action");
-  },
+  }
 };
 
 module.exports = {

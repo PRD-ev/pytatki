@@ -293,6 +293,30 @@ app.post("/logout", (req, res) => {
   res.send({ error: false, data: "Logged out" });
 });
 
+app.get("/join/:groupId", async (req, res) => {
+  const cookie = req.cookies.jwt;
+  try {
+    if (cookie) {
+      const user = jsonWebToken.verify(cookie, JWTSecretKey);
+      const group = await prisma.group({ id: req.params.groupId });
+      if (user.id && Number(group.joinable) > Date.now()) {
+        const newGroup = { ...group, members: { connect: { id: user.id } } };
+        delete newGroup.id;
+        prisma.updateGroup({
+          data: newGroup,
+          where: { id: req.params.groupId }
+        });
+        res.send("Udało się dołączyć do grupy " + group.name);
+      }
+    }
+    res.send(
+      "Nie udało się dołączyć (niezalogowany lub dołączanie nowych członków jest wyłączone)"
+    );
+  } catch (e) {
+    res.send(String(e));
+  }
+});
+
 const apolloServer = new ApolloServer({
   typeDefs: gql`
     ${readFileSync(__dirname.concat("/schema/schema.graphql"), "utf8")}

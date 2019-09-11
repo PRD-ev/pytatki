@@ -471,8 +471,20 @@ export interface GroupWhereInput {
   image_not_starts_with?: Maybe<String>;
   image_ends_with?: Maybe<String>;
   image_not_ends_with?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
-  joinable_not?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
+  joinable_not?: Maybe<String>;
+  joinable_in?: Maybe<String[] | String>;
+  joinable_not_in?: Maybe<String[] | String>;
+  joinable_lt?: Maybe<String>;
+  joinable_lte?: Maybe<String>;
+  joinable_gt?: Maybe<String>;
+  joinable_gte?: Maybe<String>;
+  joinable_contains?: Maybe<String>;
+  joinable_not_contains?: Maybe<String>;
+  joinable_starts_with?: Maybe<String>;
+  joinable_not_starts_with?: Maybe<String>;
+  joinable_ends_with?: Maybe<String>;
+  joinable_not_ends_with?: Maybe<String>;
   folders_some?: Maybe<FolderWhereInput>;
   notes_some?: Maybe<NoteWhereInput>;
   AND?: Maybe<GroupWhereInput[] | GroupWhereInput>;
@@ -609,7 +621,7 @@ export interface GroupCreateWithoutFoldersInput {
   admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable: String;
   notes?: Maybe<NoteCreateManyWithoutGroupInput>;
 }
 
@@ -643,7 +655,7 @@ export interface GroupCreateWithoutMembersInput {
   name: String;
   admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable: String;
   folders?: Maybe<FolderCreateManyWithoutGroupInput>;
   notes?: Maybe<NoteCreateManyWithoutGroupInput>;
 }
@@ -709,7 +721,7 @@ export interface GroupCreateWithoutAdminsInput {
   name: String;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable: String;
   folders?: Maybe<FolderCreateManyWithoutGroupInput>;
   notes?: Maybe<NoteCreateManyWithoutGroupInput>;
 }
@@ -756,7 +768,7 @@ export interface GroupCreateWithoutNotesInput {
   admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable: String;
   folders?: Maybe<FolderCreateManyWithoutGroupInput>;
 }
 
@@ -884,7 +896,7 @@ export interface GroupUpdateWithoutFoldersDataInput {
   admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
   notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
 }
 
@@ -956,7 +968,7 @@ export interface GroupUpdateWithoutMembersDataInput {
   name?: Maybe<String>;
   admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
   folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
   notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
 }
@@ -1081,7 +1093,7 @@ export interface GroupUpdateWithoutAdminsDataInput {
   name?: Maybe<String>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
   folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
   notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
 }
@@ -1397,8 +1409,20 @@ export interface GroupScalarWhereInput {
   image_not_starts_with?: Maybe<String>;
   image_ends_with?: Maybe<String>;
   image_not_ends_with?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
-  joinable_not?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
+  joinable_not?: Maybe<String>;
+  joinable_in?: Maybe<String[] | String>;
+  joinable_not_in?: Maybe<String[] | String>;
+  joinable_lt?: Maybe<String>;
+  joinable_lte?: Maybe<String>;
+  joinable_gt?: Maybe<String>;
+  joinable_gte?: Maybe<String>;
+  joinable_contains?: Maybe<String>;
+  joinable_not_contains?: Maybe<String>;
+  joinable_starts_with?: Maybe<String>;
+  joinable_not_starts_with?: Maybe<String>;
+  joinable_ends_with?: Maybe<String>;
+  joinable_not_ends_with?: Maybe<String>;
   AND?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
   OR?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
   NOT?: Maybe<GroupScalarWhereInput[] | GroupScalarWhereInput>;
@@ -1412,7 +1436,7 @@ export interface GroupUpdateManyWithWhereNestedInput {
 export interface GroupUpdateManyDataInput {
   name?: Maybe<String>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
 }
 
 export interface UserUpsertWithoutNotesInput {
@@ -1432,7 +1456,7 @@ export interface GroupUpdateWithoutNotesDataInput {
   admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
   folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
 }
 
@@ -1587,7 +1611,7 @@ export interface GroupCreateInput {
   admins?: Maybe<UserCreateManyWithoutAdminOfInput>;
   members?: Maybe<UserCreateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable: String;
   folders?: Maybe<FolderCreateManyWithoutGroupInput>;
   notes?: Maybe<NoteCreateManyWithoutGroupInput>;
 }
@@ -1597,7 +1621,7 @@ export interface GroupUpdateInput {
   admins?: Maybe<UserUpdateManyWithoutAdminOfInput>;
   members?: Maybe<UserUpdateManyWithoutGroupsInput>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
   folders?: Maybe<FolderUpdateManyWithoutGroupInput>;
   notes?: Maybe<NoteUpdateManyWithoutGroupInput>;
 }
@@ -1605,7 +1629,7 @@ export interface GroupUpdateInput {
 export interface GroupUpdateManyMutationInput {
   name?: Maybe<String>;
   image?: Maybe<String>;
-  joinable?: Maybe<Boolean>;
+  joinable?: Maybe<String>;
 }
 
 export interface NoteCreateInput {
@@ -1952,7 +1976,7 @@ export interface Group {
   id: ID_Output;
   name: String;
   image?: String;
-  joinable?: Boolean;
+  joinable: String;
 }
 
 export interface GroupPromise extends Promise<Group>, Fragmentable {
@@ -1977,7 +2001,7 @@ export interface GroupPromise extends Promise<Group>, Fragmentable {
     last?: Int;
   }) => T;
   image: () => Promise<String>;
-  joinable: () => Promise<Boolean>;
+  joinable: () => Promise<String>;
   folders: <T = FragmentableArray<Folder>>(args?: {
     where?: FolderWhereInput;
     orderBy?: FolderOrderByInput;
@@ -2022,7 +2046,7 @@ export interface GroupSubscription
     last?: Int;
   }) => T;
   image: () => Promise<AsyncIterator<String>>;
-  joinable: () => Promise<AsyncIterator<Boolean>>;
+  joinable: () => Promise<AsyncIterator<String>>;
   folders: <T = Promise<AsyncIterator<FolderSubscription>>>(args?: {
     where?: FolderWhereInput;
     orderBy?: FolderOrderByInput;
@@ -2067,7 +2091,7 @@ export interface GroupNullablePromise
     last?: Int;
   }) => T;
   image: () => Promise<String>;
-  joinable: () => Promise<Boolean>;
+  joinable: () => Promise<String>;
   folders: <T = FragmentableArray<Folder>>(args?: {
     where?: FolderWhereInput;
     orderBy?: FolderOrderByInput;
@@ -2416,7 +2440,7 @@ export interface GroupPreviousValues {
   id: ID_Output;
   name: String;
   image?: String;
-  joinable?: Boolean;
+  joinable: String;
 }
 
 export interface GroupPreviousValuesPromise
@@ -2425,7 +2449,7 @@ export interface GroupPreviousValuesPromise
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
   image: () => Promise<String>;
-  joinable: () => Promise<Boolean>;
+  joinable: () => Promise<String>;
 }
 
 export interface GroupPreviousValuesSubscription
@@ -2434,7 +2458,7 @@ export interface GroupPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
   image: () => Promise<AsyncIterator<String>>;
-  joinable: () => Promise<AsyncIterator<Boolean>>;
+  joinable: () => Promise<AsyncIterator<String>>;
 }
 
 export interface NoteSubscriptionPayload {
@@ -2558,14 +2582,14 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
-/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 export type Long = string;
 

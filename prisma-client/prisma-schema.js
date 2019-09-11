@@ -347,7 +347,7 @@ type Group {
   admins(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   members(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   image: String
-  joinable: Boolean
+  joinable: String!
   folders(where: FolderWhereInput, orderBy: FolderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Folder!]
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
 }
@@ -364,7 +364,7 @@ input GroupCreateInput {
   admins: UserCreateManyWithoutAdminOfInput
   members: UserCreateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String!
   folders: FolderCreateManyWithoutGroupInput
   notes: NoteCreateManyWithoutGroupInput
 }
@@ -394,7 +394,7 @@ input GroupCreateWithoutAdminsInput {
   name: String!
   members: UserCreateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String!
   folders: FolderCreateManyWithoutGroupInput
   notes: NoteCreateManyWithoutGroupInput
 }
@@ -405,7 +405,7 @@ input GroupCreateWithoutFoldersInput {
   admins: UserCreateManyWithoutAdminOfInput
   members: UserCreateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String!
   notes: NoteCreateManyWithoutGroupInput
 }
 
@@ -414,7 +414,7 @@ input GroupCreateWithoutMembersInput {
   name: String!
   admins: UserCreateManyWithoutAdminOfInput
   image: String
-  joinable: Boolean
+  joinable: String!
   folders: FolderCreateManyWithoutGroupInput
   notes: NoteCreateManyWithoutGroupInput
 }
@@ -425,7 +425,7 @@ input GroupCreateWithoutNotesInput {
   admins: UserCreateManyWithoutAdminOfInput
   members: UserCreateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String!
   folders: FolderCreateManyWithoutGroupInput
 }
 
@@ -449,7 +449,7 @@ type GroupPreviousValues {
   id: ID!
   name: String!
   image: String
-  joinable: Boolean
+  joinable: String!
 }
 
 input GroupScalarWhereInput {
@@ -495,8 +495,20 @@ input GroupScalarWhereInput {
   image_not_starts_with: String
   image_ends_with: String
   image_not_ends_with: String
-  joinable: Boolean
-  joinable_not: Boolean
+  joinable: String
+  joinable_not: String
+  joinable_in: [String!]
+  joinable_not_in: [String!]
+  joinable_lt: String
+  joinable_lte: String
+  joinable_gt: String
+  joinable_gte: String
+  joinable_contains: String
+  joinable_not_contains: String
+  joinable_starts_with: String
+  joinable_not_starts_with: String
+  joinable_ends_with: String
+  joinable_not_ends_with: String
   AND: [GroupScalarWhereInput!]
   OR: [GroupScalarWhereInput!]
   NOT: [GroupScalarWhereInput!]
@@ -523,7 +535,7 @@ input GroupUpdateInput {
   admins: UserUpdateManyWithoutAdminOfInput
   members: UserUpdateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String
   folders: FolderUpdateManyWithoutGroupInput
   notes: NoteUpdateManyWithoutGroupInput
 }
@@ -531,13 +543,13 @@ input GroupUpdateInput {
 input GroupUpdateManyDataInput {
   name: String
   image: String
-  joinable: Boolean
+  joinable: String
 }
 
 input GroupUpdateManyMutationInput {
   name: String
   image: String
-  joinable: Boolean
+  joinable: String
 }
 
 input GroupUpdateManyWithoutAdminsInput {
@@ -587,7 +599,7 @@ input GroupUpdateWithoutAdminsDataInput {
   name: String
   members: UserUpdateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String
   folders: FolderUpdateManyWithoutGroupInput
   notes: NoteUpdateManyWithoutGroupInput
 }
@@ -597,7 +609,7 @@ input GroupUpdateWithoutFoldersDataInput {
   admins: UserUpdateManyWithoutAdminOfInput
   members: UserUpdateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String
   notes: NoteUpdateManyWithoutGroupInput
 }
 
@@ -605,7 +617,7 @@ input GroupUpdateWithoutMembersDataInput {
   name: String
   admins: UserUpdateManyWithoutAdminOfInput
   image: String
-  joinable: Boolean
+  joinable: String
   folders: FolderUpdateManyWithoutGroupInput
   notes: NoteUpdateManyWithoutGroupInput
 }
@@ -615,7 +627,7 @@ input GroupUpdateWithoutNotesDataInput {
   admins: UserUpdateManyWithoutAdminOfInput
   members: UserUpdateManyWithoutGroupsInput
   image: String
-  joinable: Boolean
+  joinable: String
   folders: FolderUpdateManyWithoutGroupInput
 }
 
@@ -696,8 +708,20 @@ input GroupWhereInput {
   image_not_starts_with: String
   image_ends_with: String
   image_not_ends_with: String
-  joinable: Boolean
-  joinable_not: Boolean
+  joinable: String
+  joinable_not: String
+  joinable_in: [String!]
+  joinable_not_in: [String!]
+  joinable_lt: String
+  joinable_lte: String
+  joinable_gt: String
+  joinable_gte: String
+  joinable_contains: String
+  joinable_not_contains: String
+  joinable_starts_with: String
+  joinable_not_starts_with: String
+  joinable_ends_with: String
+  joinable_not_ends_with: String
   folders_some: FolderWhereInput
   notes_some: NoteWhereInput
   AND: [GroupWhereInput!]
