@@ -1,4 +1,7 @@
-<h1 align="center">Welcome to pytatki-backend 👋</h1>
+# Pytatki have been archived
+If you like the idea and would like to develop Pytatki and give it a new life [write to us](mailto:wachowiakf@gmail.com).
+
+<h1 align="center">Welcome to Pytatki 👋</h1>
 <p>
   <img src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
 </p>
