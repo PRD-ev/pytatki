@@ -6,7 +6,8 @@ If you like the idea and would like to develop Pytatki and give it a new life [w
   <img src="https://img.shields.io/badge/version-0.1-blue.svg?cacheSeconds=2592000" />
 </p>
 
-> API for Pytatki app
+Pytatki are developed with Docker, MongoDB, Prisma, Express.js, Vue.js.
+The app is generally working and connected with backend but saddly archived by it's owner (that is me) :<
 
 ### 🏠 [Homepage](https://pytatki.netlify.com)
 
